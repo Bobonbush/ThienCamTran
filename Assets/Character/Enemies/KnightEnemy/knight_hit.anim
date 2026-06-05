@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: player_attack_1
+  m_Name: knight_hit
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,15 +21,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 4341419392773482299, guid: 22d11454ea0d39341aa75090a6373bde, type: 3}
-    - time: 0.1
-      value: {fileID: 4382840760124518389, guid: 7bfa15023958b1649859e881001b1c33, type: 3}
-    - time: 0.2
-      value: {fileID: -5757702041356955929, guid: aab6bd86b80c1b340a3f6634b7b36ff3, type: 3}
-    - time: 0.3
-      value: {fileID: -623266487404921774, guid: 4921d1783cfc8eb4f8460e8a722a6d6c, type: 3}
-    - time: 0.4
-      value: {fileID: 8923261685909496733, guid: 2e8ea3dacab0e6f4eb464c38b3c6042d, type: 3}
+      value: {fileID: 21300000, guid: 5ed2754dd3f9b8b40a7a12f3641afc94, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -52,17 +44,13 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 4341419392773482299, guid: 22d11454ea0d39341aa75090a6373bde, type: 3}
-    - {fileID: 4382840760124518389, guid: 7bfa15023958b1649859e881001b1c33, type: 3}
-    - {fileID: -5757702041356955929, guid: aab6bd86b80c1b340a3f6634b7b36ff3, type: 3}
-    - {fileID: -623266487404921774, guid: 4921d1783cfc8eb4f8460e8a722a6d6c, type: 3}
-    - {fileID: 8923261685909496733, guid: 2e8ea3dacab0e6f4eb464c38b3c6042d, type: 3}
+    - {fileID: 21300000, guid: 5ed2754dd3f9b8b40a7a12f3641afc94, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5
+    m_StopTime: 0.1
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
