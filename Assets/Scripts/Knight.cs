@@ -1,7 +1,7 @@
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 public class Knight : MonoBehaviour
 {
     public float walkSpeed = 6f;
@@ -10,6 +10,7 @@ public class Knight : MonoBehaviour
     Rigidbody2D rb;
     TouchingDirections touchingDirections;
     Animator animator;
+    Damageable damageable;
     public enum WalkableDirection
     {
         Right,
@@ -63,6 +64,7 @@ public class Knight : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         touchingDirections = GetComponent<TouchingDirections>();
         animator = GetComponent<Animator>();
+        damageable = GetComponent<Damageable>();
     }
 
     void Update()
@@ -76,13 +78,17 @@ public class Knight : MonoBehaviour
         {
             FlipDirection();
         }
-        if (CanMove)
+
+        if (!damageable.LockVelocity)
         {
-            rb.linearVelocity = new Vector2(walkSpeed * walkDiretionVector.x, rb.linearVelocity.y);
-        }
-        else
-        {
-            rb.linearVelocity = new Vector2(Mathf.Lerp(rb.linearVelocityX, 0, walkStopRate), rb.linearVelocity.y);
+            if (CanMove)
+            {
+                rb.linearVelocity = new Vector2(walkSpeed * walkDiretionVector.x, rb.linearVelocity.y);
+            }
+            else
+            {
+                rb.linearVelocity = new Vector2(Mathf.Lerp(rb.linearVelocityX, 0, walkStopRate), rb.linearVelocity.y);
+            }
         }
     }
 
@@ -99,5 +105,10 @@ public class Knight : MonoBehaviour
         {
             Debug.LogError("Invalid WalkDirection value: " + WalkDirection);
         }
+    }
+
+    public void OnHit(int damage, Vector2 knockback)
+    {
+        rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
 }
