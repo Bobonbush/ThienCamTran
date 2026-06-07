@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
     public float airWalkSpeed = 3f;
-    public float jumpImpulse = 5f; 
+    public float jumpImpulse = 10f; 
     Vector2 moveInput;
     TouchingDirections touchingDirections;
     Damageable damageable;
@@ -79,6 +79,9 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool _isFacingRight = true;
+
+    public Vector2 lookInput { get; private set; }
+
     public bool IsFacingRight { 
         get 
         { 
@@ -113,6 +116,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool IsIdle
+    {
+        get
+        {
+            return Mathf.Abs(rb.linearVelocity.x) < 0.1f && Mathf.Abs(rb.linearVelocity.y) < 0.1f;
+        }
+    }
+
+
+
     
 
     Rigidbody2D rb;
@@ -135,6 +148,24 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
     }
 
+    public void SetFacingDirection(Vector2 moveInput)
+    {
+        if (moveInput.x > 0 && !IsFacingRight)
+        {
+            IsFacingRight = true;
+        }
+        else if (moveInput.x < 0 && IsFacingRight)
+        {
+            IsFacingRight = false;
+        }
+    }
+
+    
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        lookInput = context.ReadValue<Vector2>();
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
@@ -152,17 +183,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    public void SetFacingDirection(Vector2 moveInput)
-    {
-        if (moveInput.x > 0 && !IsFacingRight)
-        {
-            IsFacingRight = true;
-        }
-        else if (moveInput.x < 0 && IsFacingRight)
-        {
-            IsFacingRight = false;
-        }
-    }
+    
     public void OnRun(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -189,6 +210,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.started)
         {
+            Debug.Log("Attack pressed");
             animator.SetTrigger(AnimationStrings.attackTrigger);
         }
     }   
