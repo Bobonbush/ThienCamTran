@@ -99,7 +99,8 @@ public class Damageable : MonoBehaviour
             {
                 isInvincible = false;
                 timeSinceHit = 0;
-                ReviveAction = true;    // Set to false by playerController
+                if(canRevive)
+                    ReviveAction = true;    // Set to false by playerController
             }
 
             timeSinceHit += Time.deltaTime;
