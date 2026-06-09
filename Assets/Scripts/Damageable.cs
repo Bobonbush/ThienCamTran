@@ -58,7 +58,7 @@ public class Damageable : MonoBehaviour
     } 
 
     private float timeSinceHit = 0;
-    public float invicibilityTimer = 0.0f;
+    public float invicibilityTimer = 0.5f;
 
     public bool IsAlive
     {
@@ -120,6 +120,8 @@ public class Damageable : MonoBehaviour
             animator.SetTrigger(AnimationStrings.hitTrigger);
             LockVelocity = true;
             damageableHit?.Invoke(damage, knockback);
+            CharacterEvents.characterDamaged.Invoke(gameObject, damage);
+
             return true;
         }
         return false;
