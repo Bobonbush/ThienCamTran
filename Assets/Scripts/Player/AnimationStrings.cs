@@ -19,4 +19,5 @@ internal class AnimationStrings
     internal static string lockVelocity = "lockVelocity";
     internal static string lookUp = "lookUp";
     internal static string lookDown = "lookDown";
+    internal static string attackCooldown = "attackCooldown";
 }
