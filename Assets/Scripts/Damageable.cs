@@ -9,6 +9,10 @@ public class Damageable : MonoBehaviour
 
     [SerializeField]
     private float _maxHealth = 100;
+
+    [SerializeField]
+    private bool canRevive = false;
+
     public float MaxHealth
     {
         get
@@ -45,8 +49,16 @@ public class Damageable : MonoBehaviour
     [SerializeField]
     private bool isInvincible = false;
 
+    private bool _ReviveAction = false;
+    
+    public bool ReviveAction
+    {
+        get { return _ReviveAction; }
+        set { _ReviveAction = value; }
+    } 
+
     private float timeSinceHit = 0;
-    public float invicibilityTimer = 0.25f;
+    public float invicibilityTimer = 0.0f;
 
     public bool IsAlive
     {
@@ -87,12 +99,15 @@ public class Damageable : MonoBehaviour
             {
                 isInvincible = false;
                 timeSinceHit = 0;
+                ReviveAction = true;    // Set to false by playerController
             }
 
             timeSinceHit += Time.deltaTime;
         }
 
     }
+
+    
     public bool Hit(int damage, Vector2 knockback)
     {
         if (IsAlive && !isInvincible)
@@ -106,6 +121,29 @@ public class Damageable : MonoBehaviour
             damageableHit?.Invoke(damage, knockback);
             return true;
         }
+        return false;
+    }
+
+    public bool HitTrap()
+    {
+        // Falling to a trap need to reset the position and minus a constant health
+        
+        if(IsAlive )
+        {
+            float CLostHP = 10;
+            if (!canRevive) CLostHP = Health;    // if it is a mobs not player no need to revive
+            Health -= CLostHP;
+            
+
+            isInvincible = true;
+
+            animator.SetTrigger(AnimationStrings.hitTrigger);
+            LockVelocity = true;
+            damageableHit?.Invoke( (int) CLostHP, Vector2.zero);
+
+            return true;
+        }
+
         return false;
     }
 }

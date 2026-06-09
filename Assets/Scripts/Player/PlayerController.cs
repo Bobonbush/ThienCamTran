@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     TouchingDirections touchingDirections;
     Damageable damageable;
 
+    Vector3 SafeGround = Vector3.zero;
+    float LastOnGroundY = 0;
+
     public float CurrentSpeed
     {
         get
@@ -136,7 +139,23 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
         damageable = GetComponent<Damageable>();
+
     }
+
+    private void Update()
+    {
+        if(damageable.ReviveAction)
+        {
+            damageable.ReviveAction = false;
+            Revive();
+        }
+
+        if(touchingDirections.IsGrounded)
+        {
+            LastOnGroundY = transform.position.y;
+        }
+    
+     }
 
     private void FixedUpdate()
     {
@@ -218,5 +237,21 @@ public class PlayerController : MonoBehaviour
     public void OnHit(int damage, Vector2 knockback)
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+    }
+
+
+    
+
+    // When fall out of map or fall into traps
+    private void Revive() 
+    {
+        Debug.Log("Revive!");
+        transform.position = SafeGround;
+    }
+
+    public void SetSafeGround(Vector3 position)
+    {
+        SafeGround = position;
+        SafeGround.y = LastOnGroundY;
     }
 }
