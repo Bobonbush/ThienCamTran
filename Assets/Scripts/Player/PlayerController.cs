@@ -232,8 +232,16 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Attack pressed");
             animator.SetTrigger(AnimationStrings.attackTrigger);
         }
-    }   
+    }
 
+    public void OnRangedAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("Ranged attack pressed");
+            animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
+        }
+    }
     public void OnHit(int damage, Vector2 knockback)
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);

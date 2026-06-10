@@ -100,7 +100,7 @@ public class Knight : MonoBehaviour
 
         if (!damageable.LockVelocity)
         {
-            if (CanMove)
+            if (CanMove && touchingDirections.IsGrounded)
             {
                 // Accelerate towards max speed
                 rb.linearVelocity = new Vector2(

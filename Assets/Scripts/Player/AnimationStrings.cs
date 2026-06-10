@@ -20,4 +20,5 @@ internal class AnimationStrings
     internal static string lookUp = "lookUp";
     internal static string lookDown = "lookDown";
     internal static string attackCooldown = "attackCooldown";
+    internal static string rangedAttackTrigger = "rangedAttack";
 }
