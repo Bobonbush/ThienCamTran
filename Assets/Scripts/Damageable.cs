@@ -8,12 +8,12 @@ public class Damageable : MonoBehaviour
 
 
     [SerializeField]
-    private float _maxHealth = 100;
+    private int _maxHealth = 100;
 
     [SerializeField]
     private bool canRevive = false;
 
-    public float MaxHealth
+    public int MaxHealth
     {
         get
         {
@@ -26,9 +26,9 @@ public class Damageable : MonoBehaviour
     }
 
     [SerializeField]
-    private float _health = 100;
+    private int _health = 100;
 
-    public float Health
+    public int Health
     {
         get
         {
@@ -48,6 +48,7 @@ public class Damageable : MonoBehaviour
 
     [SerializeField]
     private bool isInvincible = false;
+    private bool deathByTrap = false;
 
     private bool _ReviveAction = false;
     
@@ -99,8 +100,11 @@ public class Damageable : MonoBehaviour
             {
                 isInvincible = false;
                 timeSinceHit = 0;
-                if(canRevive)
+                if (canRevive && deathByTrap)
+                {
+                    deathByTrap = false;
                     ReviveAction = true;    // Set to false by playerController
+                }
             }
 
             timeSinceHit += Time.deltaTime;
@@ -133,12 +137,14 @@ public class Damageable : MonoBehaviour
         
         if(IsAlive )
         {
-            float CLostHP = 10;
+            int CLostHP = 10;
             if (!canRevive) CLostHP = Health;    // if it is a mobs not player no need to revive
             Health -= CLostHP;
             
 
             isInvincible = true;
+
+            deathByTrap = true;
 
             animator.SetTrigger(AnimationStrings.hitTrigger);
             LockVelocity = true;

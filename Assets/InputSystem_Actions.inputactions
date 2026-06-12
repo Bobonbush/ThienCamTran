@@ -88,7 +88,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RangedAttack",
+                    "name": "Skill 1",
                     "type": "Button",
                     "id": "09757aed-0051-4e46-a206-01f00436e13c",
                     "expectedControlType": "",
@@ -475,11 +475,11 @@
                 {
                     "name": "",
                     "id": "803dfe20-da33-44aa-9c87-f41daa869b1e",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "RangedAttack",
+                    "action": "Skill 1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

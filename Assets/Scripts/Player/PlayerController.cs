@@ -5,8 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
+    public float jumpImpulse = 10f;
     public float airWalkSpeed = 3f;
-    public float jumpImpulse = 10f; 
     Vector2 moveInput;
     TouchingDirections touchingDirections;
     Damageable damageable;
@@ -36,14 +36,19 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        return airWalkSpeed;
+                        return Mathf.Max(walkSpeed, Mathf.Abs(rb.linearVelocityX));
                     }
                 }
                 else
                 {
+                    
                     return 0;
                 }
-            } else
+            }
+            else
+            {
+
+            }
             {
                 // no movement allowed when can not move
                 return 0;
@@ -182,7 +187,10 @@ public class PlayerController : MonoBehaviour
     
     public void OnLook(InputAction.CallbackContext context)
     {
-        lookInput = context.ReadValue<Vector2>();
+        if (touchingDirections.IsGrounded)
+        {
+            lookInput = context.ReadValue<Vector2>();
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
