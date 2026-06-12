@@ -379,8 +379,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   walkSpeed: 5
   runSpeed: 8
-  airWalkSpeed: 4
   jumpImpulse: 11
+  airWalkSpeed: 4
   _isMoving: 0
   _isRunning: 0
   _isFacingRight: 1
@@ -537,6 +537,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 09757aed-0051-4e46-a206-01f00436e13c
     m_ActionName: 'Player/RangedAttack[/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6588509061327645994}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fc685c11-fd7d-49ae-92ca-e52283c4da94
+    m_ActionName: 'Player/Dash[/Keyboard/v]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

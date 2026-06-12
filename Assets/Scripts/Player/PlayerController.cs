@@ -7,6 +7,15 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 8f;
     public float jumpImpulse = 10f;
     public float airWalkSpeed = 3f;
+
+    public float dashSpeed = 20f;
+    public float dashCooldown = 0.8f;
+
+    private float lastDashTime = -999f;
+    private int dashDir = 1;
+    private bool canAirDash = true;
+    private bool wasDashing = false;
+
     Vector2 moveInput;
     TouchingDirections touchingDirections;
     Damageable damageable;
@@ -54,6 +63,14 @@ public class PlayerController : MonoBehaviour
                 return 0;
             }
             
+        }
+    }
+
+    public bool IsDashing
+    {
+        get
+        {
+            return animator.GetBool(AnimationStrings.isDashing);
         }
     }
 
@@ -158,17 +175,27 @@ public class PlayerController : MonoBehaviour
         if(touchingDirections.IsGrounded)
         {
             LastOnGroundY = transform.position.y;
+            canAirDash = true;
+
         }
-    
-     }
+    }
 
     private void FixedUpdate()
     {
-        if (!damageable.LockVelocity)
+        if (IsDashing)
         {
-            rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
-        }   
+            rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
+        }
+        else 
+        {
+            if (wasDashing)
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
+            if (!damageable.LockVelocity)
+                rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+        }
+
+        wasDashing = IsDashing;
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
     }
 
@@ -249,6 +276,29 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Ranged attack pressed");
             animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
         }
+    }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.started && CanDash())
+        {
+            if (!touchingDirections.IsGrounded)
+                canAirDash = false;     // used air-dash
+
+            lastDashTime = Time.time;
+            dashDir = IsFacingRight ? 1 : -1;
+            animator.SetTrigger(AnimationStrings.dashTrigger);
+        }
+    }
+
+    private bool CanDash()
+    {
+        if (!IsAlive || !CanMove || IsDashing)
+            return false;
+        if (Time.time < lastDashTime + dashCooldown)
+            return false;
+
+        return touchingDirections.IsGrounded || canAirDash;
     }
     public void OnHit(int damage, Vector2 knockback)
     {
