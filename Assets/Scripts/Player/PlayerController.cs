@@ -304,8 +304,6 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
-
-
     
 
     // When fall out of map or fall into traps

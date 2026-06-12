@@ -381,6 +381,8 @@ MonoBehaviour:
   runSpeed: 8
   jumpImpulse: 11
   airWalkSpeed: 4
+  dashSpeed: 8
+  dashCooldown: 0.8
   _isMoving: 0
   _isRunning: 0
   _isFacingRight: 1

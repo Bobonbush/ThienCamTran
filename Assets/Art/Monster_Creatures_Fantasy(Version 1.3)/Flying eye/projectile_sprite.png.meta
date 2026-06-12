@@ -122,11 +122,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 11
-        width: 50
-        height: 37
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -143,12 +143,12 @@ TextureImporter:
       name: projectile_sprite_1
       rect:
         serializedVersion: 2
-        x: 50
-        y: 11
-        width: 50
-        height: 37
+        x: 48
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -165,12 +165,12 @@ TextureImporter:
       name: projectile_sprite_2
       rect:
         serializedVersion: 2
-        x: 100
-        y: 11
-        width: 50
-        height: 37
+        x: 96
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -187,12 +187,12 @@ TextureImporter:
       name: projectile_sprite_3
       rect:
         serializedVersion: 2
-        x: 150
-        y: 11
-        width: 50
-        height: 37
+        x: 144
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -209,12 +209,12 @@ TextureImporter:
       name: projectile_sprite_4
       rect:
         serializedVersion: 2
-        x: 200
-        y: 11
-        width: 50
-        height: 37
+        x: 192
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -231,12 +231,12 @@ TextureImporter:
       name: projectile_sprite_5
       rect:
         serializedVersion: 2
-        x: 250
-        y: 11
-        width: 50
-        height: 37
+        x: 240
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -253,12 +253,12 @@ TextureImporter:
       name: projectile_sprite_6
       rect:
         serializedVersion: 2
-        x: 300
-        y: 11
-        width: 50
-        height: 37
+        x: 288
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -275,20 +275,20 @@ TextureImporter:
       name: projectile_sprite_7
       rect:
         serializedVersion: 2
-        x: 350
-        y: 11
-        width: 50
-        height: 37
+        x: 336
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 
-      internalID: 0
+      spriteID: 304d22a1a17f3e841a2d170c139d94f0
+      internalID: 377439849
       vertices: []
       indices: 
       edges: []
@@ -297,7 +297,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 95d739a6a995b0d46937e567f18d6d91
     internalID: 0
     vertices: []
     indices: 
@@ -305,9 +305,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":8.0,"y":1.0},"gridSpriteSize":{"x":48.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BG1_0: 3095648225022645599
       projectile_sprite_0: -952785642901035298
       projectile_sprite_1: 73689268883652835
       projectile_sprite_2: -2915541089322675369
@@ -315,6 +316,7 @@ TextureImporter:
       projectile_sprite_4: -9158773422439805446
       projectile_sprite_5: 934616741007681554
       projectile_sprite_6: 5134469537059547514
+      projectile_sprite_7: 377439849
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
