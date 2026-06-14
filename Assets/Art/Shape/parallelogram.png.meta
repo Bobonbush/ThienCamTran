@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: 1738bbe870ce822458df5c5604b1149d
+guid: 4d785c0f75ec33d44a8aab090374b804
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -1338811874446606367
-    second: adventurer-fall-01_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 312
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +72,7 @@ TextureImporter:
     maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -178,23 +175,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: adventurer-fall-01_0
+      name: parallelogram_0
       rect:
         serializedVersion: 2
-        x: 18
-        y: 5
-        width: 17
-        height: 30
+        x: 20
+        y: 62
+        width: 320
+        height: 236
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1eff88a81b59b6de0800000000000000
-      internalID: -1338811874446606367
+      spriteID: 80fe3fa68391fd54791140c2ecbb358c
+      internalID: -154813547
       vertices: []
       indices: 
       edges: []
@@ -203,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6d8e7f7ba98098c49adcc4bd73b9c6c3
+    spriteID: 3771844f9f1f8d740aa3fd4d2d32c28d
     internalID: 0
     vertices: []
     indices: 
@@ -215,7 +212,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      adventurer-fall-01_0: -1338811874446606367
+      parallelogram_0: -154813547
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

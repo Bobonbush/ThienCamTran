@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
@@ -8,13 +9,15 @@ public class PlayerController : MonoBehaviour
     public float jumpImpulse = 10f;
     public float airWalkSpeed = 3f;
 
-    public float dashSpeed = 20f;
+    public float dashSpeed = 200f;
     public float dashCooldown = 0.8f;
 
     private float lastDashTime = -999f;
     private int dashDir = 1;
     private bool canAirDash = true;
     private bool wasDashing = false;
+
+    PlayerStats stat;
 
     Vector2 moveInput;
     TouchingDirections touchingDirections;
@@ -161,7 +164,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
         damageable = GetComponent<Damageable>();
-
+        stat = GetComponent<PlayerStats>();
     }
 
     private void Update()
@@ -176,7 +179,6 @@ public class PlayerController : MonoBehaviour
         {
             LastOnGroundY = transform.position.y;
             canAirDash = true;
-
         }
     }
 
@@ -184,6 +186,7 @@ public class PlayerController : MonoBehaviour
     {
         if (IsDashing)
         {
+            //rb.AddForce();
             rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
         }
         else 
@@ -291,6 +294,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnSlot1(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("First Slot pressed");
+            stat.TriggerSlot1(animator);
+        }
+    }
+
+    public void OnSlot2(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("Second Slot pressed");
+            stat.TriggerSlot2(animator);
+        }
+    }
+
     private bool CanDash()
     {
         if (!IsAlive || !CanMove || IsDashing)
@@ -300,11 +321,21 @@ public class PlayerController : MonoBehaviour
 
         return touchingDirections.IsGrounded || canAirDash;
     }
+
+
     public void OnHit(int damage, Vector2 knockback)
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
     
+
+    public void OnHeal(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            stat.Heal();
+        }
+    }
 
     // When fall out of map or fall into traps
     private void Revive() 

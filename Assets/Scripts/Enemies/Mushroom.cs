@@ -65,9 +65,13 @@ public class Mushroom : MonoBehaviour
         if (target == null) return;
 
         float dirX = target.transform.position.x - transform.position.x;
+        float dirY = target.transform.position.y - transform.position.y;
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * (dirX >= 0 ? 1 : -1);
         transform.localScale = scale;
+
+        //Vector2 dir = Vector2.Normalize(new Vector2(dirX, dirY));
+
     }
 
     // Animation Event trong clip mushroom_attack gọi hàm này

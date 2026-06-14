@@ -6,9 +6,20 @@ public class PlayerStats : MonoBehaviour
 
     Damageable damagable;
 
+    [SerializeField]
+    SkillSlotUI skillSlot;
 
-    private int Mana = 0;
-    private int MaxMana = 100;
+
+    private int _Mana = 0;
+    private int _MaxMana = 100;
+
+    private int _Tre = 3;
+    private int _MaxTre = 3;
+
+    private int HealValue = 10;
+
+    private SpecialSkill slot1 = null;
+    private SpecialSkill slot2 = null;
 
     public int Health
     {
@@ -19,10 +30,79 @@ public class PlayerStats : MonoBehaviour
     {
         get { return damagable.MaxHealth; }
     }
+
+    public int Mana
+    {
+        set {if(value <= _MaxMana) _Mana = value; }
+        get { return _Mana; }
+    }
+
+    public int MaxMana
+    {
+        set { _MaxMana = value; }
+        get { return _MaxMana; }
+    }
     
+
+    public int Tre
+    {
+        set { _Tre = value; _Tre = Mathf.Clamp(_Tre, 0, _MaxTre); }
+        get { return _Tre; }
+    }
+
+    public int MaxTre
+    {
+        set { _MaxTre = value; }
+        get { return _MaxTre; }
+    }
+
     void Start()
     {
         damagable = GetComponent<Damageable>();
+        slot1 = GetComponent<ThrowTalisman>();
+
+        SetSkillAvatar();
     }
 
+
+    private void FixedUpdate()
+    {
+        Mana += 1;
+        
+    }
+
+    private void SetSkillAvatar()
+    {
+        skillSlot.SetAvatar(slot1, slot2);
+    }
+
+    public void Heal()
+    {
+        if (_Tre > 0)
+        {
+            _Tre--;
+            damagable.Health += HealValue;
+        }
+    }
+
+
+    public void TriggerSlot1(Animator animator)
+    {
+        if (slot1 == null) return;
+
+        if(slot1.Trigger())
+        {
+            animator.SetTrigger(slot1.GetAnimationString());
+        }
+    }
+
+    public void TriggerSlot2(Animator animator)
+    {
+        if (slot2 == null) return;
+
+        if(slot2.Trigger())
+        {
+            animator.SetTrigger(slot2.GetAnimationString());
+        }
+    }
 }
