@@ -10,7 +10,9 @@ public interface SpecialSkill
     public  bool Trigger();
     public float GetMaxCoolDown();
     public float GetCoolDown();
+    public int GetManaCost(); 
     public string GetAnimationString();
+
 
     public Sprite GetSprite();
 }

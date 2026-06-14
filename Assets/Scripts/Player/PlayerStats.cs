@@ -89,6 +89,13 @@ public class PlayerStats : MonoBehaviour
     public void TriggerSlot1(Animator animator)
     {
         if (slot1 == null) return;
+        
+        if(slot1.GetManaCost() > Mana)
+        {
+            return;
+        }
+
+        Mana -= slot1.GetManaCost();
 
         if(slot1.Trigger())
         {
@@ -100,7 +107,14 @@ public class PlayerStats : MonoBehaviour
     {
         if (slot2 == null) return;
 
-        if(slot2.Trigger())
+        if (slot2.GetManaCost() > Mana)
+        {
+            return;
+        }
+
+        Mana -= slot2.GetManaCost();
+
+        if (slot2.Trigger())
         {
             animator.SetTrigger(slot2.GetAnimationString());
         }

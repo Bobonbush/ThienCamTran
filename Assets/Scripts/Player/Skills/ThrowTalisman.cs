@@ -48,6 +48,11 @@ public class ThrowTalisman : MonoBehaviour, SpecialSkill
         return animatorString;
     }
 
+    public int GetManaCost()
+    {
+        return 15;
+    } 
+
     public Sprite GetSprite()
     {
         return overView;
