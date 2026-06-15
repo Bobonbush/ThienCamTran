@@ -832,29 +832,10 @@ MonoBehaviour:
 <<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: feae1762df6fbe34c9ec2e9741c82d2f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  skillSlot: {fileID: 0}
---- !u!114 &4141065896443469664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510386946914327363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3be299702d472f40a152017cda089b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ThrowTalisman
-  overView: {fileID: 1556373296, guid: 4152f43088afd2d409ff8f5ca57a1aa8, type: 3}
-=======
-  m_Script: {fileID: 11500000, guid: 03aa4d1e96855ef4ca0e6f6add4e6ab3, type: 3}
-  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogTester
   startNode: {fileID: 11400000, guid: ad2aad75835b67a4e89e2cea273c3018, type: 2}
   style: 0
   bubbleTarget: {fileID: 0}
->>>>>>> b39f7eb47c03716008595ce5d2ca094d2f682bbf
 --- !u!1 &6745596122748728017
 GameObject:
   m_ObjectHideFlags: 0
