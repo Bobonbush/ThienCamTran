@@ -300,8 +300,12 @@ GameObject:
   - component: {fileID: 3602750924883216712}
   - component: {fileID: 4986547549228987136}
   - component: {fileID: 5714843487244732538}
+<<<<<<< HEAD
   - component: {fileID: 3127403622262091231}
   - component: {fileID: 4141065896443469664}
+=======
+  - component: {fileID: 1797806642384884975}
+>>>>>>> b39f7eb47c03716008595ce5d2ca094d2f682bbf
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -628,6 +632,7 @@ MonoBehaviour:
     m_ActionId: fc685c11-fd7d-49ae-92ca-e52283c4da94
     m_ActionName: 'Player/Dash[/Keyboard/v]'
   - m_PersistentCalls:
+<<<<<<< HEAD
       m_Calls:
       - m_Target: {fileID: 6588509061327645994}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
@@ -659,6 +664,15 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e704845d-4859-4a83-bab5-4ea56fdae872
     m_ActionName: 'Player/Skill 2[/Keyboard/d]'
+=======
+      m_Calls: []
+    m_ActionId: e704845d-4859-4a83-bab5-4ea56fdae872
+    m_ActionName: 'Player/Skill 2[/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9a32ab51-1e7e-48fc-865e-72546f58c121
+    m_ActionName: 'Player/Heal[/Keyboard/r]'
+>>>>>>> b39f7eb47c03716008595ce5d2ca094d2f682bbf
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -802,7 +816,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   launchPoint: {fileID: 1225056819779727462}
   projectilePrefab: {fileID: 7474088724729183800, guid: 0094e29973a6b60459a0cb10ddfd33d3, type: 3}
+<<<<<<< HEAD
 --- !u!114 &3127403622262091231
+=======
+--- !u!114 &1797806642384884975
+>>>>>>> b39f7eb47c03716008595ce5d2ca094d2f682bbf
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -811,6 +829,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5510386946914327363}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: feae1762df6fbe34c9ec2e9741c82d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
@@ -828,6 +847,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThrowTalisman
   overView: {fileID: 1556373296, guid: 4152f43088afd2d409ff8f5ca57a1aa8, type: 3}
+=======
+  m_Script: {fileID: 11500000, guid: 03aa4d1e96855ef4ca0e6f6add4e6ab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTester
+  startNode: {fileID: 11400000, guid: ad2aad75835b67a4e89e2cea273c3018, type: 2}
+  style: 0
+  bubbleTarget: {fileID: 0}
+>>>>>>> b39f7eb47c03716008595ce5d2ca094d2f682bbf
 --- !u!1 &6745596122748728017
 GameObject:
   m_ObjectHideFlags: 0
