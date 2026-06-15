@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogTester
   startNode: {fileID: 11400000, guid: ad2aad75835b67a4e89e2cea273c3018, type: 2}
-  style: 0
+  style: 1
   bubbleTarget: {fileID: 0}
 --- !u!1 &6745596122748728017
 GameObject:
