@@ -79,6 +79,17 @@ nút "Replace with InputSystemUIInputModule" trên EventSystem thì bấm nó, n
 - `Follow Target` = **bật**.
 - `World Offset` = `(0, 2, 0)` → chỉnh số Y cho bong bóng cao hơn đầu nhân vật.
 
+### Animation mở/đóng (có sẵn trong DialogView)
+Mỗi `DialogView` tự chạy animation khi mở và khi đóng. Chỉnh trong Inspector:
+- **Use Fade**: hiện/ẩn theo độ trong suốt (alpha).
+- **Use Slide**: trượt ngang từ trái sang phải.
+- Tick **cả hai** = kết hợp (vừa mờ dần vừa trượt).
+- **Anim Duration**: thời gian (giây).
+- **Slide Distance**: trượt bắt đầu cách vị trí gốc bao nhiêu pixel về bên trái.
+
+> Script tự thêm `CanvasGroup` vào root để làm fade — không cần gắn tay.
+> Animation chạy bằng `Time.unscaledDeltaTime` nên vẫn mượt kể cả khi game đang pause (`timeScale = 0`).
+
 ### Manager
 - Tạo empty object `DialogManager`, gắn script `DialogManager`.
 - Nối `Box View` ← `BoxView`, `Bubble View` ← `BubbleView` (cái nào không dùng để trống cũng được).
