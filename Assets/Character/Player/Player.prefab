@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 3602750924883216712}
   - component: {fileID: 4986547549228987136}
   - component: {fileID: 5714843487244732538}
+  - component: {fileID: 1797806642384884975}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -440,10 +441,6 @@ MonoBehaviour:
     m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
     m_ActionName: 'Player/Interact[/Keyboard/e]'
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
-    m_ActionName: 'Player/Crouch[/Keyboard/c]'
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6588509061327645994}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
@@ -555,6 +552,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: fc685c11-fd7d-49ae-92ca-e52283c4da94
     m_ActionName: 'Player/Dash[/Keyboard/v]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e704845d-4859-4a83-bab5-4ea56fdae872
+    m_ActionName: 'Player/Skill 2[/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9a32ab51-1e7e-48fc-865e-72546f58c121
+    m_ActionName: 'Player/Heal[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -698,6 +703,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   launchPoint: {fileID: 1225056819779727462}
   projectilePrefab: {fileID: 7474088724729183800, guid: 0094e29973a6b60459a0cb10ddfd33d3, type: 3}
+--- !u!114 &1797806642384884975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5510386946914327363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03aa4d1e96855ef4ca0e6f6add4e6ab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTester
+  startNode: {fileID: 11400000, guid: ad2aad75835b67a4e89e2cea273c3018, type: 2}
+  style: 0
+  bubbleTarget: {fileID: 0}
 --- !u!1 &6745596122748728017
 GameObject:
   m_ObjectHideFlags: 0
