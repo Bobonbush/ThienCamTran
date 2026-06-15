@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &661156185650167715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4255991255210269986}
+  - component: {fileID: 4253804978761251378}
+  m_Layer: 7
+  m_Name: FollowCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4255991255210269986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661156185650167715}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8034443942936530656}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4253804978761251378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 661156185650167715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0536b06a382955e43aa59f86ac0dab82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
+  cameraTarget: {fileID: 4255991255210269986}
+  player: {fileID: 6588509061327645994}
+  lookDistance: 4
+  activationDelay: 0.5
+  shiftSpeed: 8
 --- !u!1 &1021481664455219850
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +300,8 @@ GameObject:
   - component: {fileID: 3602750924883216712}
   - component: {fileID: 4986547549228987136}
   - component: {fileID: 5714843487244732538}
-  - component: {fileID: 1797806642384884975}
+  - component: {fileID: 3127403622262091231}
+  - component: {fileID: 4141065896443469664}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -269,7 +319,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4385080528283818002}
@@ -278,6 +328,7 @@ Transform:
   - {fileID: 3265679093032019636}
   - {fileID: 6276587447716495777}
   - {fileID: 1225056819779727462}
+  - {fileID: 4255991255210269986}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2912338021979176781
@@ -354,7 +405,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -378,11 +429,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7194878b4451a4299c34e446ea620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  walkSpeed: 5
-  runSpeed: 8
-  jumpImpulse: 11
+  walkSpeed: 8
+  runSpeed: 11
+  jumpImpulse: 13
   airWalkSpeed: 4
-  dashSpeed: 8
+  dashSpeed: 15
   dashCooldown: 0.8
   _isMoving: 0
   _isRunning: 0
@@ -429,11 +480,35 @@ MonoBehaviour:
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6588509061327645994}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6588509061327645994}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6c2ab1b8-8984-453a-af3d-a3c78ae1679a
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
@@ -524,7 +599,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6588509061327645994}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnRangedAttack
+        m_MethodName: OnSlot1
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -553,13 +628,37 @@ MonoBehaviour:
     m_ActionId: fc685c11-fd7d-49ae-92ca-e52283c4da94
     m_ActionName: 'Player/Dash[/Keyboard/v]'
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e704845d-4859-4a83-bab5-4ea56fdae872
-    m_ActionName: 'Player/Skill 2[/Keyboard/d]'
-  - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6588509061327645994}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnHeal
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 9a32ab51-1e7e-48fc-865e-72546f58c121
     m_ActionName: 'Player/Heal[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6588509061327645994}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnSlot2
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e704845d-4859-4a83-bab5-4ea56fdae872
+    m_ActionName: 'Player/Skill 2[/Keyboard/d]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -621,8 +720,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0013228655, y: -0.20596439}
-  m_Size: {x: 0.61427855, y: 1.7743217}
+  m_Offset: {x: 0.00729599, y: -0.18503399}
+  m_Size: {x: 0.57047826, y: 1.776434}
   m_Direction: 0
 --- !u!114 &3602750924883216712
 MonoBehaviour:
@@ -684,7 +783,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _maxHealth: 100
-  canRevive: 0
+  canRevive: 1
   _health: 100
   _isAlive: 1
   isInvincible: 0
@@ -703,7 +802,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   launchPoint: {fileID: 1225056819779727462}
   projectilePrefab: {fileID: 7474088724729183800, guid: 0094e29973a6b60459a0cb10ddfd33d3, type: 3}
---- !u!114 &1797806642384884975
+--- !u!114 &3127403622262091231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -712,11 +811,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5510386946914327363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03aa4d1e96855ef4ca0e6f6add4e6ab3, type: 3}
+  m_Script: {fileID: 11500000, guid: feae1762df6fbe34c9ec2e9741c82d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogTester
   startNode: {fileID: 11400000, guid: ad2aad75835b67a4e89e2cea273c3018, type: 2}
-  style: 1
+  style: 0
   bubbleTarget: {fileID: 0}
 --- !u!1 &6745596122748728017
 GameObject:
@@ -960,7 +1059,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8344676447379901827}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}

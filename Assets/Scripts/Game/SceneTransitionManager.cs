@@ -1,13 +1,20 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Splines.SplineInstantiate;
+using Unity.Cinemachine;
 
 public class SceneTransitionManager : MonoBehaviour
 {
     public static SceneTransitionManager Instance { get; private set; }
 
     [SerializeField] private CanvasGroup fadeScreen; // Link to a full-screen UI panel
-    [SerializeField] private float fadeDuration = 0.5f;
+    [SerializeField] private float fadeDuration = 2.5f;
+
+    [SerializeField] private PlayerCamera mainCamera;
+
+    private Vector3 offsetSpawn = Vector3.zero;
 
     private string targetSpawnPointId;
 
@@ -26,10 +33,13 @@ public class SceneTransitionManager : MonoBehaviour
     }
 
     // This is the global function any door in the game can call
-    public void TransitionToScene(string sceneName, string spawnPointId)
+   
+
+    public void TransitionToScene(string buildSceneIndex, string spawnPointId, Vector3 _offsetSpawn)
     {
         targetSpawnPointId = spawnPointId;
-        StartCoroutine(LoadSceneRoutine(sceneName));
+        offsetSpawn = _offsetSpawn;
+        StartCoroutine(LoadSceneRoutine(buildSceneIndex));
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName)
@@ -47,7 +57,11 @@ public class SceneTransitionManager : MonoBehaviour
         // 3. Move player to the correct spawn point in the new scene
         PositionPlayerAtSpawnPoint();
 
-        // 4. Fade back in
+        // 4. Get the camera boundary
+
+        UpdateCameraBoundary();
+
+        // 5. Fade back in
         yield return StartCoroutine(Fade(0));
     }
 
@@ -59,7 +73,11 @@ public class SceneTransitionManager : MonoBehaviour
 
         if (spawnPoint != null && player != null)
         {
-            player.transform.position = spawnPoint.transform.position;
+            player.transform.position = spawnPoint.transform.position + offsetSpawn;
+        }
+        else
+        {
+            Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
         }
     }
 
@@ -70,6 +88,24 @@ public class SceneTransitionManager : MonoBehaviour
         {
             fadeScreen.alpha = Mathf.MoveTowards(fadeScreen.alpha, targetAlpha, speed * Time.deltaTime);
             yield return null;
+        }
+        
+    }
+
+    void UpdateCameraBoundary()
+    {
+        // Find the bounds object in the newly loaded scene
+        GameObject localBounds = GameObject.Find("CameraBounds");
+
+
+        if (localBounds != null)
+        {
+            CinemachineConfiner2D confiner = GetComponentInChildren<CinemachineConfiner2D>();
+            Collider2D targetCollider = localBounds.GetComponent<Collider2D>();
+
+
+            confiner.BoundingShape2D = targetCollider;
+            confiner.InvalidateBoundingShapeCache(); 
         }
     }
 }

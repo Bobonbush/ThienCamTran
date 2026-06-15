@@ -272,15 +272,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnRangedAttack(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            Debug.Log("Ranged attack pressed");
-            animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
-        }
-    }
-
     public void OnDash(InputAction.CallbackContext context)
     {
         if (context.started && CanDash())
