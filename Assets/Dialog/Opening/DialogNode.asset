@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d0b0481880beb49bd60646c38a5d1b, type: 3}
+  m_Name: DialogNode
+  m_EditorClassIdentifier: Assembly-CSharp::DialogNode
+  speakerName: "D\xE2n gian truy\u1EC1n mi\u1EC7ng"
+  text: "V\u1EC7 An khu\u1EA5t n\u1EBBo m\xE2y ng\xE0n,\r\nThi\xEAn C\u1EA9m phong
+    k\xEDn mu\xF4n v\xE0n n\u0103m x\u01B0a.\r\nV\u1EADt thi\xEAng th\u1EA5t l\u1EA1c
+    trong m\u01B0a, \r\nTh\u1EA7n nh\xE2n b\xE1o m\u1ED9ng tr\u01B0\u1EDBc m\xE0n
+    m\u01B0a thu. \r\nQu\xE2n \u0111i khu\u1EA5t b\xF3ng s\u01B0\u01A1ng m\xF9, \r\nH\u01A1i
+    t\xE0 ph\u1EE7 k\xEDn d\u1EB7m d\xE0i non cao.\r\nS\u1EAFc vua g\u1ECDi k\u1EBB
+    b\u01B0\u1EDBc v\xE0o,\r\nPh\xF9 kh\xE2m sai l\u1EA1nh trao v\xE0o t\u1EADn tay.\r\nK\u1EBB
+    th\xF4ng \xE2m gi\u1EDBi qu\u1EF3 ngay,\r\nC\u1EE9u d\xE2n tr\u1EEB h\u1ECDa,
+    th\xE2n n\xE0y t\u1EED sinh.\r\n"
+  choices: []
