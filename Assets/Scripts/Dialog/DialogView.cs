@@ -28,6 +28,11 @@ public class DialogView : MonoBehaviour
     public float animDuration = 0.25f;    // seconds
     public float slideDistance = 200f;    // how far to the left it starts, in pixels
 
+    [Header("Typewriter (reveal text left to right)")]
+    public bool useTypewriter = true;     // reveal the body text char by char, left to right
+    public float typeSpeed = 30f;         // characters revealed per second
+    public float typeFadeChars = 3f;      // width of the per-char alpha fade (0 = hard pop)
+
     private Transform target;
     private readonly List<Button> spawnedButtons = new List<Button>();
 
@@ -38,13 +43,16 @@ public class DialogView : MonoBehaviour
     private bool isOpen;
     private bool initialized;
     private Coroutine animRoutine;
+    private Coroutine typeRoutine;
 
     public void SetTarget(Transform t) => target = t;
 
     private void Awake()
     {
         Init();
-        HideInstant();                     // start hidden, no flash
+        // Start hidden — but if Awake was deferred and runs mid-Open (because something
+        // deactivated us before our Awake ran), don't hide while we're opening.
+        if (!isOpen) HideInstant();
     }
 
     private void Init()
@@ -86,7 +94,55 @@ public class DialogView : MonoBehaviour
     public void SetText(string speaker, string body)
     {
         if (speakerNameText != null) speakerNameText.text = speaker;
+
+        if (typeRoutine != null) { StopCoroutine(typeRoutine); typeRoutine = null; }
+
+        if (useTypewriter && isActiveAndEnabled && gameObject.activeInHierarchy)
+            typeRoutine = StartCoroutine(TypeText(body));
+        else
+            dialogText.text = body;   // instant
+    }
+
+    // Reveals the body text character by character, left to right, each char fading in via alpha.
+    private IEnumerator TypeText(string body)
+    {
         dialogText.text = body;
+        dialogText.ForceMeshUpdate();
+        TMP_TextInfo info = dialogText.textInfo;
+        int count = info.characterCount;
+        if (count == 0) yield break;
+
+        float fade = Mathf.Max(typeFadeChars, 0.0001f);
+        float head = 0f;                  // current reveal position, in characters
+
+        while (head < count + fade)
+        {
+            head += Mathf.Max(typeSpeed, 0.01f) * Time.unscaledDeltaTime;
+            ApplyReveal(info, head, fade);
+            yield return null;
+        }
+        ApplyReveal(info, count + fade, fade);   // make sure everything ends fully visible
+        typeRoutine = null;
+    }
+
+    // Sets each character's alpha based on how far the reveal "head" has passed it.
+    private void ApplyReveal(TMP_TextInfo info, float head, float fade)
+    {
+        for (int i = 0; i < info.characterCount; i++)
+        {
+            TMP_CharacterInfo c = info.characterInfo[i];
+            if (!c.isVisible) continue;           // skip spaces / line breaks
+
+            byte alpha = (byte)(Mathf.Clamp01((head - i) / fade) * 255f);
+
+            int vi = c.vertexIndex;
+            Color32[] cols = info.meshInfo[c.materialReferenceIndex].colors32;
+            cols[vi + 0].a = alpha;
+            cols[vi + 1].a = alpha;
+            cols[vi + 2].a = alpha;
+            cols[vi + 3].a = alpha;
+        }
+        dialogText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
     }
 
     public void SpawnChoice(string label, UnityAction onClick)
@@ -140,6 +196,7 @@ public class DialogView : MonoBehaviour
     private void HideInstant()
     {
         if (animRoutine != null) { StopCoroutine(animRoutine); animRoutine = null; }
+        if (typeRoutine != null) { StopCoroutine(typeRoutine); typeRoutine = null; }
         ClearChoices();
         if (canvasGroup != null) canvasGroup.alpha = 0f;
         slideOffset = Vector2.zero;

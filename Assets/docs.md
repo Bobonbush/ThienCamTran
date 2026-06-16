@@ -90,6 +90,21 @@ Mỗi `DialogView` tự chạy animation khi mở và khi đóng. Chỉnh trong 
 > Script tự thêm `CanvasGroup` vào root để làm fade — không cần gắn tay.
 > Animation chạy bằng `Time.unscaledDeltaTime` nên vẫn mượt kể cả khi game đang pause (`timeScale = 0`).
 
+#### Typewriter (chữ hiện từ trái sang phải)
+Phần thân thoại hiện dần từng ký tự từ trái sang phải, mỗi ký tự fade theo alpha cho mượt:
+- **Use Typewriter**: bật/tắt hiệu ứng. Tắt = chữ hiện ngay lập tức.
+- **Type Speed**: số ký tự hiện ra mỗi giây (mặc định 30).
+- **Type Fade Chars**: độ rộng vùng fade của mỗi ký tự, tính theo số ký tự (mặc định 3).
+  Để `0` = chữ "nhảy" cứng từng ký tự; số lớn = làn sóng mờ mượt hơn.
+
+> Hiệu ứng dùng vertex alpha của TMP nên chữ giữ nguyên vị trí, chỉ mờ → rõ dần (không bị giật layout).
+> Slide (trượt khung) và typewriter (chữ) độc lập nhau — tắt slide vẫn giữ được typewriter.
+
+#### Nền đen
+"Nền đen" chỉ là màu của component **Image** trên `BoxView`/`BubbleView`:
+chọn view đó → component **Image** → ô **Color** → chỉnh sang **đen**, kéo **Alpha** xuống ~`200`
+nếu muốn nền hơi trong. Nhớ để **chữ màu sáng** (trắng) cho nổi trên nền đen.
+
 ### Manager
 - Tạo empty object `DialogManager`, gắn script `DialogManager`.
 - Nối `Box View` ← `BoxView`, `Bubble View` ← `BubbleView` (cái nào không dùng để trống cũng được).
@@ -147,9 +162,8 @@ private void StartFight()
 
 ## 8. Gợi ý mở rộng
 
-- **Chữ chạy từng ký tự (typewriter)**: sửa trong `DialogView.SetText` — thay vì gán thẳng,
-  dùng coroutine hiện từng ký tự một.
 - **Khoá điều khiển player khi đang thoại**: tắt input/di chuyển trong lúc thoại, bật lại ở `DialogEnded`.
+- **Gõ xong chữ mới hiện nút**: trong `DialogManager.ShowNode`, chờ typewriter chạy xong rồi mới spawn nút (kiểu visual novel).
 - **Hậu quả theo nhánh** (vd chọn A boss nổi giận): cho lựa chọn dẫn tới node kết thúc riêng,
   rồi đọc node cuối để biết player đã đi nhánh nào.
 - **Chân dung nhân vật**: thêm một ô Image vào `DialogView` và gán theo node.
