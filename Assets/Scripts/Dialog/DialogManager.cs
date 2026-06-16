@@ -31,6 +31,11 @@ public class DialogManager : MonoBehaviour
     public void StartDialog(DialogNode startNode, DialogStyle style, Transform target = null)
     {
         active = (style == DialogStyle.Bubble) ? bubbleView : boxView;
+        if (active == null)
+        {
+            Debug.LogError($"DialogManager: chưa gán {style} View trong Inspector!", this);
+            return;
+        }
         if (style == DialogStyle.Bubble) active.SetTarget(target);
 
         active.Open();
