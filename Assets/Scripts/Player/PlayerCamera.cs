@@ -17,16 +17,9 @@ public class PlayerCamera : MonoBehaviour
     private Vector3 defaultLocalPosition;
     private Vector3 targetLocalPosition;
 
-    private float minSceneX { get; set; }
-    private float maxSceneX { get; set; }
-    private float minSceneY { get; set; }
-    private float maxSceneY { get; set; }
     void Start()
     {
-        minSceneX = -3.0f;
-        maxSceneX = 100000000.0f;
-        minSceneY = -100.0f;
-        maxSceneY = 100000000.0f; 
+        
         if (cameraTarget != null)
         {
             defaultLocalPosition = cameraTarget.localPosition;
@@ -75,23 +68,7 @@ public class PlayerCamera : MonoBehaviour
             targetLocalPosition,
             shiftSpeed * Time.deltaTime
         );
-
-        //Debug.Log("Camera Pos : " + cameraTarget.localPosition.x);
-        Vector3 boundedWorldPosition = cameraTarget.position;
-
-        boundedWorldPosition.x = Mathf.Clamp(boundedWorldPosition.x, minSceneX, maxSceneX);
-        boundedWorldPosition.y = Mathf.Clamp(boundedWorldPosition.y, minSceneY, maxSceneY);
-        // Apply the clamped position back to the world position
-        cameraTarget.position = boundedWorldPosition;
-
         
        
-    }
-
-    // Trigger to adjust the camera max and camera min, not always follow the player.
-    public void LoadScene(float minX, float maxX )
-    {
-        minSceneX = minX;
-        maxSceneX = maxX;
     }
 }

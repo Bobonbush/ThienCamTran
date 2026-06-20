@@ -9,14 +9,40 @@ public class DialogTester : MonoBehaviour
     public DialogStyle style = DialogStyle.Box;  // Box or Bubble
     public Transform bubbleTarget;               // Who the bubble follows (empty = this object)
 
+    bool played = false;
+
+    float time = 0.0f;
+
+
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+        
+        if (time <= 1.0f)
         {
-            if (DialogManager.Instance == null || startNode == null) return;
-
+            time += Time.deltaTime;
+            return;
+        }
+        if(!played)
+        {
             Transform target = bubbleTarget != null ? bubbleTarget : transform;
             DialogManager.Instance.StartDialog(startNode, style, target);
+            played = true;
         }
+
+        if (!DialogManager.Instance.AnimationDone())
+        {
+            return;
+        }
+        time += Time.deltaTime;
+        if(time <= 2.0f)
+        {
+            return;
+        }
+
+        Debug.Log("Ended");
+        DialogManager.Instance.EndDialog();
+
+        Destroy(this.gameObject);
     }
+
 }

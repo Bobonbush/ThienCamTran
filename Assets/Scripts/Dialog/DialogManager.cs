@@ -69,6 +69,14 @@ public class DialogManager : MonoBehaviour
         ShowNode(nextNode);                              // jump to the matching branch
     }
 
+    public bool AnimationDone()
+    {
+        if (active == null) return true;
+
+        return active.AnimationDone;
+    }
+
+
     public void EndDialog()
     {
         if (active != null) active.Close();

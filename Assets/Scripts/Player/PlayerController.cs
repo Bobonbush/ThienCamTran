@@ -17,6 +17,13 @@ public class PlayerController : MonoBehaviour
     private bool canAirDash = true;
     private bool wasDashing = false;
 
+    private bool lockInput = false;
+
+    private float TargetMoveX = 0.0f;
+    
+    private Vector3 oldTransformPosition = Vector3.zero;
+    private Vector2 lockDirection = new Vector2(1, 0);
+
     PlayerStats stat;
 
     Vector2 moveInput;
@@ -25,6 +32,9 @@ public class PlayerController : MonoBehaviour
 
     Vector3 SafeGround = Vector3.zero;
     float LastOnGroundY = 0;
+    float gravityScale = 0.0f;
+
+    
 
     public float CurrentSpeed
     {
@@ -154,8 +164,8 @@ public class PlayerController : MonoBehaviour
 
 
 
-    
 
+    CapsuleCollider2D col;
     Rigidbody2D rb;
     Animator animator;
     private void Awake()
@@ -165,6 +175,7 @@ public class PlayerController : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
         damageable = GetComponent<Damageable>();
         stat = GetComponent<PlayerStats>();
+        col = GetComponent<CapsuleCollider2D>();
     }
 
     private void Update()
@@ -184,9 +195,23 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+
+        if(lockInput )
+        {
+            rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed)  , rb.linearVelocity.y) * lockDirection;
+            TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x) ;
+            oldTransformPosition = transform.position;
+            if(TargetMoveX <= 0)
+            {
+                IsMoving = false;
+                IsRunning = false;
+                lockInput = false;
+            }
+            return ;
+        }
         if (IsDashing)
         {
-            //rb.AddForce();
             rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
         }
         else 
@@ -200,6 +225,8 @@ public class PlayerController : MonoBehaviour
 
         wasDashing = IsDashing;
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
+
+        oldTransformPosition = transform.position;
     }
 
     public void SetFacingDirection(Vector2 moveInput)
@@ -217,6 +244,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnLook(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
         if (touchingDirections.IsGrounded)
         {
             lookInput = context.ReadValue<Vector2>();
@@ -225,6 +253,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
         moveInput = context.ReadValue<Vector2>();
 
         if (IsAlive)
@@ -243,6 +272,8 @@ public class PlayerController : MonoBehaviour
     
     public void OnRun(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
+
         if (context.started)
         {
             IsRunning = true;
@@ -256,6 +287,8 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         // TODO Check if alive as well
+        if (lockInput) return;
+
         if (context.started && touchingDirections.IsGrounded && CanMove)
         {
             animator.SetTrigger(AnimationStrings.jumpTrigger);   
@@ -265,6 +298,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
         if (context.started)
         {
             Debug.Log("Attack pressed");
@@ -274,6 +308,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
         if (context.started && CanDash())
         {
             if (!touchingDirections.IsGrounded)
@@ -287,6 +322,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnSlot1(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
         if (context.started)
         {
             Debug.Log("First Slot pressed");
@@ -296,6 +332,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnSlot2(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
+
+
         if (context.started)
         {
             Debug.Log("Second Slot pressed");
@@ -316,28 +355,82 @@ public class PlayerController : MonoBehaviour
 
     public void OnHit(int damage, Vector2 knockback)
     {
+        if (lockInput) return;
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
     
 
     public void OnHeal(InputAction.CallbackContext context)
     {
+        if (lockInput) return;
         if (context.performed)
         {
             stat.Heal();
         }
     }
 
+
+    public void RunForwardForXDistance(float X)
+    {
+        lockInput = true;
+        Debug.Log("On X" + X);
+        if(X > 0 )
+        {
+            rb.linearVelocity = new Vector2(Mathf.Max(Mathf.Abs(rb.linearVelocity.x), walkSpeed), rb.linearVelocityY);
+            SetFacingDirection(new Vector2(1, 0));
+            lockDirection = new Vector2(1, 0);
+        } else
+        {
+            rb.linearVelocity = new Vector2(-Mathf.Max(Mathf.Abs(rb.linearVelocity.x), walkSpeed), rb.linearVelocityY);
+            X = -X;
+            SetFacingDirection(new Vector2(-1, 0));
+            lockDirection = new Vector2(-1, 0);
+        }
+        IsMoving = true;
+
+        TargetMoveX = X;
+    }
+
+    public void RunForwardForXMilisecondsValue()
+    {
+        lockInput = true;
+    }
+
+
     // When fall out of map or fall into traps
     private void Revive() 
     {
-        Debug.Log("Revive!");
-        transform.position = SafeGround;
+        Teleport(SafeGround);
     }
 
     public void SetSafeGround(Vector3 position)
     {
         SafeGround = position;
         SafeGround.y = LastOnGroundY;
+    }
+
+    public void Teleport(Vector3 tele_position, bool onGround = true)
+    {
+        transform.position = tele_position;
+        oldTransformPosition = transform.position;
+
+        if(onGround) {
+            int groundLayer = 1 << LayerMask.NameToLayer("Ground");
+
+            RaycastHit2D hit = Physics2D.Raycast(
+                tele_position,
+                Vector2.down,
+                100f,
+                groundLayer
+            );
+
+            if (hit)
+            {
+                transform.position = hit.point + Vector2.up * (col.bounds.extents.y + 0.01f);
+                oldTransformPosition = transform.position;
+            }
+
+
+        }
     }
 }

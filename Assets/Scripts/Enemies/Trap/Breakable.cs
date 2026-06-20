@@ -1,6 +1,6 @@
 using UnityEditor.SceneManagement;
 using UnityEngine;
-
+using System.Collections;
 public class Breakable : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -10,7 +10,7 @@ public class Breakable : MonoBehaviour
     {
         animator = GetComponentInParent<Animator>();
         dm = GetComponentInParent<Damageable>();
-        dm.Health = 30;  // 3 hits
+        dm.Health = 10;  // 3 hits
         
     }
 
@@ -22,9 +22,24 @@ public class Breakable : MonoBehaviour
 
         if(!dm.IsAlive)
         {
-            
-            Destroy(transform.parent.gameObject);
+            StartCoroutine(DieRoutine());
         }
 
+    }
+
+
+
+
+    IEnumerator DieRoutine()
+    {
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+
+        // Wait one frame so the trigger takes effect
+        yield return null;
+
+        state = animator.GetCurrentAnimatorStateInfo(0);
+        yield return new WaitForSeconds(state.length);
+
+        Destroy(transform.parent.gameObject);
     }
 }
