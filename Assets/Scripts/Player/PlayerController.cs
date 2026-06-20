@@ -4,6 +4,10 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 public class PlayerController : MonoBehaviour
 {
+
+    [SerializeField]
+    private float maxComboTime = 0.3f;
+
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
     public float jumpImpulse = 10f;
@@ -33,6 +37,8 @@ public class PlayerController : MonoBehaviour
     Vector3 SafeGround = Vector3.zero;
     float LastOnGroundY = 0;
     float gravityScale = 0.0f;
+
+
 
     
 
@@ -164,10 +170,11 @@ public class PlayerController : MonoBehaviour
 
 
 
-
     CapsuleCollider2D col;
     Rigidbody2D rb;
     Animator animator;
+
+    private bool Climbing = false;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -176,6 +183,7 @@ public class PlayerController : MonoBehaviour
         damageable = GetComponent<Damageable>();
         stat = GetComponent<PlayerStats>();
         col = GetComponent<CapsuleCollider2D>();
+        gravityScale = rb.gravityScale;
     }
 
     private void Update()
@@ -196,7 +204,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
-
+        
         if(lockInput )
         {
             rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed)  , rb.linearVelocity.y) * lockDirection;
@@ -220,7 +228,20 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
             if (!damageable.LockVelocity)
-                rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+            {
+                if (Climbing == false)
+                    rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+                else
+                {
+                    
+                    rb.linearVelocity = new Vector2(0.0f, lookInput.y * walkSpeed);
+                    rb.gravityScale = 0.0f;
+                    if(touchingDirections.canClimb == false) {
+                        Climbing = false;
+                        rb.gravityScale = gravityScale;
+                    }
+                }
+            }
         }
 
         wasDashing = IsDashing;
@@ -241,13 +262,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    private float duckLastTime = 0.0f;
     
     public void OnLook(InputAction.CallbackContext context)
     {
         if (lockInput) return;
+        lookInput = context.ReadValue<Vector2>();
+
+        if (lookInput != Vector2.zero)
+        {
+
+            if (Climbing == false)
+            {
+                OnClimb();
+            }
+        }
+
+        
+
+
         if (touchingDirections.IsGrounded)
         {
-            lookInput = context.ReadValue<Vector2>();
+            
+            if (lookInput.y < 0f && Climbing == false)
+            {
+                duckLastTime = Time.time;
+            }
         }
     }
 
@@ -289,8 +330,19 @@ public class PlayerController : MonoBehaviour
         // TODO Check if alive as well
         if (lockInput) return;
 
-        if (context.started && touchingDirections.IsGrounded && CanMove)
+        if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
         {
+            Climbing = false;
+            rb.gravityScale = gravityScale;
+
+            if (Time.time - duckLastTime <= maxComboTime && touchingDirections.IsOnSlidable)
+            {
+
+                OnSlide();
+                return;
+            }
+
+            
             animator.SetTrigger(AnimationStrings.jumpTrigger);   
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
         }
@@ -299,6 +351,7 @@ public class PlayerController : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (lockInput) return;
+        if (Climbing) return;
         if (context.started)
         {
             Debug.Log("Attack pressed");
@@ -309,6 +362,8 @@ public class PlayerController : MonoBehaviour
     public void OnDash(InputAction.CallbackContext context)
     {
         if (lockInput) return;
+        if(Climbing) return;
+
         if (context.started && CanDash())
         {
             if (!touchingDirections.IsGrounded)
@@ -323,6 +378,7 @@ public class PlayerController : MonoBehaviour
     public void OnSlot1(InputAction.CallbackContext context)
     {
         if (lockInput) return;
+        if (Climbing) return;
         if (context.started)
         {
             Debug.Log("First Slot pressed");
@@ -333,7 +389,7 @@ public class PlayerController : MonoBehaviour
     public void OnSlot2(InputAction.CallbackContext context)
     {
         if (lockInput) return;
-
+        if (Climbing) return;
 
         if (context.started)
         {
@@ -344,6 +400,7 @@ public class PlayerController : MonoBehaviour
 
     private bool CanDash()
     {
+        if (Climbing) return false;
         if (!IsAlive || !CanMove || IsDashing)
             return false;
         if (Time.time < lastDashTime + dashCooldown)
@@ -356,6 +413,8 @@ public class PlayerController : MonoBehaviour
     public void OnHit(int damage, Vector2 knockback)
     {
         if (lockInput) return;
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
     
@@ -363,12 +422,37 @@ public class PlayerController : MonoBehaviour
     public void OnHeal(InputAction.CallbackContext context)
     {
         if (lockInput) return;
+        if (Climbing) return;
         if (context.performed)
         {
             stat.Heal();
         }
     }
 
+
+    public void OnSlide()
+    {
+        if (lockInput) return;
+
+        if(touchingDirections.IsOnSlidable)
+        {
+            touchingDirections.sliable.Slide(GetComponent<CapsuleCollider2D>());
+        }
+    }
+
+    public void OnClimb()
+    {
+        if(lockInput) return;
+        if(touchingDirections.canClimb)
+        {
+            
+            rb.gravityScale = 0;
+            OnSlide();
+            rb.linearVelocity = new Vector2(0.0f, lookInput.y * walkSpeed);
+            
+            Climbing = true;
+        }
+    }
 
     public void RunForwardForXDistance(float X)
     {
@@ -420,7 +504,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(
                 tele_position,
                 Vector2.down,
-                100f,
+                50f,
                 groundLayer
             );
 

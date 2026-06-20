@@ -3,16 +3,24 @@ using UnityEngine;
 public class TouchingDirections : MonoBehaviour
 {
     public ContactFilter2D castFilter;
+
+    public ContactFilter2D ladderFilter;
+
     public float groundDistance = 0.05f;
     public float wallDistnace = 0.2f;
     public float ceilingDistance = 0.05f;
 
+
+    Collider2D[] overlaps = new Collider2D[10];
+    
     CapsuleCollider2D touchingCol;
     Animator animator;
 
     RaycastHit2D[] groundHits = new RaycastHit2D[5];
     RaycastHit2D[] wallHits = new RaycastHit2D[5];
     RaycastHit2D[] ceilingHits = new RaycastHit2D[5];
+
+    public Sliable sliable;
 
     [SerializeField]
     private bool _isGrounded = false;
@@ -60,22 +68,101 @@ public class TouchingDirections : MonoBehaviour
             animator.SetBool(AnimationStrings.isOnCeiling, value);
         }
     }
+
+
+    private bool _IsOnSlidable = false;
+
+    private bool _canClimb = false;
+
+    public bool canClimb
+    {
+        private set { _canClimb = value; }
+        get { return _canClimb; }
+    }
+
+    public bool IsOnSlidable
+    {
+        get
+        {
+            return _IsOnSlidable;
+        }
+
+        set
+        {
+            _IsOnSlidable = value;
+        }
+    }
+
+
+
+    private int slidableLayer;
     private void Awake()
     {
         touchingCol = GetComponent<CapsuleCollider2D>();
         animator = GetComponent<Animator>();
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+
+        slidableLayer = LayerMask.NameToLayer("Slidable");
         
     }
+
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        IsGrounded = touchingCol.Cast(Vector2.down, castFilter, groundHits, groundDistance) > 0;
-        IsOnWall = touchingCol.Cast(wallCheckDirection, castFilter, wallHits, wallDistnace) > 0;
-        IsOnCeiling = touchingCol.Cast(Vector2.up, castFilter, ceilingHits, ceilingDistance) > 0;
+
+        int count = touchingCol.Overlap(ladderFilter, overlaps);
+        if(count > 0)
+        {
+            canClimb = true;
+        }else
+        {
+            canClimb = false;
+        }
+
+        int groundHitCount = touchingCol.Cast(Vector2.down, castFilter, groundHits, groundDistance);
+        IsGrounded = groundHitCount > 0;
+
+        IsOnSlidable = false;
+
+
+        for (int i = 0; i < groundHitCount; i++)
+        {
+            if (groundHits[i].collider.gameObject.layer == slidableLayer)
+            {
+                IsOnSlidable = true;
+                sliable = groundHits[i].collider.GetComponent<Sliable>();
+                break;
+            }
+        }
+
+        int OnWallHitCount = touchingCol.Cast(wallCheckDirection, castFilter, wallHits, wallDistnace);
+
+        int minusSlidable = 0;
+        for (int i = 0; i < OnWallHitCount; i++)
+        {
+            if (wallHits[i].collider.gameObject.layer == slidableLayer)
+            {
+                minusSlidable++;
+            }
+        }
+        IsOnWall = (OnWallHitCount - minusSlidable) > 0;
+
+        int CeilingHitCount = touchingCol.Cast(Vector2.up, castFilter, ceilingHits, ceilingDistance);
+        
+        minusSlidable = 0;
+
+        for (int i = 0; i < CeilingHitCount; i++)
+        {
+            if (ceilingHits[i].collider.gameObject.layer == slidableLayer)
+            {
+                minusSlidable++;
+            }
+        }
+
+
+        IsOnCeiling = (CeilingHitCount - minusSlidable) > 0;
     }
+
+
 }
