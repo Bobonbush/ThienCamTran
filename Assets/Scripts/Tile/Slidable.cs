@@ -20,6 +20,7 @@ public class Sliable : MonoBehaviour
 
     private IEnumerator PassThroughRoutine(Collider2D playerCollider)
     {
+        // Nothing
         Physics2D.IgnoreCollision(playerCollider, tilemapCollider, true);
 
 
