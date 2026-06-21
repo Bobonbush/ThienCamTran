@@ -6,11 +6,16 @@ public class Breakable : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     Damageable dm;
     Animator animator;
+
+
+    [SerializeField]
+    private GameObject attachedDeletation;
+
     void Start()
     {
         animator = GetComponentInParent<Animator>();
         dm = GetComponentInParent<Damageable>();
-        dm.Health = 10;  // 3 hits
+        dm.Health = 10;  // 1 hits
         
     }
 
@@ -35,11 +40,24 @@ public class Breakable : MonoBehaviour
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
 
         // Wait one frame so the trigger takes effect
+
+
         yield return null;
+        if (attachedDeletation != null)
+        {
+            HiddenPath hd = attachedDeletation.GetComponent<HiddenPath>();
+            if (hd)
+            {
+                hd.StartFade(0f);
+            }
+        }
 
         state = animator.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSeconds(state.length);
 
+        if (attachedDeletation != null) {
+            Destroy(attachedDeletation.gameObject);
+        }
         Destroy(transform.parent.gameObject);
     }
 }

@@ -498,6 +498,8 @@ public class PlayerController : MonoBehaviour
         transform.position = tele_position;
         oldTransformPosition = transform.position;
 
+        
+
         if(onGround) {
             int groundLayer = 1 << LayerMask.NameToLayer("Ground");
 
@@ -513,8 +515,8 @@ public class PlayerController : MonoBehaviour
                 transform.position = hit.point + Vector2.up * (col.bounds.extents.y + 0.01f);
                 oldTransformPosition = transform.position;
             }
-
-
         }
+
+        SetSafeGround(transform.position);
     }
 }
