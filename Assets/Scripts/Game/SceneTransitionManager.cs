@@ -125,20 +125,6 @@ public class SceneTransitionManager : MonoBehaviour
 
     void UpdateCameraBoundary()
     {
-        // Find the bounds object in the newly loaded scene
-        GameObject localBounds = GameObject.Find("CameraBounds");
-
-        
-
-
-        if (localBounds != null)
-        {
-            CinemachineConfiner2D confiner = GetComponentInChildren<CinemachineConfiner2D>();
-            Collider2D targetCollider = localBounds.GetComponent<Collider2D>();
-
-            
-            confiner.BoundingShape2D = targetCollider;
-            confiner.InvalidateBoundingShapeCache(); 
-        }
+        mainCamera.UpdateGlobalCameraBoundary();
     }
 }

@@ -22,9 +22,9 @@ TagManager:
   - Breakable
   - Slidable
   - Climable
-  - 
-  - 
-  - 
+  - CameraCustomTrigger
+  - Empty
+  - TrapActivator
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 2054236619
+    locked: 0
+  - name: Trap
+    uniqueID: 4004563311
     locked: 0
   - name: Ground
     uniqueID: 1779415923
