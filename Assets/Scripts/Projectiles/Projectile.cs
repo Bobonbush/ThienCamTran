@@ -13,6 +13,8 @@ public class Projectile : MonoBehaviour
     Animator animator;       // có thể null (đạn sprite tĩnh như Arrow)
     Collider2D col;
     bool hasImpacted = false;
+    bool hasLaunchVelocity = false;
+    Vector2 launchVelocity;
 
     private void Awake()
     {
@@ -23,8 +25,17 @@ public class Projectile : MonoBehaviour
 
     void Start()
     {
-        rb.linearVelocity = new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
+        rb.linearVelocity = hasLaunchVelocity ? launchVelocity : new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
         Destroy(gameObject, maxLifetime);
+    }
+
+    public void Launch(Vector2 velocity)
+    {
+        hasLaunchVelocity = true;
+        launchVelocity = velocity;
+
+        if (rb != null)
+            rb.linearVelocity = velocity;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

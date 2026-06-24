@@ -139,6 +139,29 @@ DialogManager.Instance.StartDialog(myStartNode, DialogStyle.Bubble, character.tr
 ### Cách 3 — Test nhanh
 Gắn `DialogTester` lên Player, gán `Start Node`, chọn `Style`, bấm **Play** rồi nhấn **F**.
 
+### Cách 4 — Đến gần hiện nút E (DialogInteractable)
+Gắn `DialogInteractable` lên prefab (NPC, rương, bảng...). Khi Player đến gần sẽ hiện nút **E**
+trên đầu object; nhấn **E** để mở thoại.
+
+Phát hiện Player bằng **đo khoảng cách** (không dùng trigger), nên hoạt động bất kể object cấu hình
+vật lý kiểu gì — kể cả enemy có trọng lực mà Player chạy xuyên qua được.
+
+Setup:
+- Tạo một object con làm dấu **E** (vd SpriteRenderer gắn sprite phím E, hoặc TextMeshPro 3D gõ chữ "E"),
+  đặt phía trên đầu object. Kéo nó vào ô **Prompt Object** (code tự ẩn/hiện theo tầm).
+- Điền **Start Node**, chọn **Style**, (Bubble thì set **Bubble Target** nếu cần).
+- **Interact Range**: tầm hiện nút E (vẽ vòng vàng trong Scene khi chọn object).
+- **Trigger Once**: bật nếu chỉ cho nói chuyện 1 lần.
+- **Player Passes Through**: bật = Player đi xuyên qua object (object vẫn rơi/đứng trên đất bình thường).
+
+Lưu ý: Player phải có tag **Player**. Nút E tự ẩn khi đang có thoại khác mở, và hiện lại khi thoại đóng
+(nếu Player vẫn trong tầm). Nếu object có lật mặt (đổi `localScale.x`) thì chữ E con cũng lật — khi đó để
+dấu E thành object riêng không bị lật, hoặc dùng sprite đối xứng.
+
+> Muốn vừa **chịu trọng lực** vừa **chạy xuyên qua**: để Rigidbody2D = **Dynamic**, Gravity Scale > 0,
+> và bật **Player Passes Through**. Script sẽ cho Player bỏ qua va chạm với object (dùng
+> `Physics2D.IgnoreCollision`) nhưng object vẫn va chạm với đất nên vẫn rơi và đứng yên trên nền.
+
 ---
 
 ## 7. Làm gì đó sau khi thoại kết thúc

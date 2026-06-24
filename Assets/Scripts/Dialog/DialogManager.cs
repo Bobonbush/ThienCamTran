@@ -19,6 +19,8 @@ public class DialogManager : MonoBehaviour
 
     private DialogView active;            // the view used by the current conversation
 
+    public bool IsActive => active != null;   // true while a conversation is on screen
+
     private void Awake()
     {
         Instance = this;
