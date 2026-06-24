@@ -1,4 +1,3 @@
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
@@ -9,11 +8,15 @@ public class Knight : MonoBehaviour
     public float walkStopRate = 0.1f;
     public DetectionZone attackZone;
     public DetectionZone cliffDetectionZone;
+    public bool moveInRange = false;
+    public BoxCollider2D moveRange;
 
     Rigidbody2D rb;
     TouchingDirections touchingDirections;
     Animator animator;
     Damageable damageable;
+    Bounds moveRangeBounds;
+    bool hasMoveRangeBounds;
     public enum WalkableDirection
     {
         Right,
@@ -80,6 +83,12 @@ public class Knight : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
         animator = GetComponent<Animator>();
         damageable = GetComponent<Damageable>();
+
+        if (moveRange != null)
+        {
+            moveRangeBounds = moveRange.bounds;
+            hasMoveRangeBounds = true;
+        }
     }
 
     void Update()
@@ -95,6 +104,12 @@ public class Knight : MonoBehaviour
     {
         if (touchingDirections.IsGrounded && touchingDirections.IsOnWall)
         {
+            FlipDirection();
+        }
+
+        if (moveInRange && hasMoveRangeBounds && IsNextStepOutsideMoveRange())
+        {
+            KeepInsideMoveRange();
             FlipDirection();
         }
 
@@ -140,5 +155,34 @@ public class Knight : MonoBehaviour
         {
             FlipDirection();
         }
+    }
+
+    private bool IsNextStepOutsideMoveRange()
+    {
+        float currentX = transform.position.x;
+        float nextX = currentX + walkDiretionVector.x * Mathf.Max(maxSpeed, Mathf.Abs(rb.linearVelocityX)) * Time.fixedDeltaTime;
+        return currentX < moveRangeBounds.min.x || currentX > moveRangeBounds.max.x || nextX < moveRangeBounds.min.x || nextX > moveRangeBounds.max.x;
+    }
+
+    private void KeepInsideMoveRange()
+    {
+        Vector3 position = transform.position;
+        position.x = Mathf.Clamp(position.x, moveRangeBounds.min.x, moveRangeBounds.max.x);
+        transform.position = position;
+
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!moveInRange)
+            return;
+
+        Gizmos.color = Color.green;
+
+        if (hasMoveRangeBounds)
+            Gizmos.DrawWireCube(moveRangeBounds.center, moveRangeBounds.size);
+        else if (moveRange != null)
+            Gizmos.DrawWireCube(moveRange.bounds.center, moveRange.bounds.size);
     }
 }

@@ -2,6 +2,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
+[RequireComponent(typeof(Inventory))]
 public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 5f;
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     public float dashSpeed = 200f;
     public float dashCooldown = 0.8f;
+    public float interactRange = 1.5f;
+    public LayerMask interactLayerMask = ~0;
 
     private float lastDashTime = -999f;
     private int dashDir = 1;
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour
     Vector2 moveInput;
     TouchingDirections touchingDirections;
     Damageable damageable;
+    Inventory inventory;
 
     Vector3 SafeGround = Vector3.zero;
     float LastOnGroundY = 0;
@@ -158,6 +162,8 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D rb;
     Animator animator;
+    Item promptedItem;
+    ItemContainer promptedContainer;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -165,6 +171,7 @@ public class PlayerController : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
         damageable = GetComponent<Damageable>();
         stat = GetComponent<PlayerStats>();
+        inventory = GetComponent<Inventory>();
     }
 
     private void Update()
@@ -179,6 +186,13 @@ public class PlayerController : MonoBehaviour
         {
             LastOnGroundY = transform.position.y;
             canAirDash = true;
+        }
+
+        UpdateInteractPrompts();
+
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            InteractWithNearest();
         }
     }
 
@@ -272,6 +286,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            InteractWithNearest();
+        }
+    }
+
     public void OnDash(InputAction.CallbackContext context)
     {
         if (context.started && CanDash())
@@ -339,5 +361,97 @@ public class PlayerController : MonoBehaviour
     {
         SafeGround = position;
         SafeGround.y = LastOnGroundY;
+    }
+
+    private void InteractWithNearest()
+    {
+        IInteractable interactable = FindNearestInteractable();
+        if (interactable != null && interactable.CanInteract)
+            interactable.Interact(this);
+    }
+
+    private void UpdateInteractPrompts()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
+        Item nearestItem = null;
+        ItemContainer nearestContainer = null;
+        float bestDistance = float.MaxValue;
+
+        foreach (Collider2D col in colliders)
+        {
+            Item item = col.GetComponentInParent<Item>();
+            ItemContainer container = col.GetComponentInParent<ItemContainer>();
+
+            if (item != null)
+            {
+                float distance = Vector2.Distance(transform.position, item.transform.position);
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    nearestItem = item;
+                    nearestContainer = null;
+                }
+            }
+
+            if (container != null)
+            {
+                float distance = Vector2.Distance(transform.position, container.transform.position);
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    nearestItem = null;
+                    nearestContainer = container;
+                }
+            }
+        }
+
+        foreach (Collider2D col in colliders)
+        {
+            Item item = col.GetComponentInParent<Item>();
+            if (item != null)
+                item.SetPromptVisible(item == nearestItem && item.CanInteract);
+
+            ItemContainer container = col.GetComponentInParent<ItemContainer>();
+            if (container != null)
+                container.SetPromptVisible(container == nearestContainer && container.CanInteract);
+        }
+
+        if (promptedItem != null && promptedItem != nearestItem)
+            promptedItem.SetPromptVisible(false);
+
+        if (promptedContainer != null && promptedContainer != nearestContainer)
+            promptedContainer.SetPromptVisible(false);
+
+        promptedItem = nearestItem;
+        promptedContainer = nearestContainer;
+    }
+
+    private IInteractable FindNearestInteractable()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
+        IInteractable nearest = null;
+        float bestDistance = float.MaxValue;
+
+        foreach (Collider2D col in colliders)
+        {
+            IInteractable interactable = col.GetComponentInParent<IInteractable>();
+            if (interactable == null || !interactable.CanInteract)
+                continue;
+
+            float distance = Vector2.Distance(transform.position, col.transform.position);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                nearest = interactable;
+            }
+        }
+
+        return nearest;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
     }
 }
