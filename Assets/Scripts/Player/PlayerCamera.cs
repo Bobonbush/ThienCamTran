@@ -15,7 +15,12 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float activationDelay = 0.15f;   // How long you must hold the button
     [SerializeField] private float shiftSpeed = 8f;         // How fast the target moves
 
-    
+    [SerializeField] private float offsetTransitionSpeed = 3f;
+
+    private Vector3 currentOffsetLocalPosition = Vector3.zero;
+
+
+
 
     private float timer = 0f;
     private Vector3 defaultLocalPosition;
@@ -40,7 +45,12 @@ public class PlayerCamera : MonoBehaviour
     void Update()
     {
 
-        
+        currentOffsetLocalPosition = Vector3.Lerp(
+             currentOffsetLocalPosition,
+             offsetLocalPosition,
+             offsetTransitionSpeed * Time.deltaTime
+        );
+
         if (cameraTarget == null) return;
 
         // 1. Check if the player is standing still on the ground
@@ -55,7 +65,7 @@ public class PlayerCamera : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= activationDelay)
             {
-                targetLocalPosition = defaultLocalPosition + new Vector3(0, lookDistance, 0) + offsetLocalPosition;
+                targetLocalPosition = defaultLocalPosition + new Vector3(0, lookDistance, 0) + currentOffsetLocalPosition;
             } 
         }
         else if (player.IsIdle && verticalInput < -0.1f) // Holding DOWN
@@ -63,14 +73,14 @@ public class PlayerCamera : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= activationDelay)
             {
-                targetLocalPosition = defaultLocalPosition + new Vector3(0, -lookDistance, 0) + offsetLocalPosition;
+                targetLocalPosition = defaultLocalPosition + new Vector3(0, -lookDistance, 0) + currentOffsetLocalPosition;
             }
         }
         else // Moving or not pressing anything: instantly reset
         {
             
             timer = 0f;
-            targetLocalPosition = defaultLocalPosition + offsetLocalPosition;
+            targetLocalPosition = defaultLocalPosition + currentOffsetLocalPosition;
         }
 
         // 3. Smoothly slide the target to its destination

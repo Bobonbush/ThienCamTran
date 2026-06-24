@@ -15,7 +15,7 @@ public class Breakable : MonoBehaviour
     {
         animator = GetComponentInParent<Animator>();
         dm = GetComponentInParent<Damageable>();
-        dm.Health = 10;  // 1 hits
+        dm.Health = 1;  // 1 hits
         
     }
 
@@ -23,6 +23,7 @@ public class Breakable : MonoBehaviour
     {
 
         animator.SetTrigger("hit"); // if have.
+        
         dm.invicibilityTimer = -1.0f;
 
         if(!dm.IsAlive)
@@ -37,23 +38,31 @@ public class Breakable : MonoBehaviour
 
     IEnumerator DieRoutine()
     {
-        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo state;
+
+        state = animator.GetCurrentAnimatorStateInfo(0);
 
         // Wait one frame so the trigger takes effect
 
 
         yield return null;
+        
+
+
         if (attachedDeletation != null)
         {
-            HiddenPath hd = attachedDeletation.GetComponent<HiddenPath>();
-            if (hd)
-            {
-                hd.StartFade(0f);
-            }
+             HiddenPath hd = attachedDeletation.GetComponent<HiddenPath>();
+             if (hd)
+             {
+                  hd.StartFade(0f);
+             }
         }
 
-        state = animator.GetCurrentAnimatorStateInfo(0);
-        yield return new WaitForSeconds(state.length);
+
+        if(animator != null) { 
+            state = animator.GetCurrentAnimatorStateInfo(0);
+            yield return new WaitForSeconds(state.length);
+        }
 
         if (attachedDeletation != null) {
             Destroy(attachedDeletation.gameObject);

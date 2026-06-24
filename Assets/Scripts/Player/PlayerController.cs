@@ -502,7 +502,7 @@ public class PlayerController : MonoBehaviour
 
         if(onGround) {
             int groundLayer = 1 << LayerMask.NameToLayer("Ground");
-
+            groundLayer |= (1 << LayerMask.NameToLayer("Slidable"));
             RaycastHit2D hit = Physics2D.Raycast(
                 tele_position,
                 Vector2.down,
@@ -515,6 +515,8 @@ public class PlayerController : MonoBehaviour
                 transform.position = hit.point + Vector2.up * (col.bounds.extents.y + 0.01f);
                 oldTransformPosition = transform.position;
             }
+
+
         }
 
         SetSafeGround(transform.position);
