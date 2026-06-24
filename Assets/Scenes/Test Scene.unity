@@ -328,7 +328,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.62, z: -10}
+  m_LocalPosition: {x: 0, y: 1.9300001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -458,9 +458,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
   cameraTarget: {fileID: 536441828}
   player: {fileID: 623337606}
+  confiner: {fileID: 0}
+  globalBoundary: {fileID: 0}
   lookDistance: 4
   activationDelay: 0.5
   shiftSpeed: 8
+  offsetTransitionSpeed: 3
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,7 +1128,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2054236619
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2191668444884831948, guid: e7046da20f1183a45829a9f1de3ec978, type: 3}
@@ -9511,7 +9514,7 @@ Transform:
   m_GameObject: {fileID: 1501629781}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.62, z: -10}
+  m_LocalPosition: {x: 0, y: 1.9300001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10008,7 +10011,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2054236619
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3095648225022645599, guid: 62b5570842852944888340c2d3ba021f, type: 3}
@@ -10071,6 +10074,7 @@ MonoBehaviour:
   dialogText: {fileID: 827804431}
   choicesContainer: {fileID: 1658876608}
   choiceButtonPrefab: {fileID: 0}
+  speakNameLastRender: 1
   followTarget: 1
   worldOffset: {x: 0, y: 2, z: 0}
   useFade: 1
@@ -10080,6 +10084,7 @@ MonoBehaviour:
   useTypewriter: 1
   typeSpeed: 30
   typeFadeChars: 3
+  newLinePause: 0.01
 --- !u!224 &1864989181
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10280,7 +10285,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2054236619
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8251505574100086631, guid: d95405abba027bd42a2f93ace84c53f3, type: 3}
@@ -10365,6 +10370,7 @@ MonoBehaviour:
   dialogText: {fileID: 1700148148}
   choicesContainer: {fileID: 1921634685}
   choiceButtonPrefab: {fileID: 9110799372587135478, guid: e6182ba0327a3f54f9f52f3cd482ea71, type: 3}
+  speakNameLastRender: 1
   followTarget: 1
   worldOffset: {x: 0, y: 2, z: 0}
   useFade: 1
@@ -10374,6 +10380,7 @@ MonoBehaviour:
   useTypewriter: 1
   typeSpeed: 30
   typeFadeChars: 3
+  newLinePause: 0.01
 --- !u!114 &2123677213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10575,7 +10582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.88
+      value: -0.57
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10633,9 +10640,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoblinEmeny
       objectReference: {fileID: 0}
+    - target: {fileID: 2977641702233020034, guid: fdab425f8666e304e92ccb9c15975539, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063738653523661250, guid: fdab425f8666e304e92ccb9c15975539, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5146863886857341844, guid: fdab425f8666e304e92ccb9c15975539, type: 3}
       propertyPath: m_BodyType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6962786660816864439, guid: fdab425f8666e304e92ccb9c15975539, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 6962786660816864439, guid: fdab425f8666e304e92ccb9c15975539, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.52
       objectReference: {fileID: 0}
     - target: {fileID: 6965551098919998198, guid: fdab425f8666e304e92ccb9c15975539, type: 3}
       propertyPath: m_LocalPosition.x
