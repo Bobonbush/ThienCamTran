@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public float jumpImpulse = 10f;
     public float airWalkSpeed = 3f;
 
+    public float maxSpeedFall = 50f;
+    public float gravityMultiplier = 2.0f;
+
     public float dashSpeed = 200f;
     public float dashCooldown = 0.8f;
     public float interactRange = 1.5f;
@@ -23,10 +26,14 @@ public class PlayerController : MonoBehaviour
     private int dashDir = 1;
     private bool canAirDash = true;
     private bool wasDashing = false;
+    private bool isHoldingJump;
 
     private bool lockInput = false;
 
     private float TargetMoveX = 0.0f;
+
+    private float maxJumpTime = 1.5f;
+    private float Jumptiming = 0.0f;
     
     private Vector3 oldTransformPosition = Vector3.zero;
     private Vector2 lockDirection = new Vector2(1, 0);
@@ -59,7 +66,6 @@ public class PlayerController : MonoBehaviour
                         if (IsRunning)
                         {
                             return runSpeed;
-
                         }
                         else
                         {
@@ -68,6 +74,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
+                        
                         return Mathf.Max(walkSpeed, Mathf.Abs(rb.linearVelocityX));
                     }
                 }
@@ -213,6 +220,11 @@ public class PlayerController : MonoBehaviour
         {
             InteractWithNearest();
         }
+
+        if(isHoldingJump)
+        {
+            Jumptiming += Time.deltaTime;
+        }
     }
 
     private void FixedUpdate()
@@ -244,13 +256,25 @@ public class PlayerController : MonoBehaviour
             if (!damageable.LockVelocity)
             {
                 if (Climbing == false)
+                {
                     rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+                    
+                    
+                    if (rb.linearVelocityY < 0.0f)
+                    {
+
+                        rb.gravityScale = gravityScale * gravityMultiplier;
+                    }
+
+                    rb.linearVelocity = new Vector2(rb.linearVelocityX, Mathf.Max(rb.linearVelocityY, -maxSpeedFall));
+                }
                 else
                 {
-                    
+
                     rb.linearVelocity = new Vector2(0.0f, lookInput.y * walkSpeed);
                     rb.gravityScale = 0.0f;
-                    if(touchingDirections.canClimb == false) {
+                    if (touchingDirections.canClimb == false)
+                    {
                         Climbing = false;
                         rb.gravityScale = gravityScale;
                     }
@@ -344,6 +368,11 @@ public class PlayerController : MonoBehaviour
         // TODO Check if alive as well
         if (lockInput) return;
 
+        if(context.started) {  isHoldingJump = true; Jumptiming = 0.0f; rb.gravityScale = gravityScale; }
+        if (context.canceled) {
+            rb.gravityScale = gravityMultiplier / Mathf.Min(1.0f, Mathf.Max(Jumptiming / maxJumpTime , 0.2f));
+            isHoldingJump = false; 
+        }
         if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
         {
             Climbing = false;
@@ -458,7 +487,7 @@ public class PlayerController : MonoBehaviour
 
         if(touchingDirections.IsOnSlidable)
         {
-            touchingDirections.sliable.Slide(GetComponent<CapsuleCollider2D>());
+            touchingDirections.sliable.Slide(GetComponent<CapsuleCollider2D>(), GetComponent<BoxCollider2D>());
         }
     }
 
@@ -612,6 +641,8 @@ public class PlayerController : MonoBehaviour
         transform.position = tele_position;
         oldTransformPosition = transform.position;
 
+
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
         
 
         if(onGround) {
@@ -626,7 +657,7 @@ public class PlayerController : MonoBehaviour
 
             if (hit)
             {
-                transform.position = hit.point + Vector2.up * (col.bounds.extents.y + 0.01f);
+                transform.position = hit.point + Vector2.up * (col.bounds.extents.y * 5.0f);
                 oldTransformPosition = transform.position;
             }
 

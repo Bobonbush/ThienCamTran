@@ -14,6 +14,7 @@ public class TouchingDirections : MonoBehaviour
     Collider2D[] overlaps = new Collider2D[10];
     
     CapsuleCollider2D touchingCol;
+    BoxCollider2D boxCol;
     Animator animator;
 
     RaycastHit2D[] groundHits = new RaycastHit2D[5];
@@ -101,6 +102,8 @@ public class TouchingDirections : MonoBehaviour
         touchingCol = GetComponent<CapsuleCollider2D>();
         animator = GetComponent<Animator>();
 
+        boxCol = GetComponent<BoxCollider2D>();
+
         slidableLayer = LayerMask.NameToLayer("Slidable");
         
     }
@@ -111,7 +114,7 @@ public class TouchingDirections : MonoBehaviour
     void FixedUpdate()
     {
 
-        int count = touchingCol.Overlap(ladderFilter, overlaps);
+        int count = touchingCol.Overlap(ladderFilter, overlaps) + boxCol.Overlap(ladderFilter, overlaps);
         if(count > 0)
         {
             canClimb = true;
@@ -120,7 +123,7 @@ public class TouchingDirections : MonoBehaviour
             canClimb = false;
         }
 
-        int groundHitCount = touchingCol.Cast(Vector2.down, castFilter, groundHits, groundDistance);
+        int groundHitCount = boxCol.Cast(Vector2.down, castFilter, groundHits, groundDistance);
         IsGrounded = groundHitCount > 0;
 
         IsOnSlidable = false;

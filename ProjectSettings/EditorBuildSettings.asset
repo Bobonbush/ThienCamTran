@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arc1/Underground-EmergencyRoom.unity
     guid: fb1608f96affae34aacba46e8cfeec3c
+  - enabled: 0
+    path: Assets/Scenes/Arc1/OutSkirt-3.unity
+    guid: f5fc5b38ef1da204eb95268a52af5b78
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

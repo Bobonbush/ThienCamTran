@@ -12,11 +12,19 @@ public class Sliable : MonoBehaviour
         tilemapCollider = GetComponent<CompositeCollider2D>();
     }
 
-    // Triggered by your Player's Down + Space input combo
     public void Slide(Collider2D playerCollider)
     {
         StartCoroutine(PassThroughRoutine(playerCollider));
     }
+
+    public void Slide(params Collider2D[] playerColliders)
+    {
+        StartCoroutine(PassThroughRoutine(playerColliders));
+    }
+
+    
+
+
 
     private IEnumerator PassThroughRoutine(Collider2D playerCollider)
     {
@@ -27,5 +35,25 @@ public class Sliable : MonoBehaviour
 
 
         Physics2D.IgnoreCollision(playerCollider, tilemapCollider, false);
+    }
+
+    private IEnumerator PassThroughRoutine(Collider2D[] playerColliders)
+    {
+        // Turn off collision for every collider passed in
+        foreach (var col in playerColliders)
+        {
+            Physics2D.IgnoreCollision(col, tilemapCollider, true);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        foreach (var col in playerColliders)
+        {
+
+            if (col != null)
+            {
+                Physics2D.IgnoreCollision(col, tilemapCollider, false);
+            }
+        }
     }
 }
