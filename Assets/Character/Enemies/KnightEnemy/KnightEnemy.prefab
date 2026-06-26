@@ -121,13 +121,14 @@ GameObject:
   - component: {fileID: 6763128224074821087}
   - component: {fileID: 8036775491050591284}
   - component: {fileID: 7023443060949656367}
+  - component: {fileID: 3505003893976337898}
   m_Layer: 8
   m_Name: KnightEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5459008834506495148
 Transform:
   m_ObjectHideFlags: 0
@@ -401,15 +402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a101239336e39f4a8472e14d1083fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  walkAcceleration: 50
-  maxSpeed: 3
-  walkStopRate: 0.1
-  cliffDetectionZone: {fileID: 5297448705347466736}
-  stationalEnemy: 1
-  spawn: {x: 0, y: 0, z: 0}
-  moveInRange: 1
-  moveRange: {fileID: 0}
-  FlipWaitingMaxTime: 2
   AlertMaxTime: 5
   raycastInfo:
     rayCast: {fileID: 5459008834506495148}
@@ -464,6 +456,32 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.0248227, y: 0.7062998}
   m_EdgeRadius: 0
+--- !u!114 &3505003893976337898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812250474075147849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225fd800c37309d488c81c92efeacd5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
+  walkAcceleration: 50
+  maxSpeed: 3
+  walkStopRate: 0.1
+  cliffDetectionZone: {fileID: 3791231753902012582}
+  stationalEnemy: 0
+  spawn: {x: 0, y: 0, z: 0}
+  moveInRange: 1
+  moveRange: {fileID: 0}
+  FlipWaitingMaxTime: 2
+  flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
+  duration: 0.25
+  lockedMove: 0
+  shouldMove: 1
+  goingBack: 0
 --- !u!1 &4238943475409541100
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,8 +664,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7235909138153428062}
-  - component: {fileID: 5297448705347466736}
   - component: {fileID: 4442812215076831698}
+  - component: {fileID: 3791231753902012582}
   m_Layer: 11
   m_Name: CliffDetectionZone
   m_TagString: Untagged
@@ -670,34 +688,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5459008834506495148}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5297448705347466736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7718886768475055361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5951f7784de7e24a96887c4f8e6a05b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectionZone
-  noCollidersRemain:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 9037322118040619569}
-        m_TargetAssemblyTypeName: Knight, Assembly-CSharp
-        m_MethodName: OnCliffDetected
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  detectedColliders: []
 --- !u!61 &4442812215076831698
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -732,7 +722,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.06319195}
+  m_Offset: {x: 0.5631094, y: 0.34577614}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -742,5 +732,18 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1.1263839}
+  m_Size: {x: 2.2404232, y: 0.5612155}
   m_EdgeRadius: 0
+--- !u!114 &3791231753902012582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7718886768475055361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66c3a7b1ce04aae4d804080ba1efd0cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DetectionGroundZone
+  detectedColliders: []

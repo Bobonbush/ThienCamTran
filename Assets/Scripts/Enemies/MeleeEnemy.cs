@@ -11,7 +11,6 @@ public class MeleeEnemy : MonoBehaviour
 
     private RaycastHit2D hit;
     private GameObject target;
-    private float distance;
     private bool InAtkRange = false;
 
     
@@ -81,6 +80,9 @@ public class MeleeEnemy : MonoBehaviour
             target = hit.collider.gameObject;
             ChaseLogic();
             e_move.lockedMove = true;
+        } else
+        {
+            e_move.lockedMove = false;
         }
     }
 
@@ -134,6 +136,7 @@ public class MeleeEnemy : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
         TriggerAlert();
+        e_move.Flash();
     }
 
 

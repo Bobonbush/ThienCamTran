@@ -188,6 +188,9 @@ public class PlayerController : MonoBehaviour
     ItemContainer promptedContainer;
 
     private bool Climbing = false;
+
+    private bool notFallYet = false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -247,6 +250,7 @@ public class PlayerController : MonoBehaviour
         if (IsDashing)
         {
             rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
+            damageable.setInvisibleFrame(0.1f);
         }
         else 
         {
@@ -260,10 +264,13 @@ public class PlayerController : MonoBehaviour
                     rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
                     
                     
-                    if (rb.linearVelocityY < 0.0f)
+                    if (rb.linearVelocityY < 0.0f && !wasDashing)
                     {
-
+                        notFallYet = false;
                         rb.gravityScale = gravityScale * gravityMultiplier;
+                    } else if(notFallYet == false)
+                    {
+                        rb.gravityScale = gravityScale;
                     }
 
                     rb.linearVelocity = new Vector2(rb.linearVelocityX, Mathf.Max(rb.linearVelocityY, -maxSpeedFall));
@@ -368,14 +375,10 @@ public class PlayerController : MonoBehaviour
         // TODO Check if alive as well
         if (lockInput) return;
 
-        if(context.started) {  isHoldingJump = true; Jumptiming = 0.0f; rb.gravityScale = gravityScale; }
-        if (context.canceled) {
-            rb.gravityScale = gravityMultiplier / Mathf.Min(1.0f, Mathf.Max(Jumptiming / maxJumpTime , 0.2f));
-            isHoldingJump = false; 
-        }
         if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
         {
             Climbing = false;
+
             rb.gravityScale = gravityScale;
 
             if (Time.time - duckLastTime <= maxComboTime && touchingDirections.IsOnSlidable)
@@ -384,11 +387,27 @@ public class PlayerController : MonoBehaviour
                 OnSlide();
                 return;
             }
+        }
 
-            
-            animator.SetTrigger(AnimationStrings.jumpTrigger);   
+        
+
+
+        if (context.started) {  
+            isHoldingJump = true; Jumptiming = 0.0f; rb.gravityScale = gravityScale; 
+        }
+        if (context.canceled) {
+            rb.gravityScale = gravityMultiplier / Mathf.Min(1.0f, Mathf.Max(Jumptiming / maxJumpTime , 0.2f));
+            isHoldingJump = false;
+            notFallYet = true;
+        }
+
+        if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
+        {
+
+            animator.SetTrigger(AnimationStrings.jumpTrigger);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
         }
+
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -397,7 +416,6 @@ public class PlayerController : MonoBehaviour
         if (Climbing) return;
         if (context.started)
         {
-            Debug.Log("Attack pressed");
             animator.SetTrigger(AnimationStrings.attackTrigger);
         }
     }
@@ -487,6 +505,7 @@ public class PlayerController : MonoBehaviour
 
         if(touchingDirections.IsOnSlidable)
         {
+            Debug.Log("Slide");
             touchingDirections.sliable.Slide(GetComponent<CapsuleCollider2D>(), GetComponent<BoxCollider2D>());
         }
     }
@@ -494,6 +513,7 @@ public class PlayerController : MonoBehaviour
     public void OnClimb()
     {
         if(lockInput) return;
+
         if(touchingDirections.canClimb)
         {
             

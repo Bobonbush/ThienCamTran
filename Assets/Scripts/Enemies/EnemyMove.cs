@@ -6,7 +6,7 @@ public class EnemyMove : MonoBehaviour
     public float walkAcceleration = 50f;
     public float maxSpeed = 3f;
     public float walkStopRate = 0.1f;
-    public DetectionZone cliffDetectionZone;
+    public DetectionGroundZone cliffDetectionZone;
 
 
     public bool stationalEnemy = false;
@@ -35,7 +35,14 @@ public class EnemyMove : MonoBehaviour
         Left
     }
 
+    [SerializeField] private Material flashMaterial;
 
+    [SerializeField] private float duration;
+
+    private SpriteRenderer spriteRenderer;
+    private Material originalMaterial;
+
+    private Coroutine flashRoute;
 
     private WalkableDirection _walkDirection;
 
@@ -54,7 +61,7 @@ public class EnemyMove : MonoBehaviour
 
     public bool lockedMove = false;
 
-    public bool shouldMove = false;
+    public bool shouldMove = true;
 
     private float waitforNextFlip = 0.0f;
     private float maxWaitforNextFlip = 1.0f;
@@ -116,6 +123,7 @@ public class EnemyMove : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
         animator = GetComponent<Animator>();
         damageable = GetComponent<Damageable>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         spawn = transform.position;
 
@@ -133,6 +141,9 @@ public class EnemyMove : MonoBehaviour
         }
 
 
+        cliffDetectionZone = GetComponentInChildren<DetectionGroundZone>();
+
+        originalMaterial = spriteRenderer.material;
 
         if (moveRange != null)
         {
@@ -159,17 +170,23 @@ public class EnemyMove : MonoBehaviour
 
         if (lockedMove) return;
 
+
+        if(stationalEnemy)
+        {
+            return;
+        }
         
 
-        if (touchingDirections.IsGrounded && touchingDirections.IsOnWall && flipState == null && waitforNextFlip > maxWaitforNextFlip )
+        if (touchingDirections.IsGrounded && (touchingDirections.IsOnWall || cliffDetectionZone.detectedColliders.Count == 0) && flipState == null && waitforNextFlip > maxWaitforNextFlip )
         {
             flipState = StartCoroutine(FlipDirection());
         }
 
+
         if (moveInRange && hasMoveRangeBounds && IsNextStepOutsideMoveRange() && flipState == null && waitforNextFlip > maxWaitforNextFlip)
         {
             KeepInsideMoveRange();
-            flipState = StartCoroutine(FlipDirection());
+            //flipState = StartCoroutine(FlipDirection());
         }
 
         if (!damageable.LockVelocity && flipState == null )
@@ -241,6 +258,8 @@ public class EnemyMove : MonoBehaviour
 
     private IEnumerator FlipDirection()
     {
+
+        rb.linearVelocityX = 0.0f;
         yield return new WaitForSeconds(FlipWaitingMaxTime);
 
         if (WalkDirection == WalkableDirection.Right)
@@ -314,5 +333,26 @@ public class EnemyMove : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(Mathf.Lerp(rb.linearVelocityX, 0, walkStopRate), rb.linearVelocity.y);
         }
+    }
+
+    public void Flash()
+    {
+        if(flashRoute != null)
+        {
+            StopCoroutine(flashRoute) ;
+        }
+
+        flashRoute = StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
+        spriteRenderer.material = flashMaterial;
+
+        yield return new WaitForSeconds(duration);
+
+        spriteRenderer.material = originalMaterial;
+
+        flashRoute = null;
     }
 }
