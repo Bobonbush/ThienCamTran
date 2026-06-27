@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     TouchingDirections touchingDirections;
     Damageable damageable;
     Inventory inventory;
+    InventoryUI inventoryUI;
 
     Vector3 SafeGround = Vector3.zero;
     float LastOnGroundY = 0;
@@ -172,6 +173,10 @@ public class PlayerController : MonoBehaviour
         damageable = GetComponent<Damageable>();
         stat = GetComponent<PlayerStats>();
         inventory = GetComponent<Inventory>();
+        inventoryUI = GetComponent<InventoryUI>();
+
+        if (inventoryUI == null)
+            inventoryUI = gameObject.AddComponent<InventoryUI>();
     }
 
     private void Update()
