@@ -13,10 +13,29 @@ namespace Game.UI
     public class PauseMenu : UIScreen
     {
         [SerializeField] private OptionsScreen optionsScreen;
+        [Tooltip("Container holding the Continue/Options/Quit buttons. Hidden while Options is open " +
+                 "so the two menus don't overlap (same idea as the main menu hiding its title).")]
+        [SerializeField] private GameObject menuButtons;
         [Tooltip("Name of the main-menu scene to return to on 'Quit to Menu'.")]
         [SerializeField] private string mainMenuScene = "MainMenu";
 
         public bool IsPaused { get; private set; }
+
+        private void Start()
+        {
+            // When Options closes (via Back/Esc), bring the pause buttons back.
+            if (optionsScreen != null) optionsScreen.Closed += ShowButtons;
+        }
+
+        private void OnDestroy()
+        {
+            if (optionsScreen != null) optionsScreen.Closed -= ShowButtons;
+        }
+
+        private void ShowButtons()
+        {
+            if (menuButtons != null) menuButtons.SetActive(true);
+        }
 
         private void Update()
         {
@@ -55,6 +74,7 @@ namespace Game.UI
 
         public void OnOptions()
         {
+            if (menuButtons != null) menuButtons.SetActive(false);
             if (optionsScreen != null) optionsScreen.Open();
         }
 
