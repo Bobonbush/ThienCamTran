@@ -17,6 +17,15 @@ public class TrapMove : MonoBehaviour
     [SerializeField] private bool DestroyOnActivate = false;
     [SerializeField] private bool reset = true; // Turn this on to enable auto-resetting
     [SerializeField] public bool ReliedOnActivator = false;
+    [SerializeField] private bool needActivator = true;
+    [SerializeField] private bool useBothDeAndActive = true;
+
+    [SerializeField] private bool turnOffColliderOnDeActive = true;
+
+    [SerializeField] private float maxReActivateWaitingTime = 5.0f;
+    private float ReActivateCountingTime = 6.0f;
+
+    private int state = 0;      
 
     [SerializeField]
     private Vector3 moveDir = new Vector3(0.0f, -1.0f, 0.0f);
@@ -39,6 +48,42 @@ public class TrapMove : MonoBehaviour
         box = GetComponent<BoxCollider2D>();
 
         box.enabled = false;
+
+        if (useBothDeAndActive && needActivator == false) reset = false;
+    }
+    private void Update()
+    {
+        if (needActivator) return;
+        
+        if(movementRoutine != null)
+        {
+            return;
+        }
+
+        if(ReActivateCountingTime < maxReActivateWaitingTime)
+        {
+            ReActivateCountingTime += Time.deltaTime;
+            return;
+        }
+
+        if(useBothDeAndActive)
+        {
+            if(state == 0 )
+            {
+                state ^= 1;
+                ActivateTrap();
+            } else
+            {
+                state ^= 1;
+                StopTrap();
+            }
+        } else
+        {
+            ActivateTrap();
+        }
+
+        ReActivateCountingTime = 0.0f;
+
     }
 
     public void ActivateTrap()
@@ -106,7 +151,7 @@ public class TrapMove : MonoBehaviour
         }
 
         movementRoutine = null;
-        if (initialPosition == transform.position)
+        if (initialPosition == transform.position && turnOffColliderOnDeActive == true)
         {
             box.enabled = false;
         }

@@ -9,7 +9,7 @@ public class Mushroom : MonoBehaviour
     [Tooltip("Face to target")]
     public bool faceTarget = true;
     public float horizontalAimHeightTolerance = 0.5f;
-    public Vector2 targetHeadOffset = new Vector2(0f, 1f);
+    public Vector2 targetHeadOffset = new Vector2(0f, 0.5f);
 
     public bool moveWhileTargetInRange = false;
 
@@ -126,12 +126,13 @@ public class Mushroom : MonoBehaviour
         Vector2 origin = projectileLauncher.LaunchPosition;
         Vector2 headPosition = (Vector2)target.transform.position + targetHeadOffset;
         float deltaY = Mathf.Abs(headPosition.y - origin.y);
-
+        
         if (deltaY <= horizontalAimHeightTolerance)
         {
             float dirX = target.transform.position.x >= transform.position.x ? 1f : -1f;
             return new Vector2(dirX, 0f);
         }
+        
 
         return (headPosition - origin).normalized;
     }

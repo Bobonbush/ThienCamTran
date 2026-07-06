@@ -384,8 +384,8 @@ MonoBehaviour:
   attackZone: {fileID: 5681712546700597679}
   faceTarget: 1
   horizontalAimHeightTolerance: 0.5
-  targetHeadOffset: {x: 0, y: 1}
-  moveWhileTargetInRange: 1
+  targetHeadOffset: {x: 0, y: 0.1}
+  moveWhileTargetInRange: 0
   _hasTarget: 0
 --- !u!95 &7386428570710745384
 Animator:
@@ -565,7 +565,7 @@ MonoBehaviour:
   walkAcceleration: 50
   maxSpeed: 3
   walkStopRate: 0.1
-  cliffDetectionZone: {fileID: 0}
+  cliffDetectionZone: {fileID: 4137705962003099211}
   stationalEnemy: 0
   spawn: {x: 0, y: 0, z: 0}
   moveInRange: 0

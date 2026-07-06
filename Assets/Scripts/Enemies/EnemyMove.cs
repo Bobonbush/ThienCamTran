@@ -175,7 +175,12 @@ public class EnemyMove : MonoBehaviour
         {
             return;
         }
-        
+
+        if (cliffDetectionZone.detectedColliders.Count == 0)
+        {
+            rb.linearVelocityX = 0.0f;
+        }
+
 
         if (touchingDirections.IsGrounded && (touchingDirections.IsOnWall || cliffDetectionZone.detectedColliders.Count == 0) && flipState == null && waitforNextFlip > maxWaitforNextFlip )
         {

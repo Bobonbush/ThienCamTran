@@ -6,7 +6,6 @@ public class Knight : MonoBehaviour
     public float walkAcceleration = 50f;
     public float maxSpeed = 3f;
     public float walkStopRate = 0.1f;
-    public DetectionZone attackZone;
 
 
 
@@ -16,16 +15,7 @@ public class Knight : MonoBehaviour
     Animator animator;
     Damageable damageable;
 
-    public bool _hasTarget = false;
-    public bool HasTarget { 
-        get { 
-            return _hasTarget; 
-        } 
-        private set {
-            _hasTarget = value;
-            animator.SetBool(AnimationStrings.hasTarget, value);
-        } 
-    }
+    MeleeEnemy melee;
 
 
 
@@ -46,12 +36,13 @@ public class Knight : MonoBehaviour
         touchingDirections = GetComponent<TouchingDirections>();
         animator = GetComponent<Animator>();
         damageable = GetComponent<Damageable>();
+        melee = GetComponent<MeleeEnemy>();
 
     }
 
     void Update()
     {
-        HasTarget = attackZone.detectedColliders.Count > 0;
+        
         if (AttackCooldown > 0)
         {
             AttackCooldown -= Time.deltaTime;

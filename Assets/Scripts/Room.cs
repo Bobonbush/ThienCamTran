@@ -16,8 +16,17 @@ public class Room : MonoBehaviour
     [SerializeField]
 
     public bool Closed = false;
-    
-    
+
+    [SerializeField]
+
+    public bool isDoor = false;
+
+    private int collisionCnt = 0;
+
+    public void EnterNextRoom()
+    {
+        SceneTransitionManager.Instance.TransitionToScene(LinkedRoom, SpawnPointId, spawnOffset);
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,9 +34,24 @@ public class Room : MonoBehaviour
         {
             return;
         }
+        
         if(collision.GetComponent<PlayerController>())
         {
-            SceneTransitionManager.Instance.TransitionToScene(LinkedRoom, SpawnPointId, spawnOffset);
+            if (isDoor)
+            {
+                collisionCnt++;
+                return;
+            }
+            EnterNextRoom();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(isDoor && collision.GetComponent<PlayerController>())
+        {
+            collisionCnt--;
+            return;
         }
     }
 }

@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool wasDashing = false;
     private bool isHoldingJump;
 
-    private bool lockInput = false;
+    public bool lockInput = false;
 
     private float TargetMoveX = 0.0f;
 
@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            //
+            
             InteractWithNearest();
         }
 
@@ -378,7 +378,7 @@ public class PlayerController : MonoBehaviour
 
         if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
         {
-            Climbing = false;
+           
 
             rb.gravityScale = gravityScale;
 
@@ -404,7 +404,7 @@ public class PlayerController : MonoBehaviour
 
         if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
         {
-
+            Climbing = false;
             animator.SetTrigger(AnimationStrings.jumpTrigger);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
         }

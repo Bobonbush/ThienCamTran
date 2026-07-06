@@ -5,7 +5,7 @@ public class CutSceneManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public static CutSceneManager Instance { get; private set; }
-    [SerializeField] public GameObject gameplayObject;
+    public GameObject gameplayObject;
 
     private void Awake()
     {
@@ -23,9 +23,13 @@ public class CutSceneManager : MonoBehaviour
 
     public void OnCutSceneStart(CutSceneInfo info)
     {
-
+            
         if (!info.RealTimeAnimation)
         {
+            if(gameplayObject == null)
+            {
+                gameplayObject = GameObject.Find("Gameplay");
+            }
             if (gameplayObject != null)
             {
                 gameplayObject.SetActive(false);

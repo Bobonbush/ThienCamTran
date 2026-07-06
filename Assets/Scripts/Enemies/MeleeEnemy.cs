@@ -13,6 +13,8 @@ public class MeleeEnemy : MonoBehaviour
     private GameObject target;
     private bool InAtkRange = false;
 
+
+
     
 
     private bool Alert = false;
@@ -24,7 +26,11 @@ public class MeleeEnemy : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
 
+    public DetectionZone attackZone;
+
     public bool _hasTarget = false;
+
+    private float offsetDistance = 2.0f;
     public bool HasTarget
     {
         get
@@ -47,8 +53,12 @@ public class MeleeEnemy : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        HasTarget = attackZone.detectedColliders.Count > 0;
+    }
 
-    
+
 
     private void FixedUpdate()
     {
@@ -103,22 +113,52 @@ public class MeleeEnemy : MonoBehaviour
             
             Vector3 targetPosition = new Vector3(target.transform.position.x, transform.position.y, transform.position.z);
             float horizontalDistance = targetPosition.x - transform.position.x;
+            Vector3 dir = targetPosition - transform.position;
+            if (Mathf.Abs(horizontalDistance + offsetDistance) > Mathf.Abs(horizontalDistance - offsetDistance))
+            {
+                horizontalDistance = horizontalDistance - offsetDistance;
+                dir.x -= offsetDistance;
+            } else
+            {
+                horizontalDistance = horizontalDistance + offsetDistance;
+                dir.x += offsetDistance;
+            }
 
             float directionX = Mathf.Sign(horizontalDistance);
 
-
-            if (directionX > 0 && e_move.WalkDirection != EnemyMove.WalkableDirection.Right)
+            if (Mathf.Abs(dir.x) > 0.1f)
             {
-                e_move.WalkDirection = EnemyMove.WalkableDirection.Right;
-            }
-            else if (directionX < 0 && e_move.WalkDirection != EnemyMove.WalkableDirection.Left)
+                dir = Vector3.Normalize(dir);
+                rb.linearVelocity = dir * e_move.maxSpeed;
+
+                if (directionX > 0 && e_move.WalkDirection != EnemyMove.WalkableDirection.Right)
+                {
+                    e_move.WalkDirection = EnemyMove.WalkableDirection.Right;
+                }
+                else if (directionX < 0 && e_move.WalkDirection != EnemyMove.WalkableDirection.Left)
+                {
+                    e_move.WalkDirection = EnemyMove.WalkableDirection.Left;
+                }
+            } else
             {
-                e_move.WalkDirection = EnemyMove.WalkableDirection.Left;
+                directionX = targetPosition.x - transform.position.x;
+                directionX = Mathf.Sign(directionX);
+
+
+                if (directionX > 0 && e_move.WalkDirection != EnemyMove.WalkableDirection.Right)
+                {
+                    e_move.WalkDirection = EnemyMove.WalkableDirection.Right;
+                }
+                else if (directionX < 0 && e_move.WalkDirection != EnemyMove.WalkableDirection.Left)
+                {
+                    e_move.WalkDirection = EnemyMove.WalkableDirection.Left;
+                }
+
+                rb.linearVelocity = Vector2.zero;
             }
 
-            Vector3 dir = targetPosition - transform.position;
-            dir = Vector3.Normalize(dir);
-            rb.linearVelocity = dir * e_move.maxSpeed;
+
+
 
             TriggerAlert();
         }
