@@ -61,6 +61,9 @@ public class Damageable : MonoBehaviour
     private float timeSinceHit = 0;
     public float invicibilityTimer = 0.5f;
 
+    private float timeInvisibleFrame = 1.0f;
+    private float maxTimeInvisibleFrame = 0.0f;
+
     public bool IsAlive
     {
         get
@@ -71,7 +74,6 @@ public class Damageable : MonoBehaviour
         {
             _isAlive = value;
             animator.SetBool(AnimationStrings.isAlive, value);
-            Debug.Log("IsAlive set to: " + value);
         }
     }
     // 
@@ -107,9 +109,30 @@ public class Damageable : MonoBehaviour
                 }
             }
 
+
+            if(timeInvisibleFrame > maxTimeInvisibleFrame)
+            {
+                isInvincible = false;
+                
+                if (canRevive && deathByTrap)
+                {
+                    deathByTrap = false;
+                    ReviveAction = true;    // Set to false by playerController
+                }
+            }
+
             timeSinceHit += Time.deltaTime;
+            timeInvisibleFrame += Time.deltaTime;
         }
 
+    }
+
+
+    public void setInvisibleFrame(float duration)
+    {
+        isInvincible = true;
+        timeInvisibleFrame = 0.0f;
+        maxTimeInvisibleFrame = duration;
     }
 
     
@@ -136,7 +159,7 @@ public class Damageable : MonoBehaviour
     {
         // Falling to a trap need to reset the position and minus a constant health
         
-        if(IsAlive )
+        if(IsAlive && !isInvincible)
         {
             int CLostHP = 10;
             if (!canRevive) CLostHP = Health;    // if it is a mobs not player no need to revive

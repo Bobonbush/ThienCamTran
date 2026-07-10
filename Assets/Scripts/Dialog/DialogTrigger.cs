@@ -29,5 +29,7 @@ public class DialogTrigger : MonoBehaviour
         }
     }
 
+
+
     // Option 2: call TriggerDialog() from other code whenever you want (e.g. right before a boss fight).
 }

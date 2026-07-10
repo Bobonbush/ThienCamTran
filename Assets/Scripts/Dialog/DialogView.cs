@@ -17,6 +17,7 @@ public class DialogView : MonoBehaviour
     public TMP_Text dialogText;
     public Transform choicesContainer;
     public Button choiceButtonPrefab;
+    public bool speakNameLastRender = true; 
 
     [Header("Bubble style (follows a character)")]
     public bool followTarget = false;     // true = bubble follows the head; false = fixed box
@@ -32,6 +33,7 @@ public class DialogView : MonoBehaviour
     public bool useTypewriter = true;     // reveal the body text char by char, left to right
     public float typeSpeed = 30f;         // characters revealed per second
     public float typeFadeChars = 3f;      // width of the per-char alpha fade (0 = hard pop)
+    public float newLinePause = 0.01f;
 
     private Transform target;
     private readonly List<Button> spawnedButtons = new List<Button>();
@@ -45,13 +47,20 @@ public class DialogView : MonoBehaviour
     private Coroutine animRoutine;
     private Coroutine typeRoutine;
 
+    int listenTypeRountineCnt = 0;   // use to listen to the number of time tyepRountine is called to indicates whether the animation is done or not.
+    int maxTypeRountineCnt = 0;
+
+    public bool AnimationDone
+    {
+        get { return listenTypeRountineCnt == maxTypeRountineCnt; }
+    }
+
     public void SetTarget(Transform t) => target = t;
 
-    private void Awake()
+    private void Start()
     {
         Init();
-        // Start hidden — but if Awake was deferred and runs mid-Open (because something
-        // deactivated us before our Awake ran), don't hide while we're opening.
+
         if (!isOpen) HideInstant();
     }
 
@@ -93,44 +102,106 @@ public class DialogView : MonoBehaviour
 
     public void SetText(string speaker, string body)
     {
-        if (speakerNameText != null) speakerNameText.text = speaker;
+        if(speakNameLastRender)
+        {
+            maxTypeRountineCnt = 2; // body first then speaker
+        } else
+        {
+            maxTypeRountineCnt = 1; // only body
+        }
+        if (speakerNameText != null)
+        {
+            if (speakNameLastRender == false)
+                speakerNameText.text = speaker;
+            else
+                speakerNameText.text = "";
+        }
 
+        
         if (typeRoutine != null) { StopCoroutine(typeRoutine); typeRoutine = null; }
 
-        if (useTypewriter && isActiveAndEnabled && gameObject.activeInHierarchy)
-            typeRoutine = StartCoroutine(TypeText(body));
+
+        if (speakNameLastRender)
+        {
+            typeRoutine = StartCoroutine(RunDialogueSequence(speaker, body));
+        }
+        else if (useTypewriter && isActiveAndEnabled && gameObject.activeInHierarchy)
+            typeRoutine = StartCoroutine(TypeText(dialogText, body));
         else
-            dialogText.text = body;   // instant
+            dialogText.text = body;   
+
+        
     }
 
-    // Reveals the body text character by character, left to right, each char fading in via alpha.
-    private IEnumerator TypeText(string body)
+    private IEnumerator RunDialogueSequence(string speaker, string body)
     {
-        dialogText.text = body;
-        dialogText.ForceMeshUpdate();
-        TMP_TextInfo info = dialogText.textInfo;
+
+        if (useTypewriter && isActiveAndEnabled && gameObject.activeInHierarchy)
+        {
+            yield return StartCoroutine(TypeText(dialogText, body));
+        }
+        else
+        {
+            dialogText.text = body;
+        }
+
+        if (speakerNameText != null)
+        {
+            if (useTypewriter && isActiveAndEnabled && gameObject.activeInHierarchy)
+            {
+                yield return StartCoroutine(TypeText(speakerNameText, speaker));
+            }
+            else
+            {
+                speakerNameText.text = speaker;
+            }
+        }
+    }
+
+
+
+    // Reveals the body text character by character, left to right, each char fading in via alpha.
+    private IEnumerator TypeText( TMP_Text dialog , string body)
+    {
+        dialog.text = body;
+        dialog.ForceMeshUpdate();
+        TMP_TextInfo info = dialog.textInfo;
         int count = info.characterCount;
         if (count == 0) yield break;
 
         float fade = Mathf.Max(typeFadeChars, 0.0001f);
         float head = 0f;                  // current reveal position, in characters
 
+        int lastIndex = -1;
+
         while (head < count + fade)
         {
             head += Mathf.Max(typeSpeed, 0.01f) * Time.unscaledDeltaTime;
-            ApplyReveal(info, head, fade);
+            int currentIndex = Mathf.FloorToInt(head);
+            if (currentIndex > lastIndex &&
+                currentIndex < body.Length &&
+                body[currentIndex] == '\n')
+            {
+                yield return new WaitForSecondsRealtime(newLinePause);
+            }
+
+            lastIndex = currentIndex;
+            ApplyReveal(dialog, info, head, fade);
             yield return null;
         }
-        ApplyReveal(info, count + fade, fade);   // make sure everything ends fully visible
+        ApplyReveal(dialog, info, count + fade, fade);   // make sure everything ends fully visible
         typeRoutine = null;
+
+        listenTypeRountineCnt++;
     }
 
     // Sets each character's alpha based on how far the reveal "head" has passed it.
-    private void ApplyReveal(TMP_TextInfo info, float head, float fade)
+    private void ApplyReveal(TMP_Text dialog, TMP_TextInfo info, float head, float fade)
     {
         for (int i = 0; i < info.characterCount; i++)
         {
             TMP_CharacterInfo c = info.characterInfo[i];
+            
             if (!c.isVisible) continue;           // skip spaces / line breaks
 
             byte alpha = (byte)(Mathf.Clamp01((head - i) / fade) * 255f);
@@ -142,7 +213,7 @@ public class DialogView : MonoBehaviour
             cols[vi + 2].a = alpha;
             cols[vi + 3].a = alpha;
         }
-        dialogText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+        dialog.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32); // For all
     }
 
     public void SpawnChoice(string label, UnityAction onClick)
@@ -181,6 +252,12 @@ public class DialogView : MonoBehaviour
     {
         float startAlpha = canvasGroup.alpha;
         float t = 0f;
+
+        while(typeRoutine != null)
+        {
+            yield return null;
+        }
+
         while (animDuration > 0f && t < animDuration)
         {
             t += Time.unscaledDeltaTime;

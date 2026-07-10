@@ -13,10 +13,21 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float fadeDuration = 2.5f;
 
     [SerializeField] private PlayerCamera mainCamera;
+    [SerializeField] private CinemachineCamera virtualCamera;
+
+    [SerializeField] private PlayerController playerController;
+
+
+    
+
 
     private Vector3 offsetSpawn = Vector3.zero;
 
     private string targetSpawnPointId;
+
+    float coolDownTransition = -1.0f;
+
+    float maxcoolDownTransition = 2.0f;
 
     private void Awake()
     {
@@ -33,13 +44,26 @@ public class SceneTransitionManager : MonoBehaviour
     }
 
     // This is the global function any door in the game can call
-   
+
+    private void Update()
+    {
+        coolDownTransition -= Time.deltaTime;
+    }
 
     public void TransitionToScene(string buildSceneIndex, string spawnPointId, Vector3 _offsetSpawn)
     {
+        if(coolDownTransition > 0)
+        {
+            return;
+        }
+        coolDownTransition = maxcoolDownTransition;
+
         targetSpawnPointId = spawnPointId;
         offsetSpawn = _offsetSpawn;
+
+        playerController.RunForwardForXDistance(_offsetSpawn.x);
         StartCoroutine(LoadSceneRoutine(buildSceneIndex));
+        
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName)
@@ -54,33 +78,40 @@ public class SceneTransitionManager : MonoBehaviour
             yield return null;
         }
 
-        // 3. Move player to the correct spawn point in the new scene
+        // 3. Update Camera's Boundary
+        UpdateCameraBoundary();
+
+        // 4. Move player to the correct spawn point in the new scene
         PositionPlayerAtSpawnPoint();
 
-        // 4. Get the camera boundary
-
-        UpdateCameraBoundary();
+        
 
         // 5. Fade back in
         yield return StartCoroutine(Fade(0));
     }
 
     private void PositionPlayerAtSpawnPoint()
+{
+    GameObject spawnPoint = GameObject.Find(targetSpawnPointId);
+    GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+    if (spawnPoint != null && player != null)
     {
-        // Find the spawn point in the newly loaded scene that matches our ID
-        GameObject spawnPoint = GameObject.Find(targetSpawnPointId);
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 finalPlayerPos = spawnPoint.transform.position + new Vector3(offsetSpawn.x * 1.15f, 0, 0);
+        
+        virtualCamera.ForceCameraPosition(finalPlayerPos, virtualCamera.transform.rotation);
+        virtualCamera.PreviousStateIsValid = false;
+        
+        
 
-        if (spawnPoint != null && player != null)
-        {
-            player.transform.position = spawnPoint.transform.position + offsetSpawn;
-        }
-        else
-        {
-            Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
-        }
+        playerController.Teleport(spawnPoint.transform.position);
+        playerController.RunForwardForXDistance(offsetSpawn.x);
     }
-
+    else
+    {
+        Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
+    }
+}
     private IEnumerator Fade(float targetAlpha)
     {
         float speed = 1f / fadeDuration;
@@ -94,18 +125,6 @@ public class SceneTransitionManager : MonoBehaviour
 
     void UpdateCameraBoundary()
     {
-        // Find the bounds object in the newly loaded scene
-        GameObject localBounds = GameObject.Find("CameraBounds");
-
-
-        if (localBounds != null)
-        {
-            CinemachineConfiner2D confiner = GetComponentInChildren<CinemachineConfiner2D>();
-            Collider2D targetCollider = localBounds.GetComponent<Collider2D>();
-
-
-            confiner.BoundingShape2D = targetCollider;
-            confiner.InvalidateBoundingShapeCache(); 
-        }
+        mainCamera.UpdateGlobalCameraBoundary();
     }
 }

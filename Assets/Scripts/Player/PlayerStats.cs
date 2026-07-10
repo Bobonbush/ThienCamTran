@@ -64,13 +64,6 @@ public class PlayerStats : MonoBehaviour
         SetSkillAvatar();
     }
 
-
-    private void FixedUpdate()
-    {
-        Mana += 1;
-        
-    }
-
     private void SetSkillAvatar()
     {
         skillSlot.SetAvatar(slot1, slot2);

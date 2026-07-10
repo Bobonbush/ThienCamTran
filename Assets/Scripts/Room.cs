@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    [SerializeField]
-    private string RoomID = "OutSkirt";
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     [SerializeField]
     private string LinkedRoom = "OutSkirt-1";
@@ -15,14 +12,46 @@ public class Room : MonoBehaviour
     [SerializeField]
     // Add offset to move out of range.
     private Vector2 spawnOffset = new Vector2(0, 0);
-    
-    
+
+    [SerializeField]
+
+    public bool Closed = false;
+
+    [SerializeField]
+
+    public bool isDoor = false;
+
+    private int collisionCnt = 0;
+
+    public void EnterNextRoom()
+    {
+        SceneTransitionManager.Instance.TransitionToScene(LinkedRoom, SpawnPointId, spawnOffset);
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(Closed) // Use for only from other to this.
+        {
+            return;
+        }
+        
         if(collision.GetComponent<PlayerController>())
         {
-            SceneTransitionManager.Instance.TransitionToScene(LinkedRoom, SpawnPointId, spawnOffset);
+            if (isDoor)
+            {
+                collisionCnt++;
+                return;
+            }
+            EnterNextRoom();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(isDoor && collision.GetComponent<PlayerController>())
+        {
+            collisionCnt--;
+            return;
         }
     }
 }

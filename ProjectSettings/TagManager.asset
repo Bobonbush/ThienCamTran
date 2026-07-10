@@ -20,12 +20,12 @@ TagManager:
   - Pickup
   - PlayerZone
   - Breakable
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Slidable
+  - Climable
+  - CameraCustomTrigger
+  - Empty
+  - TrapActivator
+  - HackingPuzzle
   - 
   - 
   - 
@@ -41,6 +41,9 @@ TagManager:
   - name: Background
     uniqueID: 2054236619
     locked: 0
+  - name: Trap
+    uniqueID: 4004563311
+    locked: 0
   - name: Ground
     uniqueID: 1779415923
     locked: 0
@@ -49,6 +52,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 975890241
+    locked: 0
+  - name: Prize
+    uniqueID: 3421241731
     locked: 0
   m_RenderingLayers:
   - Default
