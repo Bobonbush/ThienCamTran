@@ -24,4 +24,7 @@ internal class AnimationStrings
     internal static string dashTrigger = "dash";
     internal static string isDashing = "isDashing";
     internal static string MoveImplitude = "MoveImplitude";
+    internal static string attack = "Attack";
+    internal static string isDucking = "isDucking";
+    internal static string useItem = "UseItem";
 }

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,8 +7,27 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
 
+
+    [SerializeField]
+    private GameObject atk1;
+
+    [SerializeField]
+    private GameObject atk2;
+
+    [SerializeField]
+    private GameObject atk3;
+
+    [SerializeField]
+    private GameObject air_atk;
+
+    [SerializeField]
+    private float dashToAttack = 0.1f;
+
     [SerializeField]
     private float maxComboTime = 0.3f;
+
+
+   
 
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
@@ -37,6 +57,10 @@ public class PlayerController : MonoBehaviour
     
     private Vector3 oldTransformPosition = Vector3.zero;
     private Vector2 lockDirection = new Vector2(1, 0);
+
+
+    [SerializeField]
+    private bool isAttacking = false;
 
     PlayerStats stat;
 
@@ -104,6 +128,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
+
     [SerializeField]
     private bool _isMoving = false;
     public bool IsMoving { get
@@ -130,6 +157,22 @@ public class PlayerController : MonoBehaviour
         {
             _isRunning = value;
             animator.SetBool(AnimationStrings.isRunning, value);
+        }
+    }
+
+    [SerializeField]
+    private bool _isDucking = false;
+    public bool IsDucking
+    {
+        get
+        {
+            return _isDucking;
+        }
+
+        private set
+        {
+            _isDucking = value;
+            animator.SetBool(AnimationStrings.isDucking, value);
         }
     }
 
@@ -180,6 +223,9 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    
+
+
 
     CapsuleCollider2D col;
     Rigidbody2D rb;
@@ -205,11 +251,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(damageable.ReviveAction)
+        if (damageable.ReviveAction)
         {
             damageable.ReviveAction = false;
             Revive();
         }
+
+        if (isAttacking)
+        {
+            return;
+        }
+        
 
         if(touchingDirections.IsGrounded)
         {
@@ -234,8 +286,11 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
-        
-        if(lockInput )
+        if (isAttacking)
+        {
+            return;
+        }
+        if (lockInput )
         {
             rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed)  , rb.linearVelocity.y) * lockDirection;
             TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x) ;
@@ -263,6 +318,7 @@ public class PlayerController : MonoBehaviour
                 if (Climbing == false)
                 {
                     rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+                    SetFacingDirection(moveInput);
                     
                     
                     if (rb.linearVelocityY < 0.0f && !wasDashing)
@@ -298,6 +354,10 @@ public class PlayerController : MonoBehaviour
 
     public void SetFacingDirection(Vector2 moveInput)
     {
+        if(isAttacking)
+        {
+            return;
+        }
         if (moveInput.x > 0 && !IsFacingRight)
         {
             IsFacingRight = true;
@@ -308,8 +368,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    private float duckLastTime = 0.0f;
     
     public void OnLook(InputAction.CallbackContext context)
     {
@@ -325,16 +383,20 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
-
-
         if (touchingDirections.IsGrounded)
         {
             
             if (lookInput.y < 0f && Climbing == false)
             {
-                duckLastTime = Time.time;
+
+                IsDucking = true;
+            } else
+            {
+                IsDucking = false;
             }
+        } else
+        {
+            IsDucking = false;
         }
     }
 
@@ -382,7 +444,7 @@ public class PlayerController : MonoBehaviour
 
             rb.gravityScale = gravityScale;
 
-            if (Time.time - duckLastTime <= maxComboTime && touchingDirections.IsOnSlidable)
+            if (IsDucking && touchingDirections.IsOnSlidable)
             {
 
                 OnSlide();
@@ -394,9 +456,10 @@ public class PlayerController : MonoBehaviour
 
 
         if (context.started) {  
-            isHoldingJump = true; Jumptiming = 0.0f; rb.gravityScale = gravityScale; 
+            isHoldingJump = true; Jumptiming = 0.0f; rb.gravityScale = gravityScale;
+            IsDucking = false;
         }
-        if (context.canceled) {
+        if (context.canceled || isAttacking) {
             rb.gravityScale = gravityMultiplier / Mathf.Min(1.0f, Mathf.Max(Jumptiming / maxJumpTime , 0.2f));
             isHoldingJump = false;
             notFallYet = true;
@@ -419,6 +482,42 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger(AnimationStrings.attackTrigger);
         }
+    }
+
+    public void StopAttack()
+    {
+        isAttacking = false;
+        rb.gravityScale = gravityScale;
+    }
+
+    public void Attack1Trigger()
+    {
+        atk1.GetComponent<TriggerAttack>().Trigger();
+        isAttacking = true;
+        //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1), transform.position.y, transform.position.z);
+    }
+
+    public void Attack2Trigger()
+    {
+        
+        atk2.GetComponent<TriggerAttack>().Trigger();
+        isAttacking = true;
+        //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1), transform.position.y, transform.position.z);
+    }
+
+    public void Attack3Trigger()
+    {
+        atk3.GetComponent<TriggerAttack>().Trigger();
+        isAttacking = true;
+
+        //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1) * 2, transform.position.y, transform.position.z);
+    }
+
+    public void AttackAirTrigger()
+    {
+        air_atk.GetComponent<TriggerAttack>().Trigger();
+        isAttacking = true;
+        rb.gravityScale = 0.0f;
     }
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -483,6 +582,7 @@ public class PlayerController : MonoBehaviour
     public void OnHit(int damage, Vector2 knockback)
     {
         if (lockInput) return;
+        isAttacking = false;
         Climbing = false;
         rb.gravityScale = gravityScale;
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
@@ -493,10 +593,14 @@ public class PlayerController : MonoBehaviour
     {
         if (lockInput) return;
         if (Climbing) return;
-        if (context.performed)
+        if(touchingDirections.IsGrounded)
         {
-            stat.Heal();
+            if (context.performed)
+            {
+                animator.SetTrigger(AnimationStrings.useItem);
+            }
         }
+        
     }
 
 

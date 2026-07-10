@@ -1,0 +1,3026 @@
+fileFormatVersion: 2
+guid: 977d08ca3f26c7d4ea1cc2c95dc5c957
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: VisionOS
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: tvOS
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 662
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ab2cce6d84596348bb0757cbeccf383
+      internalID: 1068258405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_1
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 662
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd052f18e31d2854cb432b533deeed4d
+      internalID: -831026290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_2
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 624
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9ef505ad2edf6448b4d8aa921c5e336
+      internalID: -1163137388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 609
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9361963f9e6fe84cbfb92dec7437133
+      internalID: 1267972883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_4
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 609
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53377246e2829744ea10917b9a38ef7f
+      internalID: 269595312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_5
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 571
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc2e13c1fa9b8ee40aa6c4727d5e7f00
+      internalID: 1862479964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_6
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 556
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5fc9a867f7152a4ab66099b63c1860e
+      internalID: 490827309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_7
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 522
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f74690a926216c43946165cdb4088f6
+      internalID: -1693278023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_8
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 522
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8d91e2e6dfacd34398954dd576ec163
+      internalID: 934353557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_9
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 521
+        width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1544f5a3d84ef8c45b317b1b0f1e794e
+      internalID: -1674121391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_10
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 522
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5110b0fdea9605c4aa3e2059c5dbc4b5
+      internalID: 229169561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_11
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 522
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40aa9566638f07d48b842eac6ee7706c
+      internalID: -1850252068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_12
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 522
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20c2134c5e1c0d54489c168b003af58c
+      internalID: 642544651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_13
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 522
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 041515a4802496949b9f7da423628945
+      internalID: 907914351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_14
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 522
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42d2e7ca0da45c74eba7fe0a8efb2927
+      internalID: -703701014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_15
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 503
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae55fa6c91382294fa6a80fa7c4cb201
+      internalID: -1356047721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_16
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 503
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a16f591155d93d49913f6366e229bae
+      internalID: 283656047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_17
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 501
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc860f02ea331b941beb72aaa20aa9bc
+      internalID: 1215619250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_18
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 501
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e0a57be599ba1545b1b25662fa69c1a
+      internalID: -1977172875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_19
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 501
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 642183276cb9c4f4eadb4039ffa70692
+      internalID: -1532145487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_20
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 469
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d56b48602811c0408f2f3bbcc71fede
+      internalID: -1596978232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_21
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 469
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efdd38fa85e597d4abfc1a64a4066fd4
+      internalID: 416875558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_22
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 468
+        width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fba4cf96fa26bc84b82608b1b7eca049
+      internalID: -1528344384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_23
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 469
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3f3770b104103149b8592afb889b1d7
+      internalID: -1520674216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_24
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 469
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a8d1066b8830dc44856c9542dad4d97
+      internalID: -1094062857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_25
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 469
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62b1c4548db99a343beb1ea2aae339f7
+      internalID: 1006302595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_26
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 469
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3be6ce28dbdee804e9aedaff0aa2abb7
+      internalID: -833835476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_27
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 469
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23e60364f8da9ce4a8366973f4e7966f
+      internalID: -1405942784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_28
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 450
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c96541e82f1bf464c98bfcd7ed64f415
+      internalID: -894328180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_29
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 450
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 259af8c314a42844dad11e9a276b4f32
+      internalID: -872459736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_30
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 450
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ac6fb5e271775643a8edc90de43e85e
+      internalID: 1759715285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_31
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 448
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee65c929902e67947827ee8a26e25ce6
+      internalID: -255436058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_32
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 412
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a35895f68c9dda40a47aef02401be01
+      internalID: 766880564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_33
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 397
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbe513579a2f6b34b9e523c563fd7016
+      internalID: 1888683703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_34
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 397
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d754e6353b93aa47829e977fb4e0612
+      internalID: -394129733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_35
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 360
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81ab979a2d4954f4a98a0085921c2135
+      internalID: 134176305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_36
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 360
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8f8205386bc29b4b8c7c0d0ea050be4
+      internalID: 218059614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_37
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 359
+        width: 16
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 371e95bd3ab2b2d449dfe53967d5ba90
+      internalID: -843405754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_38
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 359
+        width: 16
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87a050d0c0835ca4c92e880e81da9c99
+      internalID: -563821152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_39
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 359
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1135fd26d76bea41a00494dc7b795c9
+      internalID: -720310015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_40
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 359
+        width: 18
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7ddcf49e914b10449b9974b80079ab0
+      internalID: -976180277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_41
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 344
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29e7438f8cea92145ab4acd0628bfe23
+      internalID: -1172780875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_42
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 344
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7eb72ca48d04694380efc3c8d0c9214
+      internalID: 1703138836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_43
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 344
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fe3b136592e0504fafc83b2a3cf048d
+      internalID: -1468769286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_44
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 344
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 977180bc025e3d04385d34be832e170c
+      internalID: 135933666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_45
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 306
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d87e5e34c0dc9e14c8009f59b8c56f8f
+      internalID: 1886840962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_46
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 306
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebdabb0e2b533894da5d4f0496987aa6
+      internalID: 1806275452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_47
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 306
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d73a39f3bcfed784494f0bc2e1337ae2
+      internalID: -1674686856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_48
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 306
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eabc7d0486461264cb3514187b5f2c89
+      internalID: -1897986843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_49
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 306
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6da72e48a0f382478723620833c6f7e
+      internalID: 673442772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_50
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 306
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f3bb5695ba49c2418193cc512a7980d
+      internalID: -18979524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_51
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 306
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c81889c1a652e6f4080dea41bcc202c4
+      internalID: 781025453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_52
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 306
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6ad5d3d47126124c9755debfece1b29
+      internalID: -1536860280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_53
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 306
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1f7433e0ca44204abc1bb6e8e550b3d
+      internalID: 1761730363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_54
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 306
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a8e6d19dd7a5404c81f66876450202f
+      internalID: -1781488452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_55
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 291
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23dfd0431d41e8e4fa0c1e3b56ef4f6b
+      internalID: 931202453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_56
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 291
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a222e5c205543ca448d7fa60d3a97abd
+      internalID: -1691501109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_57
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 291
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a85c296cfeb2f945aad8c908f4ca446
+      internalID: -280431219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_58
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 291
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5373139295c55cb47aca7e76f40b9acb
+      internalID: 1213037804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_59
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 291
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88ed1f5670c4d2a43ac105334dc07a9f
+      internalID: -929648940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_60
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 291
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b01375c3595644459d036f6bda328b7
+      internalID: -871592053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_61
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 291
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 725be744d5e405a4e9401bcb9601f25a
+      internalID: -1850900775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_62
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 291
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9be2f3f049599d44b5eb856283e3046
+      internalID: -364696161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_63
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 253
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4cb2d89286e0834facb11eb7ef0a82c
+      internalID: -1906646460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_64
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 253
+        width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 341b7124fef0b19478ddefaa117016af
+      internalID: -1984436302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_65
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 253
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55636213f4881a047b08c66bf83f3b67
+      internalID: -179648526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_66
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 253
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ba07736984839c48b27326326e9dfad
+      internalID: 265097201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_67
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 253
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a24f59ea96f47d84eb8ad9c286049105
+      internalID: -1047258155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_68
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 253
+        width: 23
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b133f337719e0b0498744244b22198cb
+      internalID: 80578438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_69
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 253
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2cc86deda387b644b4bf933b97326e6
+      internalID: 721322573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_70
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 253
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30b106b1dcc82f3499ed64fd015a69d2
+      internalID: 1659367215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_71
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 253
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6566decc6d4eb94386d1bc3c50a0249
+      internalID: -1078836762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_72
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 238
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fdd548a277509046b6c85107dad6319
+      internalID: 12357536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_73
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 238
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87272d427315c5a40bcc21797dd755f8
+      internalID: 1805266016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_74
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 238
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 544b7aa95ca8f9c4786d6449c0091780
+      internalID: 1597452379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_75
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 238
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b184701ad2a637b469d141b378d5e33a
+      internalID: -1565714005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_76
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 238
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9080259c56b00ff43b685e5b5b31daa2
+      internalID: 1540871346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_77
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 238
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 065ebbcc94741ce458cb8458b76cffa8
+      internalID: -1794761429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_78
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 200
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a2cd2f616df81e49a419f97e1e896ef
+      internalID: -857325193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_79
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 185
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3126d058a47a70b49920f790d4d5917a
+      internalID: -1957920435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_80
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 185
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2700f5a64483ca849813575cc9af7a53
+      internalID: 87286703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_81
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 185
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed469c0bad9c21048997a510a6f8614d
+      internalID: 1999924622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_82
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 185
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9ee0908317a4f94ebcdbc69f3847df5
+      internalID: -113887803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_83
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 185
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 776ac6ad70015bb458453387ddcbf7bd
+      internalID: 1115744408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_84
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 185
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20d49889cb2a41d4f9e0d7d6e996b3d7
+      internalID: -1163562205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_85
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 147
+        width: 23
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83019b421f3585c48b71ff50c0e3972b
+      internalID: 760643269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_86
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 132
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c923682eb5521fe49a96a8ec1705f176
+      internalID: 615460747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_87
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 132
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8121a06f97ebe5646a9e77d0e5dad64e
+      internalID: -2021416783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_88
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 132
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b662c4371fa90304b909d710294e6238
+      internalID: -1939921045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_89
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 132
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9925c6426e727034b9b6fca54a71606d
+      internalID: -1878360568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_90
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 132
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69db5597a60eece4c9b7c183e8f01c71
+      internalID: -2109807850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_91
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 132
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b29706ef40fcd740999d176a9eb11ab
+      internalID: -1074010424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_92
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 132
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1a1f6cd8798ac64d9b20f01b372fce7
+      internalID: -900749180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_93
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 94
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae56337fb09013642b62489a068ef8fa
+      internalID: -1803374757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_94
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 94
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29bfffd12727b9a4bbc4aec5e8078d0a
+      internalID: -605525079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_95
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 94
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 708f350a246116f459dfe714ba331273
+      internalID: 888540475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_96
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 94
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a40d2bc4e036e447aab4564573d8557
+      internalID: -249779560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_97
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 94
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adf700114d0996346ab89a7e4f7678d4
+      internalID: 175382652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_98
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 79
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55f53cdf2934ca9408932f6233fe87de
+      internalID: -1018657912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_99
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 79
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1413ccfe3f38e264aa16cc6cd4525014
+      internalID: -1383596719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_100
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 79
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98f2e9ad913a8e04cb6907bad3274638
+      internalID: -693784323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_101
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 79
+        width: 5
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7af3ac9433b987d48ab08c0a2488f1b2
+      internalID: 457288130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_102
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 79
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f7fa3d9af9886547a2f8c05e4a579f3
+      internalID: -491039323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_103
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 79
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e77994d3ae4b48048b42fb1f20910b62
+      internalID: -569403306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_104
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 79
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a662e6acd8465304cae1b98651d5464f
+      internalID: -1803390890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_105
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 79
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fa7fcba45bfdde4f80af9d6cee33b7f
+      internalID: 1138205343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_106
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 41
+        width: 25
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8239b0d086919cb40857ad0b427a5ad5
+      internalID: -1269181756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_107
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 41
+        width: 25
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 229d50cefd9a9fa41ba113f031060de9
+      internalID: -90736957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_108
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 41
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31d84398e48f4424aa908565a363569f
+      internalID: 1902049849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_109
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 41
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3927618a5b610e4d9347e01dcb47bb3
+      internalID: 48833884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_110
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 41
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fa8e6694514af24ca33a41d8673a999
+      internalID: -1372532156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_111
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 41
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94f10c80a0636b241a2959c2419a952b
+      internalID: -1936397826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_112
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 41
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1348186b695fb424d9a184339da982c7
+      internalID: -1832791277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_113
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 41
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e59097771c5f42c4a8901f111d2b534e
+      internalID: -102205620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_114
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 26
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 647a311c826f13a4a8951ef35a1ba2ef
+      internalID: 1136987441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_115
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 26
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33627dcbc3980f94a97840c983cd7570
+      internalID: 1976427273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_116
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 26
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c4db01ae77c0114f8ad87328b9b5f62
+      internalID: -944173011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_117
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 26
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee23b2c5bdb25948bffbc6e27cde69c
+      internalID: -1566071228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_118
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 26
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f8ea0dfb68ee384ebe1b04ffff06243
+      internalID: -142677703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_119
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 26
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10a42d5c9371822488653cdcb55c105e
+      internalID: 2117105383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_120
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 12
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03f4619b1122f834487ddd34959b6996
+      internalID: 676316684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_121
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 6
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15147bc590f49454984adce08757500a
+      internalID: 1457937233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_122
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 9
+        width: 11
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9cb0a96b9606894585da3595c650798
+      internalID: 1652446796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 7263966c18e5f6a4aa5bc02aa4ab25f6
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":40.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_0: 1068258405
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_1: -831026290
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_10: 229169561
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_100: -693784323
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_101: 457288130
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_102: -491039323
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_103: -569403306
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_104: -1803390890
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_105: 1138205343
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_106: -1269181756
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_107: -90736957
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_108: 1902049849
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_109: 48833884
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_11: -1850252068
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_110: -1372532156
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_111: -1936397826
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_112: -1832791277
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_113: -102205620
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_114: 1136987441
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_115: 1976427273
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_116: -944173011
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_117: -1566071228
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_118: -142677703
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_119: 2117105383
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_12: 642544651
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_120: 676316684
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_121: 1457937233
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_122: 1652446796
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_13: 907914351
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_14: -703701014
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_15: -1356047721
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_16: 283656047
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_17: 1215619250
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_18: -1977172875
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_19: -1532145487
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_2: -1163137388
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_20: -1596978232
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_21: 416875558
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_22: -1528344384
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_23: -1520674216
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_24: -1094062857
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_25: 1006302595
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_26: -833835476
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_27: -1405942784
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_28: -894328180
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_29: -872459736
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_3: 1267972883
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_30: 1759715285
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_31: -255436058
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_32: 766880564
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_33: 1888683703
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_34: -394129733
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_35: 134176305
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_36: 218059614
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_37: -843405754
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_38: -563821152
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_39: -720310015
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_4: 269595312
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_40: -976180277
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_41: -1172780875
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_42: 1703138836
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_43: -1468769286
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_44: 135933666
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_45: 1886840962
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_46: 1806275452
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_47: -1674686856
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_48: -1897986843
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_49: 673442772
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_5: 1862479964
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_50: -18979524
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_51: 781025453
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_52: -1536860280
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_53: 1761730363
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_54: -1781488452
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_55: 931202453
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_56: -1691501109
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_57: -280431219
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_58: 1213037804
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_59: -929648940
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_6: 490827309
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_60: -871592053
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_61: -1850900775
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_62: -364696161
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_63: -1906646460
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_64: -1984436302
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_65: -179648526
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_66: 265097201
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_67: -1047258155
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_68: 80578438
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_69: 721322573
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_7: -1693278023
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_70: 1659367215
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_71: -1078836762
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_72: 12357536
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_73: 1805266016
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_74: 1597452379
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_75: -1565714005
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_76: 1540871346
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_77: -1794761429
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_78: -857325193
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_79: -1957920435
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_8: 934353557
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_80: 87286703
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_81: 1999924622
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_82: -113887803
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_83: 1115744408
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_84: -1163562205
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_85: 760643269
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_86: 615460747
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_87: -2021416783
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_88: -1939921045
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_89: -1878360568
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_9: -1674121391
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_90: -2109807850
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_91: -1074010424
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_92: -900749180
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_93: -1803374757
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_94: -605525079
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_95: 888540475
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_96: -249779560
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_97: 175382652
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_98: -1018657912
+      PC _ Computer - Momodora_ Reverie Under the Moonlight - Enemies - Imp_99: -1383596719
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

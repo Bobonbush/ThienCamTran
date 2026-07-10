@@ -8,6 +8,7 @@ public class Purifying : MonoBehaviour, PuzzleEvent
 
     public int Status { get; private set; } = 0;
     public float timing = 0.0f;
+
     
 
 
