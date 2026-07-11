@@ -8,12 +8,25 @@ public class Item : MonoBehaviour, IInteractable
     public Item itemPrefab;
     public int amount = 1;
 
+    [SerializeField]
+    IInteractable.Type type = IInteractable.Type.Item;
+
+    private float invisibleframe = 0.25f;
+
+    public bool autoPickUp = false;
+
     [Header("Pickup")]
     public GameObject promptObject;
     public float pickupDelay = 0.25f;
     public bool ignorePlayerCollision = true;
 
+    Animator anim;
+
+    Rigidbody2D rb;
+
     private float spawnedAt;
+
+    private bool picked = false;
 
     public bool CanInteract
     {
@@ -32,11 +45,15 @@ public class Item : MonoBehaviour, IInteractable
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         if (promptObject != null)
             promptObject.SetActive(false);
 
         if (ignorePlayerCollision)
             IgnorePlayerCollision();
+
+        anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
@@ -46,18 +63,47 @@ public class Item : MonoBehaviour, IInteractable
 
     public void SetPromptVisible(bool visible)
     {
-        if (promptObject != null && promptObject.activeSelf != visible)
+        if (promptObject != null && promptObject.activeSelf != visible && picked == false)
             promptObject.SetActive(visible);
+    }
+
+    public IInteractable.Type GetType()
+    {
+        return type;
+    }
+
+    private void Update()
+    {
+        invisibleframe -= Time.deltaTime;
     }
 
     public void Interact(PlayerController player)
     {
-        if (!CanInteract || player == null)
+        if (!CanInteract || player == null || picked == true || invisibleframe > 0.0f)
             return;
 
+        
         Inventory inventory = player.GetComponent<Inventory>();
         if (inventory != null && inventory.AddItem(this, amount))
-            Destroy(gameObject);
+        {
+            picked = true;
+            rb.gravityScale = -1.0f;
+
+            if (anim != null)
+            {
+                
+                anim.SetTrigger("Consume");
+            }else
+            {
+                Destroy(gameObject);
+            }
+            
+        }
+    }
+
+    public void AnimationDestroy()
+    {
+        Destroy(gameObject);
     }
 
     private void IgnorePlayerCollision()

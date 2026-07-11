@@ -607,7 +607,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.83463, y: 0.63693, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1.0666667}
+  m_LocalScale: {x: 0.90000004, y: 0.90000004, z: 1.2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4385080528283818002}
@@ -724,13 +724,13 @@ MonoBehaviour:
   air_atk: {fileID: 6745596122748728017}
   dashToAttack: 0.1
   maxComboTime: 0.3
-  walkSpeed: 5
-  runSpeed: 6
+  walkSpeed: 6
+  runSpeed: 7
   jumpImpulse: 11.5
   airWalkSpeed: 4
   maxSpeedFall: 50
   gravityMultiplier: 2
-  dashSpeed: 8
+  dashSpeed: 6
   dashCooldown: 0.8
   interactRange: 1.5
   interactLayerMask:
@@ -740,6 +740,7 @@ MonoBehaviour:
   isAttacking: 0
   _isMoving: 0
   _isRunning: 0
+  _isDucking: 0
   _isFacingRight: 1
 --- !u!114 &3129385825251170596
 MonoBehaviour:

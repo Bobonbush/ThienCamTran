@@ -139,13 +139,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6588509061327645994, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: runSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6588509061327645994, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: dashSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6588509061327645994, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: walkSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6588509061327645994, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: jumpImpulse
+      value: 11.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 37.01
+      value: 37.26
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.41
+      value: 18.15
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10158,7 +10174,7 @@ Transform:
   m_GameObject: {fileID: 1577809287}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 37.01, y: 19.842, z: -10}
+  m_LocalPosition: {x: 37.26, y: 19.581999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10547,7 +10563,7 @@ Transform:
   m_GameObject: {fileID: 1885380136}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 37.01, y: 19.842, z: -10}
+  m_LocalPosition: {x: 37.26, y: 19.581999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

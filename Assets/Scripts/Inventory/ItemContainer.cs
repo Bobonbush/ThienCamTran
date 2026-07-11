@@ -1,11 +1,19 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class ItemContainer : MonoBehaviour, IInteractable
 {
+    [System.Serializable]
+    public struct itemInfo
+    {
+        public Item item;
+        public int count;
+    };
     [Header("Items")]
-    public List<Item> itemPrefabs = new List<Item>();
+
+    public List<itemInfo> itemPrefabs = new List<itemInfo>();
     public bool openOnce = true;
 
     [Header("Drop")]
@@ -25,13 +33,26 @@ public class ItemContainer : MonoBehaviour, IInteractable
         get { return !openOnce || !opened; }
     }
 
+    
+
+    Animator anim;
+
     private void Awake()
     {
         Collider2D col = GetComponent<Collider2D>();
+
+        
+
         col.isTrigger = true;
 
         if (promptObject != null)
             promptObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        anim.SetBool(AnimationStrings.openChest, opened);
     }
 
     public void SetPromptVisible(bool visible)
@@ -47,10 +68,17 @@ public class ItemContainer : MonoBehaviour, IInteractable
             return;
 
         opened = true;
+        anim.SetBool(AnimationStrings.openChest, opened);
+
         if (promptObject != null)
             promptObject.SetActive(false);
 
         DropItems();
+    }
+
+    public IInteractable.Type GetType()
+    {
+        return  IInteractable.Type.Object;
     }
 
     private void DropItems()
@@ -59,20 +87,25 @@ public class ItemContainer : MonoBehaviour, IInteractable
 
         for (int i = 0; i < itemPrefabs.Count; i++)
         {
-            Item prefab = itemPrefabs[i];
-            if (prefab == null)
-                continue;
+            Item prefab = itemPrefabs[i].item;
+            int cnt = itemPrefabs[i].count;
 
-            Vector3 offset = new Vector3(Random.Range(-spreadX, spreadX), Random.Range(0f, spreadY), 0f);
-            Item droppedItem = Instantiate(prefab, origin + offset, Quaternion.identity);
-            droppedItem.itemPrefab = prefab;
-
-            Rigidbody2D rb = droppedItem.GetComponent<Rigidbody2D>();
-            if (rb != null)
+            for (int j = 0; j < cnt; j++)
             {
-                float direction = Random.value < 0.5f ? -1f : 1f;
-                Vector2 force = new Vector2(direction * Random.Range(0.5f, burstForce), upwardForce);
-                rb.AddForce(force, ForceMode2D.Impulse);
+                if (prefab == null)
+                    continue;
+
+                Vector3 offset = new Vector3(UnityEngine.Random.Range(-spreadX, spreadX), UnityEngine.Random.Range(0f, spreadY), 0f);
+                Item droppedItem = Instantiate(prefab, origin + offset, Quaternion.identity);
+                droppedItem.itemPrefab = prefab;
+
+                Rigidbody2D rb = droppedItem.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    float direction = UnityEngine.Random.value < 0.5f ? -1f : 1f;
+                    Vector2 force = new Vector2(direction * UnityEngine.Random.Range(0.5f, burstForce), upwardForce);
+                    rb.AddForce(force, ForceMode2D.Impulse);
+                }
             }
         }
     }

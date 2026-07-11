@@ -20,12 +20,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject air_atk;
 
+    private bool saveLock = false;
+
     [SerializeField]
     private float dashToAttack = 0.1f;
 
     [SerializeField]
     private float maxComboTime = 0.3f;
 
+
+    private bool StopCombo = true;
+
+    private float lockInputFor = -1.0f;
 
    
 
@@ -49,6 +55,7 @@ public class PlayerController : MonoBehaviour
     private bool isHoldingJump;
 
     public bool lockInput = false;
+    private bool setLock = false;
 
     private float TargetMoveX = 0.0f;
 
@@ -57,6 +64,9 @@ public class PlayerController : MonoBehaviour
     
     private Vector3 oldTransformPosition = Vector3.zero;
     private Vector2 lockDirection = new Vector2(1, 0);
+
+    private bool SwapSaveDirection = false;
+    private bool CanExitSaving = false;
 
 
     [SerializeField]
@@ -73,6 +83,8 @@ public class PlayerController : MonoBehaviour
     Vector3 SafeGround = Vector3.zero;
     float LastOnGroundY = 0;
     float gravityScale = 0.0f;
+
+    private bool isSaving = false;
 
 
 
@@ -256,6 +268,20 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if(lockInputFor > 0.0f && setLock)
+        {
+            lockInput = true;
+            lockInputFor -= Time.deltaTime;
+        }else if(setLock)
+        {
+            setLock = false;
+        }
+
+        if(isSaving)
+        {
+            GotoSaving();
+        }
+
         if (damageable.ReviveAction)
         {
             damageable.ReviveAction = false;
@@ -295,7 +321,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (lockInput )
+        if (lockInput && setLock == false && saveLock == false )
         {
             rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed)  , rb.linearVelocity.y) * lockDirection;
             TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x) ;
@@ -355,6 +381,12 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
 
         oldTransformPosition = transform.position;
+    }
+
+    private void LockInput(float timing)
+    {
+        lockInputFor = timing;
+        setLock = true;
     }
 
     public void SetFacingDirection(Vector2 moveInput)
@@ -451,7 +483,7 @@ public class PlayerController : MonoBehaviour
 
             if (IsDucking && touchingDirections.IsOnSlidable)
             {
-
+                IsDucking = false;
                 OnSlide();
                 return;
             }
@@ -483,9 +515,13 @@ public class PlayerController : MonoBehaviour
     {
         if (lockInput) return;
         if (Climbing) return;
-        if (context.started)
+        if (context.performed)
         {
-            animator.SetTrigger(AnimationStrings.attackTrigger);
+            if (StopCombo)
+            {
+                animator.SetTrigger(AnimationStrings.attackTrigger);
+                StopCombo = false;
+            }
         }
     }
 
@@ -493,6 +529,12 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = false;
         rb.gravityScale = gravityScale;
+    }
+
+
+    public void ComboFrame()
+    {
+        StopCombo = true;
     }
 
     public void Attack1Trigger()
@@ -589,6 +631,7 @@ public class PlayerController : MonoBehaviour
         if (lockInput) return;
         isAttacking = false;
         Climbing = false;
+        StopCombo = true;
         rb.gravityScale = gravityScale;
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
@@ -638,7 +681,6 @@ public class PlayerController : MonoBehaviour
     public void RunForwardForXDistance(float X)
     {
         lockInput = true;
-        Debug.Log("On X" + X);
         if(X > 0 )
         {
             rb.linearVelocity = new Vector2(Mathf.Max(Mathf.Abs(rb.linearVelocity.x), walkSpeed), rb.linearVelocityY);
@@ -678,11 +720,31 @@ public class PlayerController : MonoBehaviour
     {
         IInteractable interactable = FindNearestInteractable();
         if (interactable != null && interactable.CanInteract)
-            interactable.Interact(this);
+        {
+            if (interactable.GetType() == IInteractable.Type.Item && IsDucking == false)
+            {
+                LockInput(0.25f);
+                
+                animator.SetTrigger(AnimationStrings.pickItem);
+            }
+            interactable.Interact(this);    
+        }
+    }
+
+    private void InteractWithNearest(Item item)
+    {
+        if(item != null && item.CanInteract)
+        {
+            item.Interact(this);
+        }
     }
 
     private void UpdateInteractPrompts()
     {
+        if(!touchingDirections.IsGrounded)
+        {
+            return;
+        }
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
         Item nearestItem = null;
         ItemContainer nearestContainer = null;
@@ -719,6 +781,12 @@ public class PlayerController : MonoBehaviour
         foreach (Collider2D col in colliders)
         {
             Item item = col.GetComponentInParent<Item>();
+            Transform itemTrasnform = col.gameObject.GetComponent<Transform>();
+            if (item != null && item.GetType() == IInteractable.Type.Non_needPickup && Mathf.Abs(itemTrasnform.position.y - transform.position.y) <= 0.85f && Mathf.Abs(itemTrasnform.position.x - transform.position.x) <= 0.65f)
+            {
+                InteractWithNearest(nearestItem);
+            }
+
             if (item != null)
                 item.SetPromptVisible(item == nearestItem && item.CanInteract);
 
@@ -727,7 +795,9 @@ public class PlayerController : MonoBehaviour
                 container.SetPromptVisible(container == nearestContainer && container.CanInteract);
         }
 
-        if (promptedItem != null && promptedItem != nearestItem)
+
+       
+        if (promptedItem != null && promptedItem != nearestItem && nearestItem != null &&  nearestItem.GetType() == IInteractable.Type.Item)
             promptedItem.SetPromptVisible(false);
 
         if (promptedContainer != null && promptedContainer != nearestContainer)
@@ -739,8 +809,14 @@ public class PlayerController : MonoBehaviour
 
     private IInteractable FindNearestInteractable()
     {
+      
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
         IInteractable nearest = null;
+        if(!touchingDirections.IsGrounded)
+        {
+            return nearest;
+        }
+
         float bestDistance = float.MaxValue;
 
         foreach (Collider2D col in colliders)
@@ -795,5 +871,107 @@ public class PlayerController : MonoBehaviour
         }
 
         SetSafeGround(transform.position);
+    }
+
+
+    // Save Game
+
+    public bool EnterSaving(Vector3 left, Vector3 right)
+    {
+
+        CanExitSaving = false;
+        isSaving = true;
+        float distanceLeft = Mathf.Abs(left.x - transform.position.x);
+        float distanceRight = Mathf.Abs(right.x - transform.position.x);
+
+        float offsetLeft = left.x - transform.position.x;
+        float offsetRight = right.x - transform.position.x;
+
+        if (distanceLeft < distanceRight)
+        {
+
+            if (offsetLeft >= 0.0f)
+            {
+                SwapSaveDirection = false;
+            }else
+            {
+                SwapSaveDirection = true;
+            }
+            RunForwardForXDistance(offsetLeft);
+        }else
+        {
+            if(offsetRight < 0)
+            {
+                SwapSaveDirection = false;
+            } else
+            {
+                SwapSaveDirection = true;
+            }
+             RunForwardForXDistance(offsetRight);
+        }
+
+        return true;
+    }
+
+    // Go to the saving position and perform the animation
+    public void GotoSaving()
+    {
+        
+        if(!lockInput == false && saveLock == false)
+        {
+            return;
+        }
+
+        
+
+        lockInput = true;
+        if (saveLock == false)
+        {
+            if (SwapSaveDirection)
+            {
+                if (lockDirection.x < 0)
+                {
+                    SetFacingDirection(new Vector2(1, 0));
+                }
+                else
+                {
+                    SetFacingDirection(new Vector2(-1, 0));
+                }
+                SwapSaveDirection = false;
+            }
+            rb.linearVelocity = Vector3.zero;
+            saveLock = true;
+            isSaving = true;
+            animator.SetBool(AnimationStrings.isSaving, true);
+            animator.SetTrigger(AnimationStrings.isSaving + " 0");
+        }
+    }
+    
+    public bool ExitSaving()
+    {
+        if(!CanExitSaving)
+        {
+            return false;
+        }
+
+
+        isSaving = false;
+        animator.SetBool(AnimationStrings.isSaving, false);
+        return true;
+    }
+
+    public void AnimationExitSaving()
+    {
+        lockInput = false;
+        saveLock = false;
+
+        // Turn off the UI here
+
+    }
+
+    public void AnimationEnableSave()
+    {
+        CanExitSaving = true;
+        // Implement the UI here.
     }
 }

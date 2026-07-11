@@ -471,6 +471,7 @@ MonoBehaviour:
   maxSpeed: 3
   walkStopRate: 0.1
   cliffDetectionZone: {fileID: 3791231753902012582}
+  bloodPrefab: {fileID: 6137437768111737468, guid: c549ee1f2ad400d46b0fe26461349bfa, type: 3}
   stationalEnemy: 0
   spawn: {x: 0, y: 0, z: 0}
   moveInRange: 1

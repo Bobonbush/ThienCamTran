@@ -27,4 +27,7 @@ internal class AnimationStrings
     internal static string attack = "Attack";
     internal static string isDucking = "isDucking";
     internal static string useItem = "UseItem";
+    internal static string pickItem = "PickItem";
+    internal static string openChest = "Isopen";
+    internal static string isSaving = "IsSaving";
 }
