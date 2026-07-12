@@ -41,6 +41,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/UI/Overlay.unity
     guid: d60bd5f0ceb93ed478588a0cd6d7a4ca
+  - enabled: 1
+    path: Assets/Scenes/Arc1/Underground-centralHall.unity
+    guid: c26192c421e50064cb64e9c4e07d29ec
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

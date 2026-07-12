@@ -1,6 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
-
+using System.Collections;
 public class PlayerCamera : MonoBehaviour
 {
     [Header("Target Setup")]
@@ -28,6 +28,10 @@ public class PlayerCamera : MonoBehaviour
 
     private Vector3 offsetLocalPosition = Vector3.zero; // Use for custom camera Position; 
 
+    public bool CutSceneLock = false;
+
+    private Collider2D saveLocalBounds = null; 
+
     void Start()
     {
         if(globalBoundary == null)
@@ -44,7 +48,10 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
-
+        if(CutSceneLock)
+        {
+            return;
+        }
         currentOffsetLocalPosition = Vector3.Lerp(
              currentOffsetLocalPosition,
              offsetLocalPosition,
@@ -112,6 +119,7 @@ public class PlayerCamera : MonoBehaviour
             confiner.BoundingShape2D = targetCollider;
 
             globalBoundary = targetCollider;
+            saveLocalBounds = null;
 
             confiner.InvalidateBoundingShapeCache();
         }
@@ -120,9 +128,10 @@ public class PlayerCamera : MonoBehaviour
 
     public void UpdateLocalCameraBoundary(Collider2D localBounds)
     {
+        
         confiner.BoundingShape2D = localBounds;
 
-
+        saveLocalBounds = localBounds;
         confiner.InvalidateBoundingShapeCache();
     }
 
@@ -134,30 +143,76 @@ public class PlayerCamera : MonoBehaviour
         {
             return;
         }
-        CameraCustomBound customSetting = collision.GetComponent<CameraCustomBound>();
-        SetCameraOffsetPosition(customSetting.localPosition - defaultLocalPosition);
-
-        if(customSetting.customBoundaries)
+        if (!CutSceneLock)
         {
-            UpdateLocalCameraBoundary(customSetting.Boundaries);
+            CameraCustomBound customSetting = collision.GetComponent<CameraCustomBound>();
+            SetCameraOffsetPosition(customSetting.localPosition - defaultLocalPosition);
+
+            if (customSetting.customBoundaries)
+            {
+                UpdateLocalCameraBoundary(customSetting.Boundaries);
+            }
         }
         collisionCount++;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-
+        
         if (collision.gameObject.layer != LayerMask.NameToLayer("CameraCustomTrigger"))
         {
             return;
         }
 
-        if (--collisionCount == 0)
+        if (--collisionCount == 0 && !CutSceneLock)
         {
             offsetLocalPosition = Vector3.zero;
             confiner.BoundingShape2D = globalBoundary;
 
             confiner.InvalidateBoundingShapeCache();
+        }
+    }
+
+    public IEnumerator MoveCamera(Vector3 target, float duration)
+    {
+        CutSceneLock = true;
+
+        Vector3 start = cameraTarget.position;
+
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            float t = timer / duration;
+
+            cameraTarget.position = Vector3.Lerp(start, target, t);
+
+            yield return null;
+        }
+
+        cameraTarget.position = target;
+    }
+
+    public IEnumerator Wait(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+    }
+
+    public void LockCutScene()
+    {
+        CutSceneLock = true;
+        
+        UpdateLocalCameraBoundary(null);
+    }
+
+    public void ReleaseLockCutScene()
+    {
+        CutSceneLock = false;
+        if(saveLocalBounds != null)
+        {
+            UpdateLocalCameraBoundary(saveLocalBounds);
         }
     }
 }

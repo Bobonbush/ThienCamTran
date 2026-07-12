@@ -17,11 +17,7 @@ public class Room : MonoBehaviour
 
     public bool Closed = false;
 
-    [SerializeField]
 
-    public bool isDoor = false;
-
-    private int collisionCnt = 0;
 
     public void EnterNextRoom()
     {
@@ -37,21 +33,8 @@ public class Room : MonoBehaviour
         
         if(collision.GetComponent<PlayerController>())
         {
-            if (isDoor)
-            {
-                collisionCnt++;
-                return;
-            }
             EnterNextRoom();
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if(isDoor && collision.GetComponent<PlayerController>())
-        {
-            collisionCnt--;
-            return;
-        }
-    }
 }

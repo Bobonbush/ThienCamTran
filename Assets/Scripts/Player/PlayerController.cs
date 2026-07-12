@@ -2,11 +2,16 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
+
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Damageable))]
 [RequireComponent(typeof(Inventory))]
 public class PlayerController : MonoBehaviour
 {
 
+
+    [SerializeField]
+    private GeneratePurifyPuzzle puzzleManager;
 
     [SerializeField]
     private GameObject atk1;
@@ -19,6 +24,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private GameObject air_atk;
+
+    private SealedPuzzle inActivePuzzle;
 
     private bool saveLock = false;
 
@@ -66,7 +73,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 lockDirection = new Vector2(1, 0);
 
     private bool SwapSaveDirection = false;
-    private bool CanExitSaving = false;
+    private bool CanExitForcementState = false;
 
 
     [SerializeField]
@@ -86,6 +93,9 @@ public class PlayerController : MonoBehaviour
 
     private bool isSaving = false;
 
+    private bool isPuzzleSolving = false;
+
+    public bool CutSceneLock = false;
 
 
     
@@ -245,6 +255,8 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     Item promptedItem;
     ItemContainer promptedContainer;
+    InteractiveRoom promptedRoom;
+    SealedPuzzle promptedSealedPuzzle;
 
     private bool Climbing = false;
 
@@ -252,6 +264,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        puzzleManager.gameObject.SetActive(false);
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
@@ -264,6 +277,8 @@ public class PlayerController : MonoBehaviour
 
         if (inventoryUI == null)
             inventoryUI = gameObject.AddComponent<InventoryUI>();
+        puzzleManager.OnPuzzleCompleted += OnPuzzleComplete;
+        puzzleManager.OnPuzzleFail += OnPuzzleFail;
     }
 
     private void Update()
@@ -280,6 +295,11 @@ public class PlayerController : MonoBehaviour
         if(isSaving)
         {
             GotoSaving();
+        }
+
+        if(isPuzzleSolving)
+        {
+            GotoPuzzle();
         }
 
         if (damageable.ReviveAction)
@@ -321,17 +341,26 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (lockInput && setLock == false && saveLock == false )
+        if (CutSceneLock)
         {
-            rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed)  , rb.linearVelocity.y) * lockDirection;
-            TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x) ;
+            lockInput = true;
+        }
+        if (lockInput && setLock == false && saveLock == false && CutSceneLock == false)
+        {
+
+            TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x);
             oldTransformPosition = transform.position;
-            if(TargetMoveX <= 0)
+            if (TargetMoveX <= 0)
             {
+                transform.position = new Vector3(transform.position.x - lockDirection.x * TargetMoveX, transform.position.y, transform.position.z);
                 IsMoving = false;
                 IsRunning = false;
                 lockInput = false;
+                return;
             }
+
+            rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed), rb.linearVelocity.y) * lockDirection;
+            
             return ;
         }
         if (IsDashing)
@@ -470,6 +499,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Can be use for open menu
+
+    public void OnCancelForcingState(InputAction.CallbackContext context)
+    {
+        if(CanExitForcementState)
+        {
+            if(isSaving)
+            {
+                ExitSaving();
+            }
+            if(isPuzzleSolving)
+            {
+                ExitPuzzle();
+            }
+        }else
+        {
+            // Open Settings
+        }
+    }
+
     public void OnJump(InputAction.CallbackContext context)
     {
         // TODO Check if alive as well
@@ -509,6 +558,28 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
         }
 
+    }
+
+    public void OnPurify(InputAction.CallbackContext context)
+    {
+        if(!isPuzzleSolving)
+        {
+            return;
+        }
+        if(context.performed)
+             puzzleManager.Purify(context.ReadValue<Vector2>());
+
+    }
+
+    private void OnPuzzleComplete()
+    {
+        inActivePuzzle.Done(this, GetComponentInChildren<PlayerCamera>());
+        ExitPuzzle();
+    }
+
+    private void OnPuzzleFail()
+    {
+        ExitPuzzle();
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -628,10 +699,15 @@ public class PlayerController : MonoBehaviour
 
     public void OnHit(int damage, Vector2 knockback)
     {
-        if (lockInput) return;
+        //if (lockInput) return;
+
+        ExitPuzzle();
+        AnimationExitPuzzle();
+
         isAttacking = false;
         Climbing = false;
         StopCombo = true;
+        
         rb.gravityScale = gravityScale;
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
     }
@@ -748,12 +824,16 @@ public class PlayerController : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
         Item nearestItem = null;
         ItemContainer nearestContainer = null;
+        InteractiveRoom nearestRoom = null;
+        SealedPuzzle nearestSealedPuzzle = null;
         float bestDistance = float.MaxValue;
 
         foreach (Collider2D col in colliders)
         {
             Item item = col.GetComponentInParent<Item>();
             ItemContainer container = col.GetComponentInParent<ItemContainer>();
+            InteractiveRoom room = col.GetComponentInParent<InteractiveRoom>();
+            SealedPuzzle sealedPuzzle = col.GetComponentInParent<SealedPuzzle>();
 
             if (item != null)
             {
@@ -776,23 +856,58 @@ public class PlayerController : MonoBehaviour
                     nearestContainer = container;
                 }
             }
-        }
 
-        foreach (Collider2D col in colliders)
-        {
-            Item item = col.GetComponentInParent<Item>();
-            Transform itemTrasnform = col.gameObject.GetComponent<Transform>();
-            if (item != null && item.GetType() == IInteractable.Type.Non_needPickup && Mathf.Abs(itemTrasnform.position.y - transform.position.y) <= 0.85f && Mathf.Abs(itemTrasnform.position.x - transform.position.x) <= 0.65f)
+            if(room != null)
             {
-                InteractWithNearest(nearestItem);
+                float distance = Vector2.Distance(transform.position, room.transform.position);
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    nearestRoom = room;
+                }
             }
 
-            if (item != null)
-                item.SetPromptVisible(item == nearestItem && item.CanInteract);
+            if (sealedPuzzle != null)
+            {
+                float distance = Vector2.Distance(transform.position, sealedPuzzle.transform.position);
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    nearestItem = null;
+                    nearestSealedPuzzle = sealedPuzzle;
+                }
+            }
+        }
 
-            ItemContainer container = col.GetComponentInParent<ItemContainer>();
-            if (container != null)
-                container.SetPromptVisible(container == nearestContainer && container.CanInteract);
+        if (!isPuzzleSolving && !isSaving)
+        {
+            foreach (Collider2D col in colliders)
+            {
+                Item item = col.GetComponentInParent<Item>();
+                Transform itemTrasnform = col.gameObject.GetComponent<Transform>();
+
+                if (item != null && item.GetType() == IInteractable.Type.Non_needPickup && Mathf.Abs(itemTrasnform.position.y - transform.position.y) <= 0.85f && Mathf.Abs(itemTrasnform.position.x - transform.position.x) <= 0.65f)
+                {
+                    InteractWithNearest(nearestItem);
+                }
+
+                if (item != null)
+                    item.SetPromptVisible(item == nearestItem && item.CanInteract);
+
+                ItemContainer container = col.GetComponentInParent<ItemContainer>();
+                if (container != null)
+                    container.SetPromptVisible(container == nearestContainer && container.CanInteract);
+
+                InteractiveRoom room = col.GetComponentInParent<InteractiveRoom>();
+                if (room != null)
+                    room.SetPromptVisible(room == nearestRoom && room.CanInteract);
+
+                SealedPuzzle sealedPuzzle = col.GetComponentInParent<SealedPuzzle>();
+                if (sealedPuzzle != null)
+                {
+                    sealedPuzzle.SetPromptVisible(sealedPuzzle == nearestSealedPuzzle && sealedPuzzle.CanInteract);
+                }
+            }
         }
 
 
@@ -802,9 +917,16 @@ public class PlayerController : MonoBehaviour
 
         if (promptedContainer != null && promptedContainer != nearestContainer)
             promptedContainer.SetPromptVisible(false);
+        if(promptedRoom != null && promptedRoom != nearestRoom)
+            promptedRoom.SetPromptVisible(false);
+        if (promptedSealedPuzzle != null && promptedSealedPuzzle != nearestSealedPuzzle)
+            promptedSealedPuzzle.SetPromptVisible(false);
+
 
         promptedItem = nearestItem;
         promptedContainer = nearestContainer;
+        promptedRoom = nearestRoom;
+        promptedSealedPuzzle = nearestSealedPuzzle;
     }
 
     private IInteractable FindNearestInteractable()
@@ -879,7 +1001,7 @@ public class PlayerController : MonoBehaviour
     public bool EnterSaving(Vector3 left, Vector3 right)
     {
 
-        CanExitSaving = false;
+        CanExitForcementState = false;
         isSaving = true;
         float distanceLeft = Mathf.Abs(left.x - transform.position.x);
         float distanceRight = Mathf.Abs(right.x - transform.position.x);
@@ -941,7 +1063,6 @@ public class PlayerController : MonoBehaviour
             }
             rb.linearVelocity = Vector3.zero;
             saveLock = true;
-            isSaving = true;
             animator.SetBool(AnimationStrings.isSaving, true);
             animator.SetTrigger(AnimationStrings.isSaving + " 0");
         }
@@ -949,7 +1070,7 @@ public class PlayerController : MonoBehaviour
     
     public bool ExitSaving()
     {
-        if(!CanExitSaving)
+        if(!CanExitForcementState)
         {
             return false;
         }
@@ -971,7 +1092,143 @@ public class PlayerController : MonoBehaviour
 
     public void AnimationEnableSave()
     {
-        CanExitSaving = true;
+        CanExitForcementState = true;
         // Implement the UI here.
     }
+
+    public void EnterPuzzle(Vector3 left, Vector3 right, SealedPuzzle puzzle)
+    {
+        inActivePuzzle = puzzle;
+
+        CanExitForcementState = false;
+        isPuzzleSolving = true;
+        float distanceLeft = Mathf.Abs(left.x - transform.position.x);
+        float distanceRight = Mathf.Abs(right.x - transform.position.x);
+
+        float offsetLeft = left.x - transform.position.x;
+        float offsetRight = right.x - transform.position.x;
+
+        if (distanceLeft < distanceRight)
+        {
+
+            if (offsetLeft >= 0.0f)
+            {
+                SwapSaveDirection = false;
+            }
+            else
+            {
+                SwapSaveDirection = true;
+            }
+            RunForwardForXDistance(offsetLeft);
+        }
+        else
+        {
+            if (offsetRight < 0)
+            {
+                SwapSaveDirection = false;
+            }
+            else
+            {
+                SwapSaveDirection = true;
+            }
+            RunForwardForXDistance(offsetRight);
+        }
+    }
+
+    public void GotoPuzzle()
+    {
+
+        if (!lockInput == false && saveLock == false)
+        {
+            return;
+        }
+
+
+
+        lockInput = true;
+        if (saveLock == false)
+        {
+            if (SwapSaveDirection)
+            {
+                if (lockDirection.x < 0)
+                {
+                    SetFacingDirection(new Vector2(1, 0));
+                }
+                else
+                {
+                    SetFacingDirection(new Vector2(-1, 0));
+                }
+                SwapSaveDirection = false;
+            }
+            rb.linearVelocity = Vector3.zero;
+            saveLock = true;
+            animator.SetBool(AnimationStrings.isPuzzling, true);
+            animator.SetTrigger(AnimationStrings.isPuzzling + " 0");
+        }
+
+    }
+
+    public bool ExitPuzzle()
+    {
+        isPuzzleSolving = false;
+        animator.SetBool(AnimationStrings.isPuzzling, false);
+        puzzleManager.gameObject.SetActive(false);
+        return true;
+    }
+
+    public void AnimationExitPuzzle()
+    {
+        lockInput = false;
+        saveLock = false;
+
+        // Turn off the UI here
+
+    }
+
+    public void AnimationEnablePuzzle()
+    {
+        CanExitForcementState = true;
+        // Implement the UI here.
+        puzzleManager.gameObject.SetActive(true);
+
+        puzzleManager.Generate(inActivePuzzle.Round, inActivePuzzle.Duration);
+
+    }
+
+
+    public bool isLockingInput()
+    {
+        return lockInput;
+    }
+
+    public bool isPuzzling()
+    {
+        return isPuzzleSolving;
+    }
+
+    public IEnumerator Wait(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+    }
+
+    public void LockCutScene()
+    {
+        CutSceneLock = true;
+        lockInput = true;
+
+        Debug.Log("Locked");
+        
+    }
+
+    public void ReleaseLockCutScene()
+    {
+        CutSceneLock = false;
+        lockInput = false;
+
+
+    }
+
+
+
+
 }
