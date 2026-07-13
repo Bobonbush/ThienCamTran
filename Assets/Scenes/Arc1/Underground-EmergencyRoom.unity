@@ -1739,7 +1739,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawn
   enemyList:
-  - enemies:
+  - delayTime: 0.5
+    enemies:
     - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
       spawnPrefab: {fileID: 1725098522}
       spawnOffset: {x: 0, y: 0, z: 0}
@@ -5013,11 +5014,11 @@ PrefabInstance:
       objectReference: {fileID: 272080988}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 33.3
+      value: 50.1
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.5
+      value: 16.4
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9671,7 +9672,7 @@ Transform:
   m_GameObject: {fileID: 941564466}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33.3, y: 21.111, z: -10}
+  m_LocalPosition: {x: 50.1, y: 18.011, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9744,6 +9745,10 @@ PrefabInstance:
     - target: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
       propertyPath: m_Name
       value: KnightEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459008834506495148, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5459008834506495148, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10600,7 +10605,7 @@ Transform:
   m_GameObject: {fileID: 1086161762}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33.3, y: 21.111, z: -10}
+  m_LocalPosition: {x: 50.1, y: 18.011, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

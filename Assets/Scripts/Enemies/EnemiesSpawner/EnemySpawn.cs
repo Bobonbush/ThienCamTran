@@ -19,6 +19,7 @@ public class EnemySpawn : MonoBehaviour
     [System.Serializable]
     public class EnemyRound
     {
+        public float delayTime = 0.5f;
         public List<EnemiesInfo> enemies = new();
     }
     // Round and Enemies;
@@ -32,6 +33,8 @@ public class EnemySpawn : MonoBehaviour
     public List<GameObject> currentEnemies;
 
     private ActivateTrap activeTrap; // use for close the door
+
+    Coroutine spawning = null;
 
     private void Awake()
     {
@@ -64,7 +67,7 @@ public class EnemySpawn : MonoBehaviour
 
     public void Spawn()
     {
-        if(isDone())
+        if(isDone() && spawning == null)
         {
             round++;
             if(round == 0)
@@ -78,16 +81,24 @@ public class EnemySpawn : MonoBehaviour
                 Done();
             }else
             {
-                currentEnemies.Clear();
-                for(int i = 0; i < enemyList[round].enemies.Count; i++)
-                {
-                    EnemiesInfo info = enemyList[round].enemies[i];
-                    Transform actualTransform = info.spawnPrefab.transform;
-                    actualTransform.position += info.spawnOffset;
-                    currentEnemies.Add(Instantiate(info.enemiesPrefab, actualTransform));
-                }
+                spawning = StartCoroutine(SummonEnemy());
             }
         }
+    }
+
+    public IEnumerator SummonEnemy()
+    {
+        yield return new WaitForSeconds(enemyList[round].delayTime);
+
+        currentEnemies.Clear();
+        for (int i = 0; i < enemyList[round].enemies.Count; i++)
+        {
+            EnemiesInfo info = enemyList[round].enemies[i];
+            Transform actualTransform = info.spawnPrefab.transform;
+            actualTransform.position += info.spawnOffset;
+            currentEnemies.Add(Instantiate(info.enemiesPrefab, actualTransform));
+        }
+        spawning = null;
     }
 
 

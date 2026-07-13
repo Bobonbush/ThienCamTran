@@ -664,8 +664,8 @@ public class PlayerController : MonoBehaviour
     public void OnDash(InputAction.CallbackContext context)
     {
         if (lockInput) return;
-        if(Climbing) return;
-
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         if (context.started && CanDash())
         {
             if (!touchingDirections.IsGrounded)
