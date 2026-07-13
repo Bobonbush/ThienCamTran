@@ -67,7 +67,7 @@ public class Item : MonoBehaviour, IInteractable
             promptObject.SetActive(visible);
     }
 
-    public IInteractable.Type GetType()
+    public new IInteractable.Type GetType()
     {
         return type;
     }

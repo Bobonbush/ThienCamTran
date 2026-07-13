@@ -76,7 +76,7 @@ public class ItemContainer : MonoBehaviour, IInteractable
         DropItems();
     }
 
-    public IInteractable.Type GetType()
+    public new IInteractable.Type GetType()
     {
         return  IInteractable.Type.Object;
     }

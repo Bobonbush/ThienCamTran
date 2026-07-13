@@ -1,4 +1,3 @@
-﻿using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class ProjectileTrajectory : MonoBehaviour
@@ -6,13 +5,13 @@ public class ProjectileTrajectory : MonoBehaviour
     public int damage = 10;
 
     public Vector2 knockback = new Vector2(10f, 0);
-    public float fall = 0f; // Hiệu ứng cắm xuống đất
-    public float maxLifetime = 5f;   // tự huỷ nếu bay mãi không trúng gì
+    public float fall = 0f; // Hi?u ?ng c?m xu?ng d?t
+    public float maxLifetime = 5f;   // t? hu? n?u bay m�i kh�ng tr�ng g�
     [SerializeField]
     private float offsetRotation = 0.0f;  // Set the origin object to lie on the x axis
 
     Rigidbody2D rb;
-    Animator animator;       // có thể null (đạn sprite tĩnh như Arrow)
+    Animator animator;       // c� th? null (d?n sprite tinh nhu Arrow)
     Collider2D col;
     bool hasImpacted = false;
     bool hasLaunchVelocity = false;
@@ -85,7 +84,7 @@ public class ProjectileTrajectory : MonoBehaviour
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
             Vector2 direction = Vector2.Normalize(rb.linearVelocity);
-            rb.isKinematic = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
 
 
             Vector3 position = transform.position;
@@ -100,18 +99,18 @@ public class ProjectileTrajectory : MonoBehaviour
 
     }
 
-    // Dừng đạn lại và chơi animation nổ; nếu không có Animator thì huỷ ngay (giữ hành vi cũ của Arrow)
+    // D?ng d?n l?i v� choi animation n?; n?u kh�ng c� Animator th� hu? ngay (gi? h�nh vi cu c?a Arrow)
     private void Impact()
     {
         hasImpacted = true;
         rb.linearVelocity = Vector2.zero;
-        if (col != null) col.enabled = false;   // không trúng thêm lần nữa
+        if (col != null) col.enabled = false;   // kh�ng tr�ng th�m l?n n?a
 
         if (animator != null)
         {
             animator.SetTrigger(AnimationStrings.hitTrigger);   // -> state Impact
-            // Huỷ object do Animation Event ở cuối clip Impact gọi DestroySelf(),
-            // hoặc gắn FadeRemoveBehaviour lên state Impact.
+            // Hu? object do Animation Event ? cu?i clip Impact g?i DestroySelf(),
+            // ho?c g?n FadeRemoveBehaviour l�n state Impact.
         }
         else
         {
@@ -120,7 +119,7 @@ public class ProjectileTrajectory : MonoBehaviour
         }
     }
 
-    // Gọi từ Animation Event ở frame cuối clip Impact
+    // G?i t? Animation Event ? frame cu?i clip Impact
     public void DestroySelf()
     {
         Destroy(gameObject);

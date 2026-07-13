@@ -68,7 +68,7 @@ public class Projectile : MonoBehaviour
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
             Vector2 direction = Vector2.Normalize(rb.linearVelocity);
-            rb.isKinematic = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
 
 
             Vector3 position = transform.position;

@@ -76,7 +76,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     }
 
 
-    public IInteractable.Type GetType()
+    public new IInteractable.Type GetType()
     {
         return IInteractable.Type.Purifying;
     }

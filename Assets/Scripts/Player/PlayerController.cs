@@ -264,7 +264,13 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        puzzleManager.gameObject.SetActive(false);
+        if (puzzleManager != null)
+        {
+            puzzleManager.gameObject.SetActive(false);
+            puzzleManager.OnPuzzleCompleted += OnPuzzleComplete;
+            puzzleManager.OnPuzzleFail += OnPuzzleFail;
+        }
+
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
@@ -277,8 +283,6 @@ public class PlayerController : MonoBehaviour
 
         if (inventoryUI == null)
             inventoryUI = gameObject.AddComponent<InventoryUI>();
-        puzzleManager.OnPuzzleCompleted += OnPuzzleComplete;
-        puzzleManager.OnPuzzleFail += OnPuzzleFail;
     }
 
     private void Update()
@@ -562,6 +566,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnPurify(InputAction.CallbackContext context)
     {
+        if (puzzleManager == null)
+        {
+            return;
+        }
+
         if(!isPuzzleSolving)
         {
             return;
@@ -573,6 +582,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnPuzzleComplete()
     {
+        if (inActivePuzzle == null)
+        {
+            ExitPuzzle();
+            return;
+        }
+
         inActivePuzzle.Done(this, GetComponentInChildren<PlayerCamera>());
         ExitPuzzle();
     }
@@ -1172,7 +1187,10 @@ public class PlayerController : MonoBehaviour
     {
         isPuzzleSolving = false;
         animator.SetBool(AnimationStrings.isPuzzling, false);
-        puzzleManager.gameObject.SetActive(false);
+        if (puzzleManager != null)
+        {
+            puzzleManager.gameObject.SetActive(false);
+        }
         return true;
     }
 
@@ -1187,6 +1205,12 @@ public class PlayerController : MonoBehaviour
 
     public void AnimationEnablePuzzle()
     {
+        if (puzzleManager == null || inActivePuzzle == null)
+        {
+            ExitPuzzle();
+            return;
+        }
+
         CanExitForcementState = true;
         // Implement the UI here.
         puzzleManager.gameObject.SetActive(true);
