@@ -18,6 +18,8 @@ public class EnemyMove : MonoBehaviour
 
     public Vector3 spawn = Vector3.zero;
 
+    public Vector3 offsetBlood = Vector3.zero;
+
     public bool moveInRange = false;
     public BoxCollider2D moveRange;
 
@@ -354,7 +356,7 @@ public class EnemyMove : MonoBehaviour
         }
         Instantiate(
              bloodPrefab,
-             transform.position,
+             transform.position + offsetBlood,
              rotation
         );
     }

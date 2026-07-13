@@ -13,8 +13,8 @@ private void OnTriggerEnter2D(Collider2D collision)
         Damageable damageable = collision.GetComponent<Damageable>();
         if (damageable == null)
             return;
-
-        Vector2 deliveredKnockback = transform.root.localScale.x > 0
+        
+        Vector2 deliveredKnockback = transform.parent.localScale.x > 0
             ? knockback
             : new Vector2(-knockback.x, knockback.y);
 
