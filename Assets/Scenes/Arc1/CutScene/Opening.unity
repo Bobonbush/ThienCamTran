@@ -1566,6 +1566,10 @@ PrefabInstance:
       propertyPath: confiner
       value: 
       objectReference: {fileID: 2009671905}
+    - target: {fileID: 4493965156426468103, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: attackDamage
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5510386946914327363, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1613,6 +1617,18 @@ PrefabInstance:
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511591593991291973, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: knockback.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511591593991291973, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: knockback.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511591593991291973, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: attackDamage
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

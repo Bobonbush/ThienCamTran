@@ -1738,6 +1738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7dc0991c3d7ca54f988747564eaa3e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawn
+  useActivator: 1
   enemyList:
   - delayTime: 0.5
     enemies:
@@ -1747,6 +1748,7 @@ MonoBehaviour:
     - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
       spawnPrefab: {fileID: 1152045481}
       spawnOffset: {x: 0, y: 0, z: 0}
+  trapList: []
   currentEnemies: []
 --- !u!4 &224393705 stripped
 Transform:
@@ -5014,11 +5016,11 @@ PrefabInstance:
       objectReference: {fileID: 272080988}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50.1
+      value: 92.98
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.4
+      value: 2.32
       objectReference: {fileID: 0}
     - target: {fileID: 8034443942936530656, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5862,6 +5864,7 @@ MonoBehaviour:
   ReliedOnActivator: 0
   needActivator: 1
   useBothDeAndActive: 1
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 0, y: -1, z: 0}
@@ -9672,7 +9675,7 @@ Transform:
   m_GameObject: {fileID: 941564466}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.1, y: 18.011, z: -10}
+  m_LocalPosition: {x: 92.98, y: 3.9309998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9963,6 +9966,7 @@ MonoBehaviour:
   ReliedOnActivator: 0
   needActivator: 1
   useBothDeAndActive: 0
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 0, y: -1, z: 0}
@@ -10605,7 +10609,7 @@ Transform:
   m_GameObject: {fileID: 1086161762}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.1, y: 18.011, z: -10}
+  m_LocalPosition: {x: 92.98, y: 3.9309998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13945,6 +13949,7 @@ MonoBehaviour:
   ReliedOnActivator: 0
   needActivator: 1
   useBothDeAndActive: 0
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 0, y: -1, z: 0}
@@ -13973,6 +13978,7 @@ MonoBehaviour:
   ReliedOnActivator: 0
   needActivator: 1
   useBothDeAndActive: 1
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 0, y: -1, z: 0}
@@ -14635,6 +14641,7 @@ MonoBehaviour:
   ReliedOnActivator: 0
   needActivator: 1
   useBothDeAndActive: 0
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 0, y: -1, z: 0}
@@ -15275,6 +15282,7 @@ MonoBehaviour:
   ReliedOnActivator: 1
   needActivator: 1
   useBothDeAndActive: 0
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 1, y: 0, z: 0}
@@ -15533,6 +15541,7 @@ MonoBehaviour:
   ReliedOnActivator: 0
   needActivator: 1
   useBothDeAndActive: 1
+  OutSideBothTrigger: 0
   turnOffColliderOnDeActive: 1
   maxReActivateWaitingTime: 5
   moveDir: {x: 0, y: -1, z: 0}

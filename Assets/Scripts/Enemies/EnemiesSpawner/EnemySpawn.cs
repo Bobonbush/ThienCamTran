@@ -15,6 +15,9 @@ public class EnemySpawn : MonoBehaviour
     };
 
 
+    [SerializeField]
+    private bool useActivator = true;
+
 
     [System.Serializable]
     public class EnemyRound
@@ -26,11 +29,34 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField]
     public List<EnemyRound> enemyList = new List<EnemyRound>();
 
+
+
+    [System.Serializable]
+    
+    public class TrapInfo
+    {
+        public TrapMove traps;
+    }
+
+
+    [System.Serializable]
+    public class TrapRound
+    {
+        // which round done for activate these traps
+        public int round = 0;
+        public float delayTime = 0.5f;
+        List<TrapInfo> trapInfos = new();    
+    }
+
+    public List<TrapRound> trapList = new List<TrapRound>();
+
     private int round = -1;
 
     private bool start = false;
 
     public List<GameObject> currentEnemies;
+    
+
 
     private ActivateTrap activeTrap; // use for close the door
 
@@ -39,6 +65,11 @@ public class EnemySpawn : MonoBehaviour
     private void Awake()
     {
         activeTrap = GetComponent<ActivateTrap>();
+    }
+
+    private void Start()
+    {
+        trapList.Sort((a, b) => a.round.CompareTo(b.round));
     }
 
 
@@ -55,6 +86,7 @@ public class EnemySpawn : MonoBehaviour
 
     private void ActivateTrap(bool active)
     {
+        if (useActivator == false) return;
         if(activeTrap != null)
         {
             if (active)

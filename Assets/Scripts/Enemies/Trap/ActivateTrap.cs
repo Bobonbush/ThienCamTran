@@ -141,6 +141,7 @@ public class ActivateTrap : MonoBehaviour
         {
             trap.SetActive(true);
             trap.GetComponent<TrapMove>().ActivateTrap();
+            
         }
     }
 

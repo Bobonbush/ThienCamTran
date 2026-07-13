@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Arc1/Underground-EmergencyRoom.unity
     guid: fb1608f96affae34aacba46e8cfeec3c
   - enabled: 1
-    path: Assets/Scenes/Arc1/OutSkirt-3.unity
+    path: Assets/Scenes/Arc1/OutSkirt-5.unity
     guid: f5fc5b38ef1da204eb95268a52af5b78
   - enabled: 1
     path: Assets/Scenes/Arc1/Underground-kitchen.unity
@@ -44,6 +44,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arc1/Underground-centralHall.unity
     guid: c26192c421e50064cb64e9c4e07d29ec
+  - enabled: 1
+    path: Assets/Scenes/Arc1/OutSkirt-3.unity
+    guid: b0769e066ce7bc441a3aa31d24b39fbc
+  - enabled: 1
+    path: Assets/Scenes/Arc1/OutSkirt-4.unity
+    guid: 1cc185c7907c17b45a721dbe330c4e26
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -24,9 +24,11 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     public int Round {  get { return _round; } }
 
     
-    private float _duration = 2.0f;
+    private float _duration = 1.75f;
 
     public float Duration { get { return _duration; } }
+
+    private EnemySpawn e_spawn;
     
 
     
@@ -38,6 +40,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
 
     private void Awake()
     {
+        e_spawn = GetComponentInParent<EnemySpawn>();
         activateTrap = GetComponentInParent<ActivateTrap>();
         cutTrigger = GetComponentInParent<CutTrigger>();
     }
@@ -73,6 +76,11 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         cutTrigger.Trigger(playerController, player);
         activateTrap.TriggerAnimation();
         activateTrap.ActivateTraps();
+
+        if(e_spawn != null)
+        {
+            e_spawn.StartUp();
+        }
     }
 
 
