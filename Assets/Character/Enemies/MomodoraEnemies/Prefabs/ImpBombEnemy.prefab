@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 5954925451980561929}
   - component: {fileID: 2208927953371612168}
   - component: {fileID: 8358449033546392878}
+  - component: {fileID: 6742433571030089416}
   m_Layer: 8
   m_Name: ImpBombEnemy
   m_TagString: Untagged
@@ -449,6 +450,34 @@ MonoBehaviour:
   minimumPitch: 0.94
   maximumPitch: 1.04
   spatialBlend: 0
+--- !u!114 &6742433571030089416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3246293877470050967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225fd800c37309d488c81c92efeacd5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
+  walkAcceleration: 50
+  maxSpeed: 3
+  walkStopRate: 0.1
+  cliffDetectionZone: {fileID: 0}
+  stationalEnemy: 1
+  spawn: {x: 0, y: 0, z: 0}
+  offsetBlood: {x: 0, y: 0.5, z: 0}
+  moveInRange: 0
+  moveRange: {fileID: 0}
+  FlipWaitingMaxTime: 2
+  flashMaterial: {fileID: 0}
+  duration: 0
+  _walkDiretionVector: {x: 1, y: 0}
+  lockedMove: 1
+  shouldMove: 1
+  goingBack: 0
 --- !u!1 &3359392281572477557
 GameObject:
   m_ObjectHideFlags: 0

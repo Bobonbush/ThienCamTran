@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 852680863448688854}
   - component: {fileID: 8202875370090857487}
   - component: {fileID: 7578839816078801774}
+  - component: {fileID: 1456704595473282387}
   m_Layer: 8
   m_Name: ImpShieldEnemy
   m_TagString: Untagged
@@ -370,6 +371,34 @@ MonoBehaviour:
   minimumPitch: 0.94
   maximumPitch: 1.04
   spatialBlend: 0
+--- !u!114 &1456704595473282387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6084762074902324087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225fd800c37309d488c81c92efeacd5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
+  walkAcceleration: 50
+  maxSpeed: 3
+  walkStopRate: 0.1
+  cliffDetectionZone: {fileID: 0}
+  stationalEnemy: 1
+  spawn: {x: 0, y: 0, z: 0}
+  offsetBlood: {x: 0, y: 0.5, z: 0}
+  moveInRange: 0
+  moveRange: {fileID: 0}
+  FlipWaitingMaxTime: 2
+  flashMaterial: {fileID: 0}
+  duration: 0
+  _walkDiretionVector: {x: 1, y: 0}
+  lockedMove: 1
+  shouldMove: 1
+  goingBack: 0
 --- !u!1 &6092297787316113603
 GameObject:
   m_ObjectHideFlags: 0
