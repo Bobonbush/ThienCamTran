@@ -560,6 +560,7 @@ public class PlayerController : MonoBehaviour
             Climbing = false;
             animator.SetTrigger(AnimationStrings.jumpTrigger);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
+            Sfx.Play(SfxId.PlayerJump);
         }
 
     }
@@ -627,6 +628,7 @@ public class PlayerController : MonoBehaviour
     {
         atk1.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
+        Sfx.Play(SfxId.PlayerAttack);
         //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1), transform.position.y, transform.position.z);
     }
 
@@ -635,6 +637,7 @@ public class PlayerController : MonoBehaviour
         
         atk2.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
+        Sfx.Play(SfxId.PlayerAttack);
         //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1), transform.position.y, transform.position.z);
     }
 
@@ -642,6 +645,7 @@ public class PlayerController : MonoBehaviour
     {
         atk3.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
+        Sfx.Play(SfxId.PlayerAttack);
 
         //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1) * 2, transform.position.y, transform.position.z);
     }
@@ -651,6 +655,7 @@ public class PlayerController : MonoBehaviour
         air_atk.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         rb.gravityScale = 0.0f;
+        Sfx.Play(SfxId.PlayerAttack);
     }
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -674,6 +679,7 @@ public class PlayerController : MonoBehaviour
             lastDashTime = Time.time;
             dashDir = IsFacingRight ? 1 : -1;
             animator.SetTrigger(AnimationStrings.dashTrigger);
+            Sfx.Play(SfxId.PlayerDash);
         }
     }
 
@@ -796,9 +802,10 @@ public class PlayerController : MonoBehaviour
 
 
     // When fall out of map or fall into traps
-    private void Revive() 
+    private void Revive()
     {
         Teleport(SafeGround);
+        Sfx.Play(SfxId.PlayerRevive);
     }
 
     public void SetSafeGround(Vector3 position)
@@ -815,8 +822,9 @@ public class PlayerController : MonoBehaviour
             if (interactable.GetType() == IInteractable.Type.Item && IsDucking == false)
             {
                 LockInput(0.25f);
-                
+
                 animator.SetTrigger(AnimationStrings.pickItem);
+                Sfx.Play(SfxId.PlayerPickup);
             }
             interactable.Interact(this);    
         }

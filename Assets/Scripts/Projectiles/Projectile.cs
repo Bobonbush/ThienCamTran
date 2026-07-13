@@ -10,6 +10,10 @@ public class Projectile : MonoBehaviour
     public bool damagesPlayerOnly = false;
     public float fall = 0f;
 
+    [Header("Audio")]
+    public AudioClip[] impactClips;
+    [Range(0f, 1f)] public float impactVolume = 0.8f;
+
     Rigidbody2D rb;
     Animator animator;       // có thể null (đạn sprite tĩnh như Arrow)
     Collider2D col;
@@ -64,6 +68,9 @@ public class Projectile : MonoBehaviour
         }
         else if (collision.GetComponentInParent<Ground>() != null)
         {
+            hasImpacted = true;
+            PlayImpactSfx();
+
             // Touch ground
 
 
@@ -90,6 +97,7 @@ public class Projectile : MonoBehaviour
     private void Impact()
     {
         hasImpacted = true;
+        PlayImpactSfx();
         rb.linearVelocity = Vector2.zero;
         if (col != null) col.enabled = false;   // không trúng thêm lần nữa
 
@@ -109,5 +117,10 @@ public class Projectile : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    private void PlayImpactSfx()
+    {
+        EnemySfxController.PlayAtPoint(impactClips, transform.position, impactVolume);
     }
 }

@@ -177,3 +177,7 @@ MonoBehaviour:
   spinSpeed: -720
   maxLifetime: 5
   catchDistance: 0.4
+  impactClips:
+  - {fileID: 8300000, guid: 5961e04d707db9b4daf2bdeaa9e243da, type: 3}
+  - {fileID: 8300000, guid: aee44f24866a23046bf6565e408f6910, type: 3}
+  impactVolume: 0.78

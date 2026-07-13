@@ -6,6 +6,13 @@ public class ProjectileTrajectory : MonoBehaviour
 
     public Vector2 knockback = new Vector2(10f, 0);
     public bool damagesPlayerOnly = false;
+
+    public bool impactOnGround = false;
+
+    [Header("Audio")]
+    public AudioClip[] impactClips;
+    [Range(0f, 1f)] public float impactVolume = 0.9f;
+
     public float fall = 0f; // Hi?u ?ng c?m xu?ng d?t
     public float maxLifetime = 5f;   // t? hu? n?u bay m�i kh�ng tr�ng g�
     [SerializeField]
@@ -79,6 +86,15 @@ public class ProjectileTrajectory : MonoBehaviour
             }
         }else if(collision.GetComponentInParent<Ground>() != null)
         {
+            if (impactOnGround)
+            {
+                Impact();
+                return;
+            }
+
+            hasImpacted = true;
+            PlayImpactSfx();
+
             // Touch ground
 
             
@@ -107,6 +123,7 @@ public class ProjectileTrajectory : MonoBehaviour
     private void Impact()
     {
         hasImpacted = true;
+        PlayImpactSfx();
         rb.linearVelocity = Vector2.zero;
         if (col != null) col.enabled = false;   // kh�ng tr�ng th�m l?n n?a
 
@@ -127,5 +144,10 @@ public class ProjectileTrajectory : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    private void PlayImpactSfx()
+    {
+        EnemySfxController.PlayAtPoint(impactClips, transform.position, impactVolume);
     }
 }

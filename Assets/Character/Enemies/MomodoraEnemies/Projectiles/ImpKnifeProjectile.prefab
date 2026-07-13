@@ -185,3 +185,6 @@ MonoBehaviour:
   maxLifetime: 5
   damagesPlayerOnly: 1
   fall: 0
+  impactClips:
+  - {fileID: 8300000, guid: 8d2e0a78c87a27e4595e30c53721d8e5, type: 3}
+  impactVolume: 0.72

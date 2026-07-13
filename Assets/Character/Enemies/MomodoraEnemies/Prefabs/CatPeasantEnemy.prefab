@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 5628322879148035327}
   - component: {fileID: 4447252392448010644}
   - component: {fileID: 4295872247327780457}
+  - component: {fileID: 9084292799619583209}
+  - component: {fileID: 8822006569030131093}
   m_Layer: 8
   m_Name: CatPeasantEnemy
   m_TagString: Untagged
@@ -270,6 +272,7 @@ MonoBehaviour:
   FlipWaitingMaxTime: 2
   flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
   duration: 0.25
+  _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 0
   shouldMove: 1
   goingBack: 0
@@ -356,6 +359,137 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 1.7}
   m_Size: {x: 2.1, y: 3.4}
   m_Direction: 0
+--- !u!82 &9084292799619583209
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632481799677671888}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8822006569030131093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632481799677671888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbba6add392dd974e93038d522f7ed05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySfxController
+  shieldRaiseClips: []
+  attackWindupClips:
+  - {fileID: 8300000, guid: 48e2dff2bd24cb946a95834411db0389, type: 3}
+  attackReleaseClips:
+  - {fileID: 8300000, guid: 3f9267f585c31b549921a3e590a3c703, type: 3}
+  - {fileID: 8300000, guid: 06723f28e279f6d4ca35e9b74e73912e, type: 3}
+  attackImpactClips: []
+  attackImpactLayerClips: []
+  blockClips: []
+  catchClips:
+  - {fileID: 8300000, guid: 04ada501202515749b2694948721a5ad, type: 3}
+  - {fileID: 8300000, guid: f0ba6c42c4d04a043ab5028b823ee521, type: 3}
+  hurtClips:
+  - {fileID: 8300000, guid: 9c73ecc4c5dd5db43bb1962e53a24c86, type: 3}
+  - {fileID: 8300000, guid: e4cbb7f8c6eb0a740a368380fc8d58bc, type: 3}
+  deathClips:
+  - {fileID: 8300000, guid: ad1907dbed9148944a3a4c5d26638b95, type: 3}
+  volume: 0.84
+  impactLayerVolume: 0
+  minimumPitch: 0.93
+  maximumPitch: 1.04
+  spatialBlend: 0
 --- !u!1 &4671645230758836983
 GameObject:
   m_ObjectHideFlags: 0

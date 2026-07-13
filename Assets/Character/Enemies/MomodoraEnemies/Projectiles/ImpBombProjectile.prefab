@@ -182,6 +182,11 @@ MonoBehaviour:
   damage: 15
   knockback: {x: 3, y: 2}
   damagesPlayerOnly: 1
+  impactOnGround: 1
+  impactClips:
+  - {fileID: 8300000, guid: 72e80265564e1f246bd7efb1ebdb0cac, type: 3}
+  - {fileID: 8300000, guid: 80869e7e395999d48bdd54c66267569f, type: 3}
+  impactVolume: 0.9
   fall: 0
   maxLifetime: 5
   offsetRotation: 0

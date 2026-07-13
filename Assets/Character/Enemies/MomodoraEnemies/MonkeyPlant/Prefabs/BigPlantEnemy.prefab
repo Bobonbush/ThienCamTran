@@ -117,6 +117,8 @@ GameObject:
   - component: {fileID: 4578858845958590667}
   - component: {fileID: 4162084638414522811}
   - component: {fileID: 2908773824355931561}
+  - component: {fileID: 7417973234791024338}
+  - component: {fileID: 4351223850177628288}
   m_Layer: 8
   m_Name: BigPlantEnemy
   m_TagString: Untagged
@@ -341,6 +343,7 @@ MonoBehaviour:
   FlipWaitingMaxTime: 1.2
   flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
   duration: 0.25
+  _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 0
   shouldMove: 1
   goingBack: 0
@@ -448,6 +451,139 @@ MonoBehaviour:
   lockFacingDuringAttack: 1
   useAnimationHitbox: 1
   animationAttackHitbox: {fileID: 1284168542647723910}
+--- !u!82 &7417973234791024338
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7371759413876972813}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &4351223850177628288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7371759413876972813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbba6add392dd974e93038d522f7ed05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySfxController
+  shieldRaiseClips: []
+  attackWindupClips:
+  - {fileID: 8300000, guid: 2dec7b31b5a3437094c6aeec7033a251, type: 3}
+  - {fileID: 8300000, guid: 00a2a68134df41099fcf228a7bd3f3cd, type: 3}
+  attackReleaseClips: []
+  attackImpactClips:
+  - {fileID: 8300000, guid: 7b20ebca9c019494d8209f5a528bacd6, type: 3}
+  - {fileID: 8300000, guid: f86e0804c0b0dff4daae0ae089c43b02, type: 3}
+  attackImpactLayerClips:
+  - {fileID: 8300000, guid: e3df0849390ac9a49a0f048e8b0e5062, type: 3}
+  - {fileID: 8300000, guid: c6ace2687dfa02c45998b3d11b07f441, type: 3}
+  blockClips: []
+  catchClips: []
+  hurtClips:
+  - {fileID: 8300000, guid: 8332d5037c4d49ba8fadd7c9d39ddb83, type: 3}
+  - {fileID: 8300000, guid: 1c7f891fb5724895b93859825eb7aba5, type: 3}
+  - {fileID: 8300000, guid: b86092c07adf4c16939ec1b362dd9b1e, type: 3}
+  deathClips:
+  - {fileID: 8300000, guid: 08cce0647f70432882a2d493f76dbfbe, type: 3}
+  volume: 0.95
+  impactLayerVolume: 0.35
+  minimumPitch: 0.88
+  maximumPitch: 0.98
+  spatialBlend: 0
 --- !u!1 &7516816789501216427
 GameObject:
   m_ObjectHideFlags: 0

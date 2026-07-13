@@ -195,6 +195,8 @@ GameObject:
   - component: {fileID: 1793233749080612185}
   - component: {fileID: 7596219510762279598}
   - component: {fileID: 596917106094551927}
+  - component: {fileID: 3098683494410492647}
+  - component: {fileID: 6872017891959695771}
   m_Layer: 8
   m_Name: MonkeyEnemy
   m_TagString: Untagged
@@ -418,6 +420,7 @@ MonoBehaviour:
   FlipWaitingMaxTime: 0.45
   flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
   duration: 0.25
+  _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 0
   shouldMove: 1
   goingBack: 0
@@ -522,3 +525,137 @@ MonoBehaviour:
   attackRecovery: 0.42
   attackRange: 1.9
   knockback: {x: 4, y: 1.5}
+  lockFacingDuringAttack: 0
+  useAnimationHitbox: 0
+  animationAttackHitbox: {fileID: 0}
+--- !u!82 &3098683494410492647
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8363796119466156177}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6872017891959695771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8363796119466156177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbba6add392dd974e93038d522f7ed05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySfxController
+  shieldRaiseClips: []
+  attackWindupClips:
+  - {fileID: 8300000, guid: d5b31e6be3e340fc9f350fdcad615d09, type: 3}
+  - {fileID: 8300000, guid: f60a121facfa4ff886bf629813b20eff, type: 3}
+  attackReleaseClips: []
+  attackImpactClips:
+  - {fileID: 8300000, guid: f1b28ee6922083546bde0c2efd0ced6d, type: 3}
+  - {fileID: 8300000, guid: 9cad871f22dc9924ab04c77144d6b00e, type: 3}
+  attackImpactLayerClips:
+  - {fileID: 8300000, guid: 25968c5d8f52df847b281c1a21aa5d96, type: 3}
+  blockClips: []
+  catchClips: []
+  hurtClips:
+  - {fileID: 8300000, guid: c2381f7003aa4ff088b3c3b4393d055c, type: 3}
+  - {fileID: 8300000, guid: bea186bfc15e4b709f6978495aadbe04, type: 3}
+  deathClips:
+  - {fileID: 8300000, guid: 2873778ea58e4c1aa6c640569849c9f5, type: 3}
+  volume: 0.8
+  impactLayerVolume: 0.4
+  minimumPitch: 1.12
+  maximumPitch: 1.25
+  spatialBlend: 0

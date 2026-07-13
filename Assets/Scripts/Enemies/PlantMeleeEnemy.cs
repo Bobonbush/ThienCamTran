@@ -26,6 +26,7 @@ public class PlantMeleeEnemy : MonoBehaviour
     private Damageable damageable;
     private Rigidbody2D rb;
     private EnemyMove enemyMove;
+    private EnemySfxController sfx;
     private Collider2D currentTarget;
     private Coroutine attackRoutine;
     private float attackFacingSign = 1f;
@@ -36,6 +37,7 @@ public class PlantMeleeEnemy : MonoBehaviour
         damageable = GetComponent<Damageable>();
         rb = GetComponent<Rigidbody2D>();
         enemyMove = GetComponent<EnemyMove>();
+        sfx = GetComponent<EnemySfxController>();
 
         damageable.damageableHit.AddListener(OnHit);
         animator.SetBool(AnimationStrings.canMove, true);
@@ -89,7 +91,13 @@ public class PlantMeleeEnemy : MonoBehaviour
     private IEnumerator AttackLoop()
     {
         animator.SetTrigger(MeleeAttackHash);
+        if (sfx != null)
+            sfx.PlayAttackWindup();
+
         yield return new WaitForSeconds(attackWindup);
+
+        if (sfx != null)
+            sfx.PlayAttackImpact();
 
         if (!useAnimationHitbox)
             TryDamageTarget();

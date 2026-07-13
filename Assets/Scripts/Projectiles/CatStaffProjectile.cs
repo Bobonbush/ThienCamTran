@@ -13,6 +13,10 @@ public class CatStaffProjectile : MonoBehaviour
     [Min(0.1f)] public float maxLifetime = 5f;
     [Min(0.05f)] public float catchDistance = 0.35f;
 
+    [Header("Audio")]
+    public AudioClip[] impactClips;
+    [Range(0f, 1f)] public float impactVolume = 0.85f;
+
     private readonly HashSet<int> hitTargets = new HashSet<int>();
     private Rigidbody2D rb;
     private RangeEnemy owner;
@@ -82,7 +86,9 @@ public class CatStaffProjectile : MonoBehaviour
             return;
 
         float direction = rb.linearVelocityX >= 0f ? 1f : -1f;
-        target.Hit(damage, new Vector2(knockback.x * direction, knockback.y), transform.position);
+        bool gotHit = target.Hit(damage, new Vector2(knockback.x * direction, knockback.y), transform.position);
+        if (gotHit)
+            EnemySfxController.PlayAtPoint(impactClips, transform.position, impactVolume);
     }
 
     private void NotifyReturned()

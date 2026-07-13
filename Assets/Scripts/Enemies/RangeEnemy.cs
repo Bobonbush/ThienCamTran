@@ -55,6 +55,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     private Damageable damageable;
     private Rigidbody2D rb;
     private EnemyMove enemyMove;
+    private EnemySfxController sfx;
     private Coroutine combatRoutine;
     private Collider2D currentTarget;
     private bool isShielding;
@@ -87,6 +88,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
         rb = GetComponent<Rigidbody2D>();
         enemyMove = GetComponent<EnemyMove>();
+        sfx = GetComponent<EnemySfxController>();
 
         animator.SetBool(AnimationStrings.canMove, !stationary && !hovering);
         animator.SetBool(AnimationStrings.isAlive, damageable.IsAlive);
@@ -167,11 +169,15 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         if (enemyType == EnemyType.Shield)
         {
             SetShielding(true);
+            if (sfx != null)
+                sfx.PlayShieldRaise();
             yield return new WaitForSeconds(shieldDuration);
             SetShielding(false);
         }
 
         animator.SetTrigger(RangedAttackHash);
+        if (sfx != null)
+            sfx.PlayAttackWindup();
         yield return new WaitForSeconds(attackWindup);
 
         if (currentTarget != null && damageable.IsAlive)
@@ -189,6 +195,9 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         Vector2 direction = GetFacingDirection();
 
         GameObject projectile = Instantiate(projectilePrefab, LaunchPosition, projectilePrefab.transform.rotation);
+        if (sfx != null)
+            sfx.PlayAttackRelease();
+
         Vector3 scale = projectile.transform.localScale;
         float projectileFacing = Mathf.Sign(direction.x);
         if (enemyType == EnemyType.Knife || enemyType == EnemyType.Shield)
@@ -259,6 +268,8 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     public void OnDamageBlocked(Vector2 damageSource)
     {
         animator.SetTrigger(BlockHitHash);
+        if (sfx != null)
+            sfx.PlayBlock();
     }
 
     public void OnStaffReturned()
@@ -269,6 +280,8 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         hasStaff = true;
         animator.SetBool(HasStaffHash, true);
         animator.SetTrigger(CatchProjectileHash);
+        if (sfx != null)
+            sfx.PlayCatch();
     }
 
     public void OnHit(int damage, Vector2 knockback)
