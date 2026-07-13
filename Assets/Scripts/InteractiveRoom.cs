@@ -28,7 +28,7 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
 
     public bool CanInteract
     {
-        get { return promp.FinishAnimation(); }
+        get { return promp == null || promp.FinishAnimation(); }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -45,7 +45,7 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
 
     public void SetPromptVisible(bool visible)
     {
-        bool canShow = visible && CanInteract && promp.FinishAnimation();
+        bool canShow = visible && CanInteract;
         if (promptObject != null && promptObject.activeSelf != canShow)
             promptObject.SetActive(canShow);
     }
@@ -58,7 +58,10 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
         Debug.Log(seal != null);
         if(seal != null && seal.isSealed())
         {
-            promp.OutSideActivate();
+            if (promp != null)
+            {
+                promp.OutSideActivate();
+            }
             return;
         }
         EnterNextRoom();   
@@ -69,7 +72,7 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
         SceneTransitionManager.Instance.TransitionToScene(LinkedRoom, SpawnPointId, spawnOffset);
     }
 
-    public IInteractable.Type GetType()
+    public new IInteractable.Type GetType()
     {
         return IInteractable.Type.Door;
     }

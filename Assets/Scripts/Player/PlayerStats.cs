@@ -66,11 +66,21 @@ public class PlayerStats : MonoBehaviour
 
     private void SetSkillAvatar()
     {
+        if (skillSlot == null)
+        {
+            return;
+        }
+
         skillSlot.SetAvatar(slot1, slot2);
     }
 
     public void Heal()
     {
+        if (damagable == null)
+        {
+            return;
+        }
+
         if (_Tre > 0)
         {
             _Tre--;

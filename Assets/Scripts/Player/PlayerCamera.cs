@@ -34,6 +34,16 @@ public class PlayerCamera : MonoBehaviour
 
     void Start()
     {
+        if (player == null)
+        {
+            player = GetComponentInParent<PlayerController>();
+        }
+
+        if (cameraTarget == null)
+        {
+            cameraTarget = transform;
+        }
+
         if(globalBoundary == null)
         {
             UpdateGlobalCameraBoundary();
@@ -59,6 +69,7 @@ public class PlayerCamera : MonoBehaviour
         );
 
         if (cameraTarget == null) return;
+        if (player == null) return;
 
         // 1. Check if the player is standing still on the ground
         // (If your velocity is near 0, you are idle)
@@ -115,6 +126,10 @@ public class PlayerCamera : MonoBehaviour
 
             Collider2D targetCollider = localBounds.GetComponent<Collider2D>();
 
+            if (confiner == null || targetCollider == null)
+            {
+                return;
+            }
 
             confiner.BoundingShape2D = targetCollider;
 
@@ -128,6 +143,10 @@ public class PlayerCamera : MonoBehaviour
 
     public void UpdateLocalCameraBoundary(Collider2D localBounds)
     {
+        if (confiner == null)
+        {
+            return;
+        }
         
         confiner.BoundingShape2D = localBounds;
 
@@ -146,6 +165,11 @@ public class PlayerCamera : MonoBehaviour
         if (!CutSceneLock)
         {
             CameraCustomBound customSetting = collision.GetComponent<CameraCustomBound>();
+            if (customSetting == null)
+            {
+                return;
+            }
+
             SetCameraOffsetPosition(customSetting.localPosition - defaultLocalPosition);
 
             if (customSetting.customBoundaries)
@@ -175,6 +199,11 @@ public class PlayerCamera : MonoBehaviour
 
     public IEnumerator MoveCamera(Vector3 target, float duration)
     {
+        if (cameraTarget == null)
+        {
+            yield break;
+        }
+
         CutSceneLock = true;
 
         Vector3 start = cameraTarget.position;

@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
@@ -29,19 +28,37 @@ public class GeneratePurifyPuzzle : MonoBehaviour
 
     private void Awake()
     {
-        roundGen = RoundSpace.GetComponent<PurifyGenerate>();
+        if (RoundSpace != null)
+        {
+            roundGen = RoundSpace.GetComponent<PurifyGenerate>();
+        }
 
-        puzzle = PuzzleSpace.GetComponent<PurifyGenerate>();
+        if (PuzzleSpace != null)
+        {
+            puzzle = PuzzleSpace.GetComponent<PurifyGenerate>();
+        }
 
-        puzzle.OnPuzzleCompleted += HandlePuzzleCompleted;
-        puzzle.OnTimeReset += HandleTimePauseWhenFinish;
-        roundGen.OnPuzzleCompleted += HandleRoundCompleted;
+        if (puzzle != null)
+        {
+            puzzle.OnPuzzleCompleted += HandlePuzzleCompleted;
+            puzzle.OnTimeReset += HandleTimePauseWhenFinish;
+        }
+
+        if (roundGen != null)
+        {
+            roundGen.OnPuzzleCompleted += HandleRoundCompleted;
+        }
     }
 
 
 
     private void Update()
     {
+        if (Timingbar1 == null || Timingbar2 == null)
+        {
+            return;
+        }
+
         if (!stopCheckTime)
         {
             if (duration > 0.0f)
@@ -89,12 +106,24 @@ public class GeneratePurifyPuzzle : MonoBehaviour
     }
     private void Start()
     {
-        roundGen = RoundSpace.GetComponent<PurifyGenerate>();
-        puzzle = PuzzleSpace.GetComponent<PurifyGenerate>();
+        if (roundGen == null && RoundSpace != null)
+        {
+            roundGen = RoundSpace.GetComponent<PurifyGenerate>();
+        }
+
+        if (puzzle == null && PuzzleSpace != null)
+        {
+            puzzle = PuzzleSpace.GetComponent<PurifyGenerate>();
+        }
     }
 
     public void Generate(int round_cnt, float _duration)
     {
+        if (roundGen == null || puzzle == null || Timingbar1 == null || Timingbar2 == null)
+        {
+            return;
+        }
+
         finishCnt = 0;
         stopCheckTime = false;
         SetTiming(_duration);
@@ -110,6 +139,11 @@ public class GeneratePurifyPuzzle : MonoBehaviour
 
     private void GeneratePurify()
     {
+        if (puzzle == null)
+        {
+            return;
+        }
+
         List<int> code = new List<int>();
         puzzle.Clear();
        
@@ -125,6 +159,11 @@ public class GeneratePurifyPuzzle : MonoBehaviour
 
     public void Purify(Vector2 input)
     {
+        if (puzzle == null)
+        {
+            return;
+        }
+
         puzzle.ReceiveInput(input);
     }
 
