@@ -74,6 +74,15 @@ public class ActivateTrap : MonoBehaviour
         }
     }
 
+    public void DeActiveTraps()
+    {
+        if (mode == ExecutionMode.Parallel)
+        {
+            Restore();
+        }
+    }
+
+
     private IEnumerator RunParallel()
     {
 
@@ -162,12 +171,12 @@ public class ActivateTrap : MonoBehaviour
 
     private IEnumerator RestoreWhenClear(Vector3 targetPosition)
     {
-        while (collisionCnt > 0)
+        while (collisionCnt > 0 && triggerType != TriggerType.purify)
         {
             yield return null;
         }
 
-        foreach(TrapData data in trapSequence)
+        foreach (TrapData data in trapSequence)
         {
             TrapMove trap = data.trapObject.GetComponent<TrapMove>();
             if(trap != null)

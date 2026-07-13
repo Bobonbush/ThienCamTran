@@ -139,7 +139,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8195487232901360266}
@@ -471,7 +471,6 @@ MonoBehaviour:
   maxSpeed: 3
   walkStopRate: 0.1
   cliffDetectionZone: {fileID: 3791231753902012582}
-  bloodPrefab: {fileID: 6137437768111737468, guid: c549ee1f2ad400d46b0fe26461349bfa, type: 3}
   stationalEnemy: 0
   spawn: {x: 0, y: 0, z: 0}
   moveInRange: 1
@@ -479,6 +478,7 @@ MonoBehaviour:
   FlipWaitingMaxTime: 2
   flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
   duration: 0.25
+  _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 0
   shouldMove: 1
   goingBack: 0

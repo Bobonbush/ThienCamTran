@@ -23,6 +23,7 @@ public class ItemContainer : MonoBehaviour, IInteractable
     public float spreadX = 1.5f;
     public float spreadY = 0.5f;
 
+    EnemySpawn e_spawn;
     [Header("Prompt")]
     public GameObject promptObject;
 
@@ -40,7 +41,7 @@ public class ItemContainer : MonoBehaviour, IInteractable
     private void Awake()
     {
         Collider2D col = GetComponent<Collider2D>();
-
+        e_spawn = GetComponent<EnemySpawn>();
         
 
         col.isTrigger = true;
@@ -107,6 +108,12 @@ public class ItemContainer : MonoBehaviour, IInteractable
                     rb.AddForce(force, ForceMode2D.Impulse);
                 }
             }
+        }
+
+
+        if(e_spawn != null)
+        {
+            e_spawn.StartUp();
         }
     }
 }

@@ -119,6 +119,7 @@ public class TrapMove : MonoBehaviour
             duration = Vector3.Distance(initialPosition, transform.position) * invertDistance * moveDuration;
         }
 
+
         movementRoutine = StartCoroutine(TrapSequence(targetPos, duration));
 
        
