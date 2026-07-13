@@ -5,13 +5,14 @@ public class ProjectileTrajectory : MonoBehaviour
     public int damage = 10;
 
     public Vector2 knockback = new Vector2(10f, 0);
+    public bool damagesPlayerOnly = false;
     public float fall = 0f; // Hi?u ?ng c?m xu?ng d?t
-    public float maxLifetime = 5f;   // t? hu? n?u bay mãi không trúng gì
+    public float maxLifetime = 5f;   // t? hu? n?u bay mï¿½i khï¿½ng trï¿½ng gï¿½
     [SerializeField]
     private float offsetRotation = 0.0f;  // Set the origin object to lie on the x axis
 
     Rigidbody2D rb;
-    Animator animator;       // có th? null (d?n sprite tinh nhu Arrow)
+    Animator animator;       // cï¿½ th? null (d?n sprite tinh nhu Arrow)
     Collider2D col;
     bool hasImpacted = false;
     bool hasLaunchVelocity = false;
@@ -58,7 +59,10 @@ public class ProjectileTrajectory : MonoBehaviour
         if (hasImpacted) return;
 
 
-        Damageable damageable = collision.GetComponent<Damageable>();
+        Damageable damageable = collision.GetComponentInParent<Damageable>();
+
+        if (damageable != null && damagesPlayerOnly && collision.GetComponentInParent<PlayerController>() == null)
+            return;
 
         if (damageable != null)
         {
@@ -67,13 +71,13 @@ public class ProjectileTrajectory : MonoBehaviour
             float dir = rb.linearVelocityX;
             Vector2 deliveredKnockback = dir > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
             // Hit the damageable object
-            bool gotHit = damageable.Hit(damage, deliveredKnockback);
+            bool gotHit = damageable.Hit(damage, deliveredKnockback, transform.position);
             if (gotHit)
             {
                 //Debug.Log(collision.name + " hit for " + damage + " damage!");
                 Impact();
             }
-        }else if(collision.GetComponent<Ground>() != null)
+        }else if(collision.GetComponentInParent<Ground>() != null)
         {
             // Touch ground
 
@@ -99,18 +103,18 @@ public class ProjectileTrajectory : MonoBehaviour
 
     }
 
-    // D?ng d?n l?i và choi animation n?; n?u không có Animator thì hu? ngay (gi? hành vi cu c?a Arrow)
+    // D?ng d?n l?i vï¿½ choi animation n?; n?u khï¿½ng cï¿½ Animator thï¿½ hu? ngay (gi? hï¿½nh vi cu c?a Arrow)
     private void Impact()
     {
         hasImpacted = true;
         rb.linearVelocity = Vector2.zero;
-        if (col != null) col.enabled = false;   // không trúng thêm l?n n?a
+        if (col != null) col.enabled = false;   // khï¿½ng trï¿½ng thï¿½m l?n n?a
 
         if (animator != null)
         {
             animator.SetTrigger(AnimationStrings.hitTrigger);   // -> state Impact
             // Hu? object do Animation Event ? cu?i clip Impact g?i DestroySelf(),
-            // ho?c g?n FadeRemoveBehaviour lên state Impact.
+            // ho?c g?n FadeRemoveBehaviour lï¿½n state Impact.
         }
         else
         {

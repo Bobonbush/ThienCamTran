@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     public Vector2 knockback = new Vector2(0, 0);
     public float maxLifetime = 5f;   // tự huỷ nếu bay mãi không trúng gì
 
+    public bool damagesPlayerOnly = false;
     public float fall = 0f;
 
     Rigidbody2D rb;
@@ -42,7 +43,10 @@ public class Projectile : MonoBehaviour
     {
         if (hasImpacted) return;
 
-        Damageable damageable = collision.GetComponent<Damageable>();
+        Damageable damageable = collision.GetComponentInParent<Damageable>();
+
+        if (damageable != null && damagesPlayerOnly && collision.GetComponentInParent<PlayerController>() == null)
+            return;
 
         if (damageable != null)
         {
@@ -50,14 +54,15 @@ public class Projectile : MonoBehaviour
             float dir = rb.linearVelocityX;
             Vector2 deliveredKnockback = dir > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
             // Hit the damageable object
-            bool gotHit = damageable.Hit(damage, deliveredKnockback);
+            bool gotHit = damageable.Hit(damage, deliveredKnockback, transform.position);
             if (gotHit)
             {
-                Debug.Log(collision.name + " hit for " + damage + " damage!");
+                if (!damageable.LastHitWasBlocked)
+                    Debug.Log(collision.name + " hit for " + damage + " damage!");
                 Impact();
             }
         }
-        else
+        else if (collision.GetComponentInParent<Ground>() != null)
         {
             // Touch ground
 

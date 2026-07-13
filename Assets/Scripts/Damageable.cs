@@ -3,8 +3,12 @@ using UnityEngine;
 using UnityEngine.Events;
 public class Damageable : MonoBehaviour
 {
-    public UnityEvent<int, Vector2> damageableHit;
+    public UnityEvent<int, Vector2> damageableHit = new UnityEvent<int, Vector2>();
     Animator animator;
+    private IDirectionalDamageBlocker directionalDamageBlocker;
+
+    public bool LastHitWasBlocked { get; private set; }
+
 
 
     [SerializeField]
@@ -89,9 +93,21 @@ public class Damageable : MonoBehaviour
         }
     }
 
-    public void Awake()
+public void Awake()
     {
         animator = GetComponent<Animator>();
+        animator.SetBool(AnimationStrings.isAlive, _isAlive);
+
+        MonoBehaviour[] behaviours = GetComponents<MonoBehaviour>();
+        for (int i = 0; i < behaviours.Length; i++)
+        {
+            IDirectionalDamageBlocker blocker = behaviours[i] as IDirectionalDamageBlocker;
+            if (blocker == null)
+                continue;
+
+            directionalDamageBlocker = blocker;
+            break;
+        }
     }
 
     private void Update()
@@ -136,23 +152,41 @@ public class Damageable : MonoBehaviour
     }
 
     
-    public bool Hit(int damage, Vector2 knockback)
+public bool Hit(int damage, Vector2 knockback)
     {
-        if (IsAlive && !isInvincible)
+        return ApplyHit(damage, knockback, null);
+    }
+
+    public bool Hit(int damage, Vector2 knockback, Vector2 damageSource)
+    {
+        return ApplyHit(damage, knockback, damageSource);
+    }
+
+    private bool ApplyHit(int damage, Vector2 knockback, Vector2? damageSource)
+    {
+        LastHitWasBlocked = false;
+
+        if (!IsAlive || isInvincible)
+            return false;
+
+        if (damageSource.HasValue &&
+            directionalDamageBlocker != null &&
+            directionalDamageBlocker.BlocksDamageFrom(damageSource.Value))
         {
-            Health -= damage;
-            isInvincible = true;
-
-            // Notify other subscribed components that the damageable was hit to handle the knockback and such
-            animator.SetTrigger(AnimationStrings.hitTrigger);
-            LockVelocity = true;
-            damageableHit?.Invoke(damage, knockback);
-            
-            CharacterEvents.characterDamaged?.Invoke(gameObject, damage);
-
+            LastHitWasBlocked = true;
+            directionalDamageBlocker.OnDamageBlocked(damageSource.Value);
             return true;
         }
-        return false;
+
+        Health -= damage;
+        isInvincible = true;
+
+        animator.SetTrigger(AnimationStrings.hitTrigger);
+        LockVelocity = true;
+        damageableHit?.Invoke(damage, knockback);
+        CharacterEvents.characterDamaged?.Invoke(gameObject, damage);
+
+        return true;
     }
 
     public bool HitTrap()

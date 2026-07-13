@@ -8,20 +8,22 @@ public class Attack : MonoBehaviour
 
 
 
-    private void OnTriggerEnter2D(Collider2D collision)
+private void OnTriggerEnter2D(Collider2D collision)
     {
-        // See if it can be hitted
         Damageable damageable = collision.GetComponent<Damageable>();
+        if (damageable == null)
+            return;
 
-        if (damageable != null)
-        {
-            Vector2 deliveredKnockback = transform.parent.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
-            // Hit the damageable object
-            bool gotHit = damageable.Hit(attackDamage, deliveredKnockback);
-            if (gotHit)
-            {
-                Debug.Log(collision.name + " hit for " + attackDamage + " damage!");
-            }
-        }
+        Vector2 deliveredKnockback = transform.root.localScale.x > 0
+            ? knockback
+            : new Vector2(-knockback.x, knockback.y);
+
+        bool handled = damageable.Hit(
+            attackDamage,
+            deliveredKnockback,
+            transform.root.position);
+
+        if (handled && !damageable.LastHitWasBlocked)
+            Debug.Log(collision.name + " hit for " + attackDamage + " damage!");
     }
 }
