@@ -415,6 +415,7 @@ MonoBehaviour:
   cliffDetectionZone: {fileID: 1270423036146488377}
   stationalEnemy: 0
   spawn: {x: 0, y: 0, z: 0}
+  offsetBlood: {x: 0, y: 0.5, z: 0}
   moveInRange: 0
   moveRange: {fileID: 0}
   FlipWaitingMaxTime: 0.45
