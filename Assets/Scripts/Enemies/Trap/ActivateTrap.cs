@@ -10,8 +10,6 @@ public class ActivateTrap : MonoBehaviour
     [SerializeField] private float delayRestore = 3.0f;
     [SerializeField] private Vector3 moveDir = new Vector3(0, -1, 0);
 
-    [SerializeField]
-    private Transform realTrasnform;
 
     private BoxCollider2D box;
 
@@ -25,6 +23,11 @@ public class ActivateTrap : MonoBehaviour
     public enum ExecutionMode { Parallel, Sequential }
 
     public enum Type { oneTimeTrigger, multipleTimeTrigger, continuousTrigger};
+
+    [SerializeField]
+    private bool oneTimeTriggerSave = false;
+
+    public enum TriggerType { stand, purify};
 
     public bool isActivating
     {
@@ -41,6 +44,8 @@ public class ActivateTrap : MonoBehaviour
     [SerializeField] private ExecutionMode mode = ExecutionMode.Parallel;
 
     [SerializeField] Type type = Type.oneTimeTrigger;
+
+    [SerializeField] TriggerType triggerType = TriggerType.stand;
 
     private Coroutine movementRoutine;
 
@@ -69,6 +74,15 @@ public class ActivateTrap : MonoBehaviour
         }
     }
 
+    public void DeActiveTraps()
+    {
+        if (mode == ExecutionMode.Parallel)
+        {
+            Restore();
+        }
+    }
+
+
     private IEnumerator RunParallel()
     {
 
@@ -83,7 +97,11 @@ public class ActivateTrap : MonoBehaviour
         if (type == Type.oneTimeTrigger)
         {
             yield return new WaitForSeconds(longestDelay);
-            Destroy(this.gameObject);
+            if (oneTimeTriggerSave == false)
+                Destroy(this.gameObject);
+            else
+                this.enabled = false;
+               
         } else if(type == Type.multipleTimeTrigger)
         {
             yield return new WaitForSeconds(longestDelay + delayRestore);
@@ -123,6 +141,7 @@ public class ActivateTrap : MonoBehaviour
         {
             trap.SetActive(true);
             trap.GetComponent<TrapMove>().ActivateTrap();
+            
         }
     }
 
@@ -153,12 +172,12 @@ public class ActivateTrap : MonoBehaviour
 
     private IEnumerator RestoreWhenClear(Vector3 targetPosition)
     {
-        while (collisionCnt > 0)
+        while (collisionCnt > 0 && triggerType != TriggerType.purify)
         {
             yield return null;
         }
 
-        foreach(TrapData data in trapSequence)
+        foreach (TrapData data in trapSequence)
         {
             TrapMove trap = data.trapObject.GetComponent<TrapMove>();
             if(trap != null)
@@ -213,6 +232,7 @@ public class ActivateTrap : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (triggerType == TriggerType.purify) return;
         collisionCnt++;
         if (collisionCnt == 1)
         {
@@ -224,6 +244,8 @@ public class ActivateTrap : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (triggerType == TriggerType.purify) return;
+
         collisionCnt--;
         if(collisionCnt == 0 && type == Type.continuousTrigger)
         {

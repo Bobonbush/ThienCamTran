@@ -92,8 +92,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599f742746667dd4f9e00293390052fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldSpacePrompt
-  promptText: {fileID: 5799189450830373271}
+  tmpText: {fileID: 0}
   fadeSpeed: 4
+  slideDistance: 0.5
+  type: 1
+  TriggerDuration: 1
 --- !u!1 &8166564873175842740
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,8 +131,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.38252974, y: -1.4267398}
-  m_SizeDelta: {x: 20, y: 5}
+  m_AnchoredPosition: {x: -1.07, y: -0.12}
+  m_SizeDelta: {x: 9.8642, y: 2.9465}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8587184816674273238
 MeshRenderer:
@@ -200,7 +203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0110\u01B0\u1EDDng v\xE0o th\xE0nh"
+  m_text: The door is sealed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 285c715054d151641983c725547774d4, type: 2}
   m_sharedMaterial: {fileID: -4756301598457123581, guid: 285c715054d151641983c725547774d4, type: 2}
@@ -227,8 +230,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

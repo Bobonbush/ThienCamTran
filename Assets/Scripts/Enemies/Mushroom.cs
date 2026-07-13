@@ -110,6 +110,7 @@ public class Mushroom : MonoBehaviour
     public void OnHit(int damage, Vector2 knockback)
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+        e_move.BloodEffect(Vector2.Normalize(rb.linearVelocity));
         e_move.Flash();
     }
 

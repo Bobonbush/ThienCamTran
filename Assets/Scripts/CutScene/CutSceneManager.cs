@@ -24,30 +24,30 @@ public class CutSceneManager : MonoBehaviour
     public void OnCutSceneStart(CutSceneInfo info)
     {
             
-        if (!info.RealTimeAnimation)
+        // Turn off Hub
+
+        if(gameplayObject == null)
         {
-            if(gameplayObject == null)
-            {
-                gameplayObject = GameObject.Find("Gameplay");
-            }
-            if (gameplayObject != null)
-            {
-                gameplayObject.SetActive(false);
-                Debug.Log("[CutScene] gameplayObject hidden successfully.");
-            }
-            else
-            {
-                Debug.LogError("[CutScene] gameplayObject is MISSING/NULL in the inspector!");
-            }
+            gameplayObject = GameObject.Find("Gameplay");
         }
+        if (gameplayObject != null)
+        {
+            gameplayObject.SetActive(false);
+            Debug.Log("[CutScene] gameplayObject hidden successfully.");
+        }
+        else
+        {
+            Debug.LogError("[CutScene] gameplayObject is MISSING/NULL in the inspector!");
+        }
+        
     }
 
     public void OnCutSceneEnd(CutSceneInfo info)
     {
-        if(!info.RealTimeAnimation)
-        {
-            gameplayObject.SetActive(true);
-        }
+
+        // Turn on Hub Again
+        gameplayObject.SetActive(true);
+        
 
         if(info.newScene)
         {

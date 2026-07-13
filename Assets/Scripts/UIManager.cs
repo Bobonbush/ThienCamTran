@@ -9,7 +9,10 @@ public class UIManager : MonoBehaviour
     public Canvas gameCanvas;
     private void Awake()
     {
-        gameCanvas = FindObjectOfType<Canvas>();
+        if (gameCanvas == null)
+        {
+            gameCanvas = FindFirstObjectByType<Canvas>();
+        }
     }
     private void OnEnable()
     {
@@ -24,6 +27,11 @@ public class UIManager : MonoBehaviour
     }
     public void CharacterTookDamage(GameObject character, int damageReceived)
     {
+        if (character == null || damageTextPrefab == null || gameCanvas == null || Camera.main == null)
+        {
+            return;
+        }
+
         Vector3 spawnPosition = Camera.main.WorldToScreenPoint(character.transform.position);
         TMP_Text tmpText = Instantiate(damageTextPrefab, spawnPosition, Quaternion.identity, gameCanvas.transform).GetComponent<TMP_Text>();
         tmpText.text = damageReceived.ToString();
@@ -31,6 +39,11 @@ public class UIManager : MonoBehaviour
 
     public void CharacterHealed(GameObject character, int healthRestored)
     {
+        if (character == null || healthTextPrefab == null || gameCanvas == null || Camera.main == null)
+        {
+            return;
+        }
+
         Vector3 spawnPosition = Camera.main.WorldToScreenPoint(character.transform.position);
         TMP_Text tmpText = Instantiate(healthTextPrefab, spawnPosition, Quaternion.identity, gameCanvas.transform).GetComponent<TMP_Text>();
         tmpText.text = healthRestored.ToString();

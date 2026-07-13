@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Splines;
 public class EnemyMove : MonoBehaviour
 {
 
@@ -7,6 +8,9 @@ public class EnemyMove : MonoBehaviour
     public float maxSpeed = 3f;
     public float walkStopRate = 0.1f;
     public DetectionGroundZone cliffDetectionZone;
+
+   
+    private ParticleSystem bloodPrefab;
 
 
     public bool stationalEnemy = false;
@@ -46,6 +50,8 @@ public class EnemyMove : MonoBehaviour
 
     private WalkableDirection _walkDirection;
 
+
+    [SerializeField]
     private Vector2 _walkDiretionVector = Vector2.right;
 
 
@@ -125,19 +131,24 @@ public class EnemyMove : MonoBehaviour
         damageable = GetComponent<Damageable>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        bloodPrefab = Resources.Load<ParticleSystem>("Effect/Blood");
+
         spawn = transform.position;
 
-        initScaleX = transform.localScale.x;
+        initScaleX = transform.lossyScale.x;
 
         if (initScaleX < 0f)
         {
-            walkDiretionVector = Vector2.left;
             _walkDirection = WalkableDirection.Left;
+            WalkDirection = WalkableDirection.Left;
+            walkDiretionVector = Vector2.left;
+
         }
         else
         {
-            walkDiretionVector = Vector2.right;
             _walkDirection = WalkableDirection.Right;
+            WalkDirection = WalkableDirection.Right;
+            walkDiretionVector = Vector2.right;
         }
 
 
@@ -149,6 +160,27 @@ public class EnemyMove : MonoBehaviour
         {
             moveRangeBounds = moveRange.bounds;
             hasMoveRangeBounds = true;
+        }
+    }
+
+    private void Start()
+    {
+        spawn = transform.position;
+
+        initScaleX = transform.transform.lossyScale.x;
+
+        if (initScaleX < 0f)
+        {
+            _walkDirection = WalkableDirection.Left;
+            WalkDirection = WalkableDirection.Left;
+            walkDiretionVector = Vector2.left;
+           
+        }
+        else
+        {
+            _walkDirection = WalkableDirection.Right;
+            WalkDirection = WalkableDirection.Right;
+            walkDiretionVector = Vector2.right;
         }
     }
 
@@ -310,6 +342,23 @@ public class EnemyMove : MonoBehaviour
         desiredMove = true;
     }
 
+    public void BloodEffect(Vector2 hit_direction)
+    {
+        
+
+        Quaternion rotation = bloodPrefab.transform.rotation;
+
+        if(hit_direction.x > 0)
+        {
+            rotation *= Quaternion.Euler(0, 180, 0);
+        }
+        Instantiate(
+             bloodPrefab,
+             transform.position,
+             rotation
+        );
+    }
+
 
     private void OnDrawGizmosSelected()
     {
@@ -357,6 +406,7 @@ public class EnemyMove : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         spriteRenderer.material = originalMaterial;
+
 
         flashRoute = null;
     }

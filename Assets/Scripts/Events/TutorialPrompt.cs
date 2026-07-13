@@ -28,6 +28,7 @@ public class TutorialPrompt : MonoBehaviour
 
     void Awake()
     {
+        
         // 1. Automatically find or create the Text Component to save time
         tmpText = GetComponentInChildren<TextMeshPro>();
         if (tmpText == null)

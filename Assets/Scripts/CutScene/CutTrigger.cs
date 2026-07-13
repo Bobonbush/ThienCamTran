@@ -1,12 +1,13 @@
 using UnityEngine;
-
+using System.Collections;
 public class CutTrigger : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     enum TriggerType : int {
         Instant = 0,
-        HitBox = 1
+        HitBox = 1,
+        NeedTrigger = 2
     }
 
     bool startPlaying = false;
@@ -25,7 +26,46 @@ public class CutTrigger : MonoBehaviour
     
     bool played = false;
 
+    bool NoCutSceneRemain { get { return cnt == 0; } }
+
     float time = 0.0f;
+    int cnt = 0;
+
+    private bool isDone = false;
+
+    private PlayerController playerController;
+    private PlayerCamera playerCamera;
+
+
+    bool MulthiThreadingLock = false;
+    bool firstAnimatorTrigger = false;
+
+    private IEnumerator AcquireLock()
+    {
+        while(MulthiThreadingLock)
+        {
+            yield return null;
+        }
+        MulthiThreadingLock = true;
+    }
+
+    private void ReleaseLock()
+    {
+
+        MulthiThreadingLock = false;
+    }
+
+    private IEnumerator ModifyCount(int x)
+    {
+        yield return AcquireLock();
+        cnt += x;
+        if(cnt > 0)
+        {
+            firstAnimatorTrigger = true;
+        }
+        ReleaseLock();
+    }
+
 
 
     void Start()
@@ -38,8 +78,70 @@ public class CutTrigger : MonoBehaviour
         }
     }
 
+    public void Trigger(PlayerController player, PlayerCamera _camera )
+    {
+        if (type == TriggerType.NeedTrigger)
+        {
+            startPlaying = true;
+            playerController = player;
+            playerCamera = _camera;
+            CutScenePerform();
+        }
+    }
 
-    private void DialogAnimation()
+
+    private IEnumerator PerformPlayerMove()
+    {
+        yield return ModifyCount(1);
+        
+        for(int i = 0; i < info.PlayerForceDatas.Count; i++)
+        {
+            CutSceneInfo.PlayerForceData data = info.PlayerForceDatas[i];
+            yield return playerController.Wait(data.stayDuration);
+        }
+
+        yield return ModifyCount(-1);
+    }
+
+    private IEnumerator PerformCameraMove()
+    {
+        yield return ModifyCount(1);
+        Vector3 savePositionCamera = playerCamera.transform.position;
+        for(int i = 0; i< info.ForceCameraMovement.Count; i++)
+        {
+            CutSceneInfo.CameraForceData data = info.ForceCameraMovement[i];
+            yield return playerCamera.Wait(data.delaybeforeMove);
+
+            yield return playerCamera.MoveCamera(
+                  data.position,
+                  data.moveDuration);
+
+            yield return playerCamera.Wait(data.stayDuration);
+
+        }
+
+        if(info.ComeBackCamera)
+        {
+            yield return playerCamera.MoveCamera(savePositionCamera, info.timeCameraComeBack);
+        }
+
+        yield return ModifyCount(-1);
+    }
+
+
+    private void CutScenePerform()
+    {
+        if(info.RealTimeAnimation)
+        {
+            playerCamera.LockCutScene();
+            playerController.LockCutScene();
+
+            StartCoroutine(PerformPlayerMove());
+
+            StartCoroutine(PerformCameraMove());
+        }
+    }
+    private void BigDialogAnimation()
     {
         if (time <= info.delayTime)
         {
@@ -81,18 +183,41 @@ public class CutTrigger : MonoBehaviour
         {
             return;
         }
-        if(info.useDialog)
+
+        // Text only CutScene
+        if(info.useBigDialog)
         {
-            DialogAnimation();
+            BigDialogAnimation();
+            return;
+        }
+
+        if(NoCutSceneRemain && startPlaying && firstAnimatorTrigger)
+        {
+            Debug.Log("Finished");
+            isDone = true;
+            AbandoneTrigger();
         }
     }
 
 
 
+
+    private void AbandoneTrigger()
+    {
+        if(playerController != null)
+        {
+            playerController.ReleaseLockCutScene();
+        }
+        if(playerCamera != null)
+        {
+            playerCamera.ReleaseLockCutScene();
+        }
+        this.enabled = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (type == TriggerType.Instant) return;
-        if(type == TriggerType.HitBox)
+        if(type == TriggerType.HitBox && startPlaying == false)
         {
             if (collision.GetComponent<CutHitBox>()) { 
                 startPlaying = true;

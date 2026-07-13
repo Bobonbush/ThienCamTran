@@ -139,7 +139,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8195487232901360266}
@@ -382,9 +382,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _maxHealth: 100
+  _maxHealth: 50
   canRevive: 0
-  _health: 100
+  _health: 50
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.25
@@ -478,6 +478,7 @@ MonoBehaviour:
   FlipWaitingMaxTime: 2
   flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
   duration: 0.25
+  _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 0
   shouldMove: 1
   goingBack: 0
@@ -721,7 +722,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.5631094, y: 0.34577614}
+  m_Offset: {x: 0.66451454, y: 0.34577614}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -731,7 +732,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.2404232, y: 0.5612155}
+  m_Size: {x: 2.037613, y: 0.5612155}
   m_EdgeRadius: 0
 --- !u!114 &3791231753902012582
 MonoBehaviour:

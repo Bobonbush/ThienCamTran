@@ -8,7 +8,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - IgnoreLight
   - Water
   - UI
   - Ground
@@ -26,8 +26,8 @@ TagManager:
   - Empty
   - TrapActivator
   - HackingPuzzle
-  - 
-  - 
+  - OverlapItem
+  - SaveGameZone
   - 
   - 
   - 
@@ -55,6 +55,9 @@ TagManager:
     locked: 0
   - name: Prize
     uniqueID: 3421241731
+    locked: 0
+  - name: UI
+    uniqueID: 1481729457
     locked: 0
   m_RenderingLayers:
   - Default

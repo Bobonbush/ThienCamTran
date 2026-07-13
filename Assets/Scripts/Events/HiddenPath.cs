@@ -5,10 +5,13 @@ public class HiddenPath : MonoBehaviour
     [Header("Fade Settings")]
     [Tooltip("How long the fade transition takes in seconds.")]
     [SerializeField] private float fadeDuration = 0.5f;
+    [SerializeField] private bool isKilled = false;
 
     private int triggerCount = 0;
     private Coroutine fadeCoroutine;
     private SpriteRenderer[] childSprites;
+
+    
 
 
     private void Start()
@@ -81,6 +84,12 @@ public class HiddenPath : MonoBehaviour
 
         // Ensure we strictly hit the exact final target value
         UpdateChildrenAlpha(targetAlpha);
+        fadeCoroutine = null;
+
+        if(targetAlpha == 0f && isKilled)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void UpdateChildrenAlpha(float alpha)

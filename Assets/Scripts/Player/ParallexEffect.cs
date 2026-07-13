@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.Cinemachine;
+
 
 public class ParallaxEffect : MonoBehaviour
 {
@@ -36,6 +38,9 @@ public class ParallaxEffect : MonoBehaviour
         {
             cam = Camera.main;
         }
+
+        CinemachineCamera virtualCam = FindFirstObjectByType<CinemachineCamera>();
+        followTarget = virtualCam.Follow;
     }
 
     // Update is called once per frame

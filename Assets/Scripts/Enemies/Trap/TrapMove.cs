@@ -20,6 +20,9 @@ public class TrapMove : MonoBehaviour
     [SerializeField] private bool needActivator = true;
     [SerializeField] private bool useBothDeAndActive = true;
 
+    [SerializeField] private bool OutSideBothTrigger = false;
+    private bool HasOutSideBothTriggered = false;
+
     [SerializeField] private bool turnOffColliderOnDeActive = true;
 
     [SerializeField] private float maxReActivateWaitingTime = 5.0f;
@@ -51,13 +54,24 @@ public class TrapMove : MonoBehaviour
 
         if (useBothDeAndActive && needActivator == false) reset = false;
     }
+
+
     private void Update()
     {
+        
         if (needActivator) return;
         
         if(movementRoutine != null)
         {
             return;
+        }
+
+        if(OutSideBothTrigger == true  )
+        {
+            if(!HasOutSideBothTriggered)
+            {
+                return;
+            }
         }
 
         if(ReActivateCountingTime < maxReActivateWaitingTime)
@@ -88,6 +102,7 @@ public class TrapMove : MonoBehaviour
 
     public void ActivateTrap()
     {
+        HasOutSideBothTriggered = true;
         if (movementRoutine != null)
         {
             StopCoroutine(movementRoutine);
@@ -118,6 +133,7 @@ public class TrapMove : MonoBehaviour
         {
             duration = Vector3.Distance(initialPosition, transform.position) * invertDistance * moveDuration;
         }
+
 
         movementRoutine = StartCoroutine(TrapSequence(targetPos, duration));
 

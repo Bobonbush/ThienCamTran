@@ -48,7 +48,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 0.3607471, b: 0.22327036, a: 1}
+  m_Color: {r: 1, g: 0.8075337, b: 0.2235294, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 1
-  m_PointLightOuterRadius: 7.267215
+  m_PointLightOuterRadius: 9.267215
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 4093194106991494897}
   - component: {fileID: 2994428640734478922}
   - component: {fileID: 1960304667651833836}
+  - component: {fileID: 3123860474708357281}
   m_Layer: 0
   m_Name: Torch
   m_TagString: Untagged
@@ -199,3 +200,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3123860474708357281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6844932302986237976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c888c68bc60874aa38805eba3a712e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TorchFlicker
+  light2D: {fileID: 312643217679675415}
+  baseIntensity: 1
+  intensityVariation: 0.25
+  smoothSpeed: 15
+  baseRadius: 9.267215
+  radiusVariation: 0.2

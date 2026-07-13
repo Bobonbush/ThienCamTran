@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff89d15d6a5b47449cd1d87d767e00d, type: 3}
   m_Name: BridgeBreak
   m_EditorClassIdentifier: Assembly-CSharp::CutSceneInfo
-  RealTimeAnimation: 1
-  useDialog: 1
+  useDialog: 0
+  useBigDialog: 0
   delayTime: 0
   showTime: 10
   fadingTime: 0
@@ -21,3 +21,9 @@ MonoBehaviour:
   SceneID: Underground-1
   SpawnID: Underground-wakeup
   SpawnOffset: {x: 0, y: 0, z: 0}
+  RealTimeAnimation: 1
+  UsedCamera: 0
+  ForceCameraMovement: []
+  PlayerForceDatas: []
+  ComeBackCamera: 1
+  timeCameraComeBack: 1
