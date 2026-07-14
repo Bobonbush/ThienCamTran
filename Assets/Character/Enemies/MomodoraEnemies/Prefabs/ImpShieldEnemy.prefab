@@ -231,6 +231,14 @@ MonoBehaviour:
   attackCooldown: 2.25
   shieldDuration: 2.5
   shieldBlockArc: 160
+  seeThroughWalls: 0
+  sightBlockerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  projectilesPierceWalls: 0
+  aimBombAtTarget: 1
+  throwAngle: 55
+  maxThrowSpeed: 16
   hovering: 0
   hoverAmplitude: 0.25
   hoverFrequency: 1.2

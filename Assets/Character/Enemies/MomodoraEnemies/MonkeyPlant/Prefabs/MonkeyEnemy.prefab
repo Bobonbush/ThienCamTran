@@ -527,6 +527,9 @@ MonoBehaviour:
   lockFacingDuringAttack: 0
   useAnimationHitbox: 0
   animationAttackHitbox: {fileID: 0}
+  sightBlockerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!82 &3098683494410492647
 AudioSource:
   m_ObjectHideFlags: 0

@@ -31223,9 +31223,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5562745385998913127, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
+      propertyPath: m_Radius
+      value: 1.7344759
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562745385998913127, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.16552424
+      objectReference: {fileID: 0}
     - target: {fileID: 8363796119466156177, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
       propertyPath: m_Name
       value: MonkeyEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8816876536627873608, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
