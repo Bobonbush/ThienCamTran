@@ -197,7 +197,7 @@ MonoBehaviour:
   attackCooldown: 2.25
   shieldDuration: 2.5
   shieldBlockArc: 160
-  seeThroughWalls: 0
+  seeThroughWalls: 1
   sightBlockerMask:
     serializedVersion: 2
     m_Bits: 0
