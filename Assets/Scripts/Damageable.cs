@@ -146,13 +146,18 @@ public void Awake()
 
     public void setInvisibleFrame(float duration)
     {
+        
         isInvincible = true;
         timeInvisibleFrame = 0.0f;
         maxTimeInvisibleFrame = duration;
+        if(timeInvisibleFrame > maxTimeInvisibleFrame)
+        {
+            isInvincible = false;
+        }
     }
 
     
-public bool Hit(int damage, Vector2 knockback)
+    public bool Hit(int damage, Vector2 knockback)
     {
         return ApplyHit(damage, knockback, null);
     }

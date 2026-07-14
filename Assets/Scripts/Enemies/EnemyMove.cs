@@ -41,7 +41,7 @@ public class EnemyMove : MonoBehaviour
         Left
     }
 
-    [SerializeField] private Material flashMaterial;
+    private Material flashMaterial;
 
     [SerializeField] private float duration;
 
@@ -132,6 +132,8 @@ public class EnemyMove : MonoBehaviour
         animator = GetComponent<Animator>();
         damageable = GetComponent<Damageable>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        flashMaterial = Resources.Load<Material>("Material/WhiteOutShader");
 
         bloodPrefab = Resources.Load<ParticleSystem>("Effect/Blood");
 

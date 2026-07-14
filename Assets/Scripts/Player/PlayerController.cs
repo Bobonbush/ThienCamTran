@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
     private bool StopCombo = true;
 
+    private bool skipDialogButtonPress = false;
+
     private float lockInputFor = -1.0f;
 
    
@@ -97,7 +99,10 @@ public class PlayerController : MonoBehaviour
 
     public bool CutSceneLock = false;
 
+    private bool DialogLock = false;
 
+
+    private PlayerEffect playerEffect;
     
 
     public float CurrentSpeed
@@ -280,13 +285,14 @@ public class PlayerController : MonoBehaviour
         gravityScale = rb.gravityScale;
         inventory = GetComponent<Inventory>();
         inventoryUI = GetComponent<InventoryUI>();
-
+        playerEffect = GetComponent<PlayerEffect>();
         if (inventoryUI == null)
             inventoryUI = gameObject.AddComponent<InventoryUI>();
     }
 
     private void Update()
     {
+        
         if(lockInputFor > 0.0f && setLock)
         {
             lockInput = true;
@@ -349,7 +355,11 @@ public class PlayerController : MonoBehaviour
         {
             lockInput = true;
         }
-        if (lockInput && setLock == false && saveLock == false && CutSceneLock == false)
+        if (DialogLock)
+        {
+            lockInput = true;
+        }
+        if (lockInput && setLock == false && saveLock == false && CutSceneLock == false && DialogLock == false)
         {
 
             TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x);
@@ -364,13 +374,12 @@ public class PlayerController : MonoBehaviour
             }
 
             rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed), rb.linearVelocity.y) * lockDirection;
-            
-            return ;
+
+            return;
         }
         if (IsDashing)
         {
             rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
-            damageable.setInvisibleFrame(0.1f);
         }
         else 
         {
@@ -600,6 +609,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (DialogLock && context.performed)
+        {
+            skipDialogButtonPress = true;
+        }
+
         if (lockInput) return;
         if (Climbing) return;
         if (context.performed)
@@ -678,7 +692,9 @@ public class PlayerController : MonoBehaviour
 
             lastDashTime = Time.time;
             dashDir = IsFacingRight ? 1 : -1;
+
             animator.SetTrigger(AnimationStrings.dashTrigger);
+
             Sfx.Play(SfxId.PlayerDash);
         }
     }
@@ -724,6 +740,13 @@ public class PlayerController : MonoBehaviour
 
         ExitPuzzle();
         AnimationExitPuzzle();
+
+        playerEffect.BloodEffect(knockback.normalized);
+        playerEffect.Flash();
+
+
+
+        GetComponentInChildren<PlayerCamera>().Shake();
 
         isAttacking = false;
         Climbing = false;
@@ -1238,6 +1261,8 @@ public class PlayerController : MonoBehaviour
         return isPuzzleSolving;
     }
 
+    
+
     public IEnumerator Wait(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -1247,20 +1272,53 @@ public class PlayerController : MonoBehaviour
     {
         CutSceneLock = true;
         lockInput = true;
-
-        Debug.Log("Locked");
-        
+        rb.linearVelocityX = 0.0f;
     }
 
     public void ReleaseLockCutScene()
     {
         CutSceneLock = false;
         lockInput = false;
-
-
     }
 
+    public void LockDiaLog()
+    {
+        DialogLock = true;
+        lockInput = true;
+        rb.linearVelocityX = 0.0f;
+        skipDialogButtonPress = false;
+    }
 
+    public void ReleaseLockDialog()
+    {
+        DialogLock = false;
+        lockInput = false;
+    }
+
+    public bool isSkipDialog()
+    {
+        if(skipDialogButtonPress)
+        {
+            skipDialogButtonPress = false;
+            return true;
+        }
+        return false;
+    }
+    
+    public void SetInvisibleFrame()
+    {
+        damageable.setInvisibleFrame(100.0f);
+    }
+
+    public void SetUnInvisibleFrame()
+    {
+        damageable.setInvisibleFrame(-1.0f);
+    }
+
+    public Vector2 CurrentVelocity()
+    {
+        return rb.linearVelocity;
+    }
 
 
 }

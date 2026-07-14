@@ -80,6 +80,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         if(e_spawn != null)
         {
             e_spawn.StartUp();
+            e_spawn.SetUpCutScene(playerController, player);
         }
     }
 

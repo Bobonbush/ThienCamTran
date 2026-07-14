@@ -10,6 +10,8 @@ public class DialogManager : MonoBehaviour
 {
     public static DialogManager Instance { get; private set; }
 
+
+
     [Header("The two display styles")]
     public DialogView boxView;            // rectangular box at the bottom
     public DialogView bubbleView;         // speech bubble above a character
@@ -20,6 +22,9 @@ public class DialogManager : MonoBehaviour
     private DialogView active;            // the view used by the current conversation
 
     public bool IsActive => active != null;   // true while a conversation is on screen
+    private DialogNode currentNode;
+
+    [SerializeField] private PlayerController controller;
 
     private void Awake()
     {
@@ -28,10 +33,49 @@ public class DialogManager : MonoBehaviour
         if (bubbleView != null) bubbleView.Close();
     }
 
+
+
+    private void Update()
+    {
+        if (active == null)
+            return;
+
+        if(!controller.isSkipDialog())
+        {
+            return;
+        }
+
+        // First press -> reveal instantly
+        if (!active.AnimationDone)
+        {
+            active.SkipTypewriter();
+            return;
+        }
+
+        // Second press -> advance automatically
+        Debug.Log("Stop Here");
+        if (currentNode == null)
+            return;
+        
+        if (currentNode.IsEnd)
+        {
+            EndDialog();
+            return;
+        }
+
+        if (currentNode.choices.Count == 1)
+        {
+            
+            OnChoiceSelected(currentNode.choices[0].nextNode);
+        }
+    }
+
     // style = box or bubble.
     // target = the character the bubble follows (only needed for the Bubble style).
     public void StartDialog(DialogNode startNode, DialogStyle style, Transform target = null)
     {
+        controller.LockDiaLog();
+
         active = (style == DialogStyle.Bubble) ? bubbleView : boxView;
         if (active == null)
         {
@@ -46,6 +90,7 @@ public class DialogManager : MonoBehaviour
 
     private void ShowNode(DialogNode node)
     {
+        currentNode = node;
         active.SetText(node.speakerName, node.text);
         active.ClearChoices();
 
@@ -84,5 +129,6 @@ public class DialogManager : MonoBehaviour
         if (active != null) active.Close();
         active = null;
         DialogEnded?.Invoke();
+        controller.ReleaseLockDialog();
     }
 }

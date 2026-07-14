@@ -45,10 +45,21 @@ public class DialogView : MonoBehaviour
     private bool isOpen;
     private bool initialized;
     private Coroutine animRoutine;
+
     private Coroutine typeRoutine;
+
+    private bool skipRequested;
 
     int listenTypeRountineCnt = 0;   // use to listen to the number of time tyepRountine is called to indicates whether the animation is done or not.
     int maxTypeRountineCnt = 0;
+
+    public void SkipTypewriter()
+    {
+        if (typeRoutine == null)
+            return;
+
+        skipRequested = true;
+    }
 
     public bool AnimationDone
     {
@@ -102,7 +113,8 @@ public class DialogView : MonoBehaviour
 
     public void SetText(string speaker, string body)
     {
-        if(speakNameLastRender)
+        listenTypeRountineCnt = 0;
+        if (speakNameLastRender)
         {
             maxTypeRountineCnt = 2; // body first then speaker
         } else
@@ -164,6 +176,9 @@ public class DialogView : MonoBehaviour
     private IEnumerator TypeText( TMP_Text dialog , string body)
     {
         dialog.text = body;
+
+        skipRequested = false;
+
         dialog.ForceMeshUpdate();
         TMP_TextInfo info = dialog.textInfo;
         int count = info.characterCount;
@@ -176,6 +191,17 @@ public class DialogView : MonoBehaviour
 
         while (head < count + fade)
         {
+            if (skipRequested)
+            {
+                ApplyReveal(dialog, info, count + fade, fade);
+
+                skipRequested = false;
+                typeRoutine = null;
+                listenTypeRountineCnt = maxTypeRountineCnt;
+
+
+                yield break;
+            }
             head += Mathf.Max(typeSpeed, 0.01f) * Time.unscaledDeltaTime;
             int currentIndex = Mathf.FloorToInt(head);
             if (currentIndex > lastIndex &&

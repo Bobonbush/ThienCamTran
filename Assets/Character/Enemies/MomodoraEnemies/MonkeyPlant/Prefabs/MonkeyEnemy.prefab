@@ -419,7 +419,6 @@ MonoBehaviour:
   moveInRange: 0
   moveRange: {fileID: 0}
   FlipWaitingMaxTime: 0.45
-  flashMaterial: {fileID: 2100000, guid: 5d00eb1fe977e1f40851c063a08d106e, type: 2}
   duration: 0.25
   _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 0
