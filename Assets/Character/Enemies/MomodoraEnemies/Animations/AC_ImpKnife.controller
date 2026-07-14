@@ -202,6 +202,12 @@ AnimatorController:
   m_Name: AC_ImpKnife
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: attackCooldown
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: isAlive
     m_Type: 4
     m_DefaultFloat: 0
@@ -385,8 +391,11 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: rangedAttack
+    m_ConditionEvent: hasTarget
     m_EventTreshold: 0
+  - m_ConditionMode: 4
+    m_ConditionEvent: attackCooldown
+    m_EventTreshold: 0.00001
   - m_ConditionMode: 1
     m_ConditionEvent: isAlive
     m_EventTreshold: 0
@@ -417,6 +426,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 8937829748971715085}
   m_StateMachineBehaviours:
+  - {fileID: 7788990011223301}
   - {fileID: 1526583147040126794}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -507,3 +517,22 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &7788990011223301
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c052ebbcc65d564fa48de8840b745d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetFloatBehaviour
+  floatName: attackCooldown
+  updateOnStateEnter: 0
+  updateOnStateExit: 1
+  updateOnStateMachineEnter: 0
+  updateOnStateMachineExit: 0
+  valueOnEnter: 0
+  valueOnExit: 1.35

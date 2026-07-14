@@ -313,8 +313,7 @@ MonoBehaviour:
   launchPoint: {fileID: 5129473359886666157}
   straightProjectileSpeed: 12
   bombLaunchVelocity: {x: 6, y: 8}
-  attackWindup: 0.55
-  attackCooldown: 1.8
+  attackCooldown: 2.35
   shieldDuration: 2.5
   shieldBlockArc: 160
   hovering: 0

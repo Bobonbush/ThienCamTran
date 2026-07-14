@@ -8,6 +8,7 @@ public class ProjectileTrajectory : MonoBehaviour
     public bool damagesPlayerOnly = false;
 
     public bool impactOnGround = false;
+    public bool piercesWalls = false;   // đạn bay xuyên Ground thay vì ghim/nổ khi chạm tường
 
     [Header("Audio")]
     public AudioClip[] impactClips;
@@ -86,6 +87,9 @@ public class ProjectileTrajectory : MonoBehaviour
             }
         }else if(collision.GetComponentInParent<Ground>() != null)
         {
+            if (piercesWalls)
+                return;
+
             if (impactOnGround)
             {
                 Impact();

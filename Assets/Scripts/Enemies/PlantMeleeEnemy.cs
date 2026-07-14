@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(Damageable), typeof(Rigidbody2D))]
@@ -8,40 +7,67 @@ public class PlantMeleeEnemy : MonoBehaviour
 
     [Header("Attack")]
     public int attackDamage = 8;
-    public float attackWindup = 0.2f;
-    public float attackRecovery = 0.45f;
     public float attackRange = 1.75f;
     public Vector2 knockback = new Vector2(5f, 2f);
     public bool lockFacingDuringAttack;
 
     [Header("Animation Hitbox")]
+    [Tooltip("Dame đến từ hitbox keyframe trong clip (kiểu Knight/SwordAttack) thay vì event AttackImpact.")]
     public bool useAnimationHitbox;
     public Collider2D animationAttackHitbox;
 
-    private static readonly int HasTargetHash = Animator.StringToHash("hasTarget");
-    private static readonly int MeleeAttackHash = Animator.StringToHash("meleeAttack");
-    private static readonly int IsAliveHash = Animator.StringToHash("isAlive");
+    [Header("Line of Sight")]
+    [Tooltip("Layer chặn tầm nhìn. Để trống sẽ tự lấy layer Ground.")]
+    public LayerMask sightBlockerMask;
 
-    private Animator animator;
-    private Damageable damageable;
-    private Rigidbody2D rb;
-    private EnemyMove enemyMove;
-    private EnemySfxController sfx;
-    private Collider2D currentTarget;
-    private Coroutine attackRoutine;
-    private float attackFacingSign = 1f;
+    Animator animator;
+    Damageable damageable;
+    Rigidbody2D rb;
+    Collider2D bodyCollider;
+    EnemyMove enemyMove;
+    EnemySfxController sfx;
+    Collider2D currentTarget;
+    float attackFacingSign = 1f;
+
+    bool _hasTarget = false;
+    public bool HasTarget
+    {
+        get { return _hasTarget; }
+        private set
+        {
+            _hasTarget = value;
+            animator.SetBool(AnimationStrings.hasTarget, value);
+        }
+    }
+
+    // Animator tự vào state Attack khi hasTarget && attackCooldown < 0.00001 (giống Knight).
+    // SetFloatBehaviour trên state Attack reset cooldown khi thoát state.
+    public float AttackCooldown
+    {
+        get { return animator.GetFloat(AnimationStrings.attackCooldown); }
+        private set { animator.SetFloat(AnimationStrings.attackCooldown, Mathf.Max(value, 0)); }
+    }
+
+    private bool IsAttacking
+    {
+        get { return animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"); }
+    }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         damageable = GetComponent<Damageable>();
         rb = GetComponent<Rigidbody2D>();
+        bodyCollider = GetComponent<Collider2D>();
         enemyMove = GetComponent<EnemyMove>();
         sfx = GetComponent<EnemySfxController>();
 
+        if (sightBlockerMask.value == 0)
+            sightBlockerMask = LayerMask.GetMask("Ground");
+
         damageable.damageableHit.AddListener(OnHit);
         animator.SetBool(AnimationStrings.canMove, true);
-        animator.SetBool(IsAliveHash, damageable.IsAlive);
+        animator.SetBool(AnimationStrings.isAlive, damageable.IsAlive);
         DisableAnimationHitbox();
     }
 
@@ -53,17 +79,21 @@ public class PlantMeleeEnemy : MonoBehaviour
             return;
         }
 
+        if (AttackCooldown > 0)
+            AttackCooldown -= Time.deltaTime;
+
         currentTarget = GetTarget();
-        bool hasTarget = currentTarget != null;
-        animator.SetBool(HasTargetHash, hasTarget);
+        HasTarget = currentTarget != null;
+        bool hasTarget = HasTarget;
+        bool isAttacking = IsAttacking;
 
         if (enemyMove != null)
         {
-            enemyMove.shouldMove = !hasTarget && attackRoutine == null;
-            enemyMove.lockedMove = hasTarget || attackRoutine != null;
+            enemyMove.shouldMove = !hasTarget && !isAttacking;
+            enemyMove.lockedMove = hasTarget || isAttacking;
         }
 
-        if (attackRoutine != null)
+        if (isAttacking)
         {
             rb.linearVelocityX = 0f;
 
@@ -74,36 +104,31 @@ public class PlantMeleeEnemy : MonoBehaviour
         if (!hasTarget)
             return;
 
-        if (attackRoutine == null)
-        {
+        if (!isAttacking || !lockFacingDuringAttack)
             FaceTarget(currentTarget.transform.position);
-            attackFacingSign = Mathf.Sign(transform.localScale.x);
-            attackRoutine = StartCoroutine(AttackLoop());
-        }
-        else if (!lockFacingDuringAttack)
-        {
-            FaceTarget(currentTarget.transform.position);
-        }
 
         rb.linearVelocityX = 0f;
     }
 
-    private IEnumerator AttackLoop()
+    // Animation Event ở frame đầu clip attack: sfx vung + khoá hướng đánh
+    public void AttackWindup()
     {
-        animator.SetTrigger(MeleeAttackHash);
+        attackFacingSign = Mathf.Sign(transform.localScale.x);
         if (sfx != null)
             sfx.PlayAttackWindup();
+    }
 
-        yield return new WaitForSeconds(attackWindup);
+    // Animation Event trong clip attack gọi hàm này (giống Mushroom.FireProjectile)
+    public void AttackImpact()
+    {
+        if (!damageable.IsAlive)
+            return;
 
         if (sfx != null)
             sfx.PlayAttackImpact();
 
         if (!useAnimationHitbox)
             TryDamageTarget();
-
-        yield return new WaitForSeconds(attackRecovery);
-        attackRoutine = null;
     }
 
     private void TryDamageTarget()
@@ -120,6 +145,9 @@ public class PlantMeleeEnemy : MonoBehaviour
 
         Vector2 targetPoint = currentTarget.bounds.ClosestPoint(transform.position);
         if (Vector2.Distance(transform.position, targetPoint) > attackRange)
+            return;
+
+        if (!HasLineOfSight(currentTarget))
             return;
 
         Damageable targetDamageable = currentTarget.GetComponentInParent<Damageable>();
@@ -147,11 +175,24 @@ public class PlantMeleeEnemy : MonoBehaviour
                 continue;
             }
 
-            if (candidate.GetComponentInParent<PlayerController>() != null)
+            if (candidate.GetComponentInParent<PlayerController>() != null && HasLineOfSight(candidate))
                 return candidate;
         }
 
         return null;
+    }
+
+    // Không cho nhìn xuyên tường: linecast về phía nhân vật, vướng Ground là mất dấu
+    private bool HasLineOfSight(Collider2D target)
+    {
+        Vector2 origin = bodyCollider != null ? bodyCollider.bounds.center : (Vector2)transform.position;
+
+        if (Physics2D.Linecast(origin, target.bounds.center, sightBlockerMask).collider == null)
+            return true;
+
+        // Tâm bị che nhưng mép gần nhất có thể vẫn hở
+        Vector2 closestPoint = target.bounds.ClosestPoint(origin);
+        return Physics2D.Linecast(origin, closestPoint, sightBlockerMask).collider == null;
     }
 
     private void FaceTarget(Vector2 targetPosition)
@@ -222,18 +263,11 @@ public class PlantMeleeEnemy : MonoBehaviour
             enemyMove.shouldMove = damageable.IsAlive;
             enemyMove.lockedMove = false;
         }
-
-        if (attackRoutine == null)
-            return;
-
-        StopCoroutine(attackRoutine);
-        attackRoutine = null;
     }
 
     private void OnDisable()
     {
         currentTarget = null;
-        attackRoutine = null;
         DisableAnimationHitbox();
     }
 

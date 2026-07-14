@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     public float maxLifetime = 5f;   // tự huỷ nếu bay mãi không trúng gì
 
     public bool damagesPlayerOnly = false;
+    public bool piercesWalls = false;   // đạn bay xuyên Ground thay vì ghim vào tường
     public float fall = 0f;
 
     [Header("Audio")]
@@ -68,6 +69,9 @@ public class Projectile : MonoBehaviour
         }
         else if (collision.GetComponentInParent<Ground>() != null)
         {
+            if (piercesWalls)
+                return;
+
             hasImpacted = true;
             PlayImpactSfx();
 

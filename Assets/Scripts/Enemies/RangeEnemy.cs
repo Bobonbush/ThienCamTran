@@ -31,12 +31,27 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     public Vector2 bombLaunchVelocity = new Vector2(6f, 8f);
 
     [Header("Timing")]
-    [Min(0f)] public float attackWindup = 0.35f;
+    [Tooltip("Chỉ dùng cho loại Shield (nghỉ sau khi ném). Loại khác chỉnh cooldown bằng SetFloatBehaviour trên state Throw trong Animator.")]
     [Min(0f)] public float attackCooldown = 1.75f;
     [Min(0f)] public float shieldDuration = 2.5f;
 
     [Header("Shield")]
     [Range(0f, 180f)] public float shieldBlockArc = 160f;
+
+    [Header("Line of Sight")]
+    [Tooltip("Bật lên thì nhìn xuyên tường như cũ, tắt thì phải thấy nhân vật mới bắn.")]
+    public bool seeThroughWalls = false;
+    [Tooltip("Layer chặn tầm nhìn. Để trống sẽ tự lấy layer Ground.")]
+    public LayerMask sightBlockerMask;
+    [Tooltip("Đạn bay xuyên tường hay chạm tường thì nổ/ghim.")]
+    public bool projectilesPierceWalls = false;
+
+    [Header("Bomb Arc")]
+    [Tooltip("Ném cầu vồng nhắm đúng vị trí nhân vật thay vì lực cố định.")]
+    public bool aimBombAtTarget = true;
+    [Tooltip("Góc ném (độ). Quỹ đạo được giải để rơi trúng mục tiêu với đúng góc này.")]
+    [Range(15f, 85f)] public float throwAngle = 55f;
+    [Min(1f)] public float maxThrowSpeed = 16f;
 
     [Header("Hover")]
     public bool hovering;
@@ -44,30 +59,43 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     [Min(0.01f)] public float hoverFrequency = 1.2f;
     [Min(0.1f)] public float hoverResponsiveness = 8f;
 
-    private static readonly int HasTargetHash = Animator.StringToHash("hasTarget");
-    private static readonly int RangedAttackHash = Animator.StringToHash("rangedAttack");
-    private static readonly int IsShieldingHash = Animator.StringToHash("isShielding");
-    private static readonly int BlockHitHash = Animator.StringToHash("blockHit");
-    private static readonly int HasStaffHash = Animator.StringToHash("hasStaff");
-    private static readonly int CatchProjectileHash = Animator.StringToHash("catchProjectile");
-
-    private Animator animator;
-    private Damageable damageable;
-    private Rigidbody2D rb;
-    private EnemyMove enemyMove;
-    private EnemySfxController sfx;
-    private Coroutine combatRoutine;
-    private Collider2D currentTarget;
-    private bool isShielding;
-    private bool hasStaff = true;
-    private float lastFacingSign;
-    private float hoverCenterX;
-    private float hoverCenterY;
-    private float hoverPhase;
+    Animator animator;
+    Damageable damageable;
+    Rigidbody2D rb;
+    Collider2D bodyCollider;
+    EnemyMove enemyMove;
+    EnemySfxController sfx;
+    Coroutine combatRoutine;
+    Collider2D currentTarget;
+    bool isShielding;
+    bool hasStaff = true;
+    float lastFacingSign;
+    float hoverCenterX;
+    float hoverCenterY;
+    float hoverPhase;
 
     public bool IsShielding
     {
         get { return isShielding; }
+    }
+
+    bool _hasTarget = false;
+    public bool HasTarget
+    {
+        get { return _hasTarget; }
+        private set
+        {
+            _hasTarget = value;
+            animator.SetBool(AnimationStrings.hasTarget, value);
+        }
+    }
+
+    // Animator tự vào state Throw khi hasTarget && attackCooldown < 0.00001 (giống Knight/Mushroom).
+    // SetFloatBehaviour trên state Throw reset cooldown khi thoát state. Riêng Shield vẫn chạy theo CombatLoop.
+    public float AttackCooldown
+    {
+        get { return animator.GetFloat(AnimationStrings.attackCooldown); }
+        private set { animator.SetFloat(AnimationStrings.attackCooldown, Mathf.Max(value, 0)); }
     }
 
     public Vector2 StaffReturnPosition
@@ -87,13 +115,17 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         damageable.damageableHit.AddListener(OnHit);
 
         rb = GetComponent<Rigidbody2D>();
+        bodyCollider = GetComponent<Collider2D>();
         enemyMove = GetComponent<EnemyMove>();
         sfx = GetComponent<EnemySfxController>();
+
+        if (sightBlockerMask.value == 0)
+            sightBlockerMask = LayerMask.GetMask("Ground");
 
         animator.SetBool(AnimationStrings.canMove, !stationary && !hovering);
         animator.SetBool(AnimationStrings.isAlive, damageable.IsAlive);
         if (enemyType == EnemyType.Staff)
-            animator.SetBool(HasStaffHash, true);
+            animator.SetBool(AnimationStrings.hasStaff, true);
         lastFacingSign = Mathf.Sign(transform.localScale.x);
 
         if (hovering)
@@ -147,11 +179,13 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
             return;
         }
 
-        currentTarget = GetTarget();
-        bool hasTarget = currentTarget != null;
-        animator.SetBool(HasTargetHash, hasTarget);
+        if (enemyType != EnemyType.Shield && AttackCooldown > 0)
+            AttackCooldown -= Time.deltaTime;
 
-        if (!hasTarget)
+        currentTarget = GetTarget();
+        HasTarget = currentTarget != null;
+
+        if (!HasTarget)
         {
             StopCombat();
             return;
@@ -160,36 +194,38 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         if (faceTarget)
             FaceTarget(currentTarget.transform.position);
 
-        if (combatRoutine == null && (enemyType != EnemyType.Staff || hasStaff))
+        // Knife/Bomb/Staff: animator tự tấn công qua điều kiện hasTarget + attackCooldown (+ hasStaff).
+        // Shield cần trình tự giơ khiên -> ném nên vẫn chạy coroutine.
+        if (enemyType == EnemyType.Shield && combatRoutine == null)
             combatRoutine = StartCoroutine(CombatLoop());
     }
 
     private IEnumerator CombatLoop()
     {
-        if (enemyType == EnemyType.Shield)
-        {
-            SetShielding(true);
-            if (sfx != null)
-                sfx.PlayShieldRaise();
-            yield return new WaitForSeconds(shieldDuration);
-            SetShielding(false);
-        }
-
-        animator.SetTrigger(RangedAttackHash);
+        SetShielding(true);
         if (sfx != null)
-            sfx.PlayAttackWindup();
-        yield return new WaitForSeconds(attackWindup);
+            sfx.PlayShieldRaise();
+        yield return new WaitForSeconds(shieldDuration);
+        SetShielding(false);
 
-        if (currentTarget != null && damageable.IsAlive)
-            FireProjectile();
+        animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
 
+        // Đạn rời tay do Animation Event FireProjectile trong clip Throw quyết định
         yield return new WaitForSeconds(attackCooldown);
         combatRoutine = null;
     }
 
+    // Animation Event ở frame đầu clip Throw
+    public void AttackWindup()
+    {
+        if (sfx != null)
+            sfx.PlayAttackWindup();
+    }
+
+    // Animation Event trong clip Throw gọi hàm này (giống Mushroom.FireProjectile)
     public void FireProjectile()
     {
-        if (projectilePrefab == null)
+        if (projectilePrefab == null || !damageable.IsAlive)
             return;
 
         Vector2 direction = GetFacingDirection();
@@ -197,6 +233,8 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         GameObject projectile = Instantiate(projectilePrefab, LaunchPosition, projectilePrefab.transform.rotation);
         if (sfx != null)
             sfx.PlayAttackRelease();
+
+        ApplyWallPiercing(projectile);
 
         Vector3 scale = projectile.transform.localScale;
         float projectileFacing = Mathf.Sign(direction.x);
@@ -211,7 +249,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
             if (staffProjectile != null)
             {
                 hasStaff = false;
-                animator.SetBool(HasStaffHash, false);
+                animator.SetBool(AnimationStrings.hasStaff, false);
                 staffProjectile.Launch(this, direction, straightProjectileSpeed);
                 return;
             }
@@ -219,9 +257,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
         if (enemyType == EnemyType.Bomb)
         {
-            Vector2 velocity = new Vector2(
-                Mathf.Abs(bombLaunchVelocity.x) * GetFacingDirection().x,
-                bombLaunchVelocity.y);
+            Vector2 velocity = GetBombVelocity(projectile);
 
             ProjectileTrajectory trajectory = projectile.GetComponent<ProjectileTrajectory>();
             if (trajectory != null)
@@ -252,6 +288,61 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
             body.linearVelocity = direction * straightProjectileSpeed;
     }
 
+    private void ApplyWallPiercing(GameObject projectile)
+    {
+        if (!projectilesPierceWalls)
+            return;
+
+        Projectile straightProjectile = projectile.GetComponent<Projectile>();
+        if (straightProjectile != null)
+            straightProjectile.piercesWalls = true;
+
+        ProjectileTrajectory trajectory = projectile.GetComponent<ProjectileTrajectory>();
+        if (trajectory != null)
+            trajectory.piercesWalls = true;
+    }
+
+    // Giải quỹ đạo ném cầu vồng: cố định góc ném, tính tốc độ để rơi trúng mục tiêu
+    private Vector2 GetBombVelocity(GameObject projectile)
+    {
+        Vector2 fallback = new Vector2(
+            Mathf.Abs(bombLaunchVelocity.x) * GetFacingDirection().x,
+            bombLaunchVelocity.y);
+
+        if (!aimBombAtTarget || currentTarget == null)
+            return fallback;
+
+        Vector2 origin = LaunchPosition;
+        Vector2 targetPosition = currentTarget.bounds.center;
+
+        float gravityScale = 1f;
+        Rigidbody2D projectileBody = projectile.GetComponent<Rigidbody2D>();
+        if (projectileBody != null)
+            gravityScale = projectileBody.gravityScale;
+
+        float gravity = Mathf.Abs(Physics2D.gravity.y) * gravityScale;
+        float dx = Mathf.Abs(targetPosition.x - origin.x);
+        float dy = targetPosition.y - origin.y;
+
+        if (dx < 0.05f || gravity < 0.01f)
+            return fallback;
+
+        float angle = throwAngle * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(angle);
+        float denominator = 2f * cos * cos * (dx * Mathf.Tan(angle) - dy);
+
+        // Mục tiêu cao hơn góc ném với tới được
+        if (denominator <= 0.001f)
+            return fallback;
+
+        float speed = Mathf.Sqrt(gravity * dx * dx / denominator);
+        if (speed > maxThrowSpeed)
+            return fallback;
+
+        float directionSign = Mathf.Sign(targetPosition.x - origin.x);
+        return new Vector2(cos * speed * directionSign, Mathf.Sin(angle) * speed);
+    }
+
     public bool BlocksDamageFrom(Vector2 damageSource)
     {
         if (enemyType != EnemyType.Shield || !isShielding || !damageable.IsAlive)
@@ -267,7 +358,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
     public void OnDamageBlocked(Vector2 damageSource)
     {
-        animator.SetTrigger(BlockHitHash);
+        animator.SetTrigger(AnimationStrings.blockHitTrigger);
         if (sfx != null)
             sfx.PlayBlock();
     }
@@ -278,8 +369,8 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
             return;
 
         hasStaff = true;
-        animator.SetBool(HasStaffHash, true);
-        animator.SetTrigger(CatchProjectileHash);
+        animator.SetBool(AnimationStrings.hasStaff, true);
+        animator.SetTrigger(AnimationStrings.catchProjectileTrigger);
         if (sfx != null)
             sfx.PlayCatch();
     }
@@ -303,13 +394,33 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         for (int i = attackZone.detectedColliders.Count - 1; i >= 0; i--)
         {
             Collider2D candidate = attackZone.detectedColliders[i];
-            if (candidate != null && candidate.GetComponentInParent<PlayerController>() != null)
-                return candidate;
+            if (candidate == null)
+            {
+                attackZone.detectedColliders.RemoveAt(i);
+                continue;
+            }
 
-            attackZone.detectedColliders.RemoveAt(i);
+            if (candidate.GetComponentInParent<PlayerController>() == null)
+                continue;
+
+            if (seeThroughWalls || HasLineOfSight(candidate))
+                return candidate;
         }
 
         return null;
+    }
+
+    // Không cho nhìn xuyên tường: linecast về phía nhân vật, vướng Ground là mất dấu
+    private bool HasLineOfSight(Collider2D target)
+    {
+        Vector2 origin = bodyCollider != null ? bodyCollider.bounds.center : (Vector2)transform.position;
+
+        if (Physics2D.Linecast(origin, target.bounds.center, sightBlockerMask).collider == null)
+            return true;
+
+        // Tâm bị che nhưng mép gần nhất có thể vẫn hở
+        Vector2 closestPoint = target.bounds.ClosestPoint(origin);
+        return Physics2D.Linecast(origin, closestPoint, sightBlockerMask).collider == null;
     }
 
     private void FaceTarget(Vector2 targetPosition)
@@ -328,7 +439,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     private void SetShielding(bool value)
     {
         isShielding = value;
-        animator.SetBool(IsShieldingHash, value);
+        animator.SetBool(AnimationStrings.isShielding, value);
     }
 
     private void StopCombat()
@@ -337,7 +448,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
         if (animator != null)
         {
-            animator.SetBool(HasTargetHash, false);
+            animator.SetBool(AnimationStrings.hasTarget, false);
             SetShielding(false);
         }
         else

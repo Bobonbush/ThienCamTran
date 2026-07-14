@@ -522,8 +522,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantMeleeEnemy
   attackZone: {fileID: 1199187561944735712}
   attackDamage: 7
-  attackWindup: 0.22
-  attackRecovery: 0.42
   attackRange: 1.9
   knockback: {x: 4, y: 1.5}
   lockFacingDuringAttack: 0
