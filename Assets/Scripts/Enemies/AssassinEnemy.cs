@@ -216,7 +216,8 @@ public class AssassinEnemy : MonoBehaviour
 
     public void OnHit(int damage, Vector2 hitKnockback)
     {
-        rb.linearVelocity = new Vector2(hitKnockback.x, rb.linearVelocity.y + hitKnockback.y);
+        // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
+        rb.linearVelocity = new Vector2(hitKnockback.x, Mathf.Max(rb.linearVelocity.y, hitKnockback.y));
 
         // Bị đánh khi chưa kịp biến mất -> huỷ tàng hình
         if (teleportRoutine != null && spriteRenderer.enabled)

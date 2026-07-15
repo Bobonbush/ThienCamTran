@@ -537,6 +537,7 @@ MonoBehaviour:
   isInvincible: 0
   invicibilityTimer: 0.5
   minKnockbackLockTime: 0.25
+  knockbackResistance: 0.1
 --- !u!114 &7976450959491248197
 MonoBehaviour:
   m_ObjectHideFlags: 0

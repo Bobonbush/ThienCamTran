@@ -378,7 +378,8 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
     public void OnHit(int damage, Vector2 knockback)
     {
-        rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+        // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
+        rb.linearVelocity = new Vector2(knockback.x, Mathf.Max(rb.linearVelocity.y, knockback.y));
 
         // Bị đánh lén: quay về phía kẻ đánh (knockback đẩy ra xa kẻ đánh)
         if (faceTarget && Mathf.Abs(knockback.x) > 0.01f)

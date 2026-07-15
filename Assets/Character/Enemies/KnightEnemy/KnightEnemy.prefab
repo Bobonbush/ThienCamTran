@@ -388,6 +388,7 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.25
+  knockbackResistance: 0.3
 --- !u!114 &8036775491050591284
 MonoBehaviour:
   m_ObjectHideFlags: 0
