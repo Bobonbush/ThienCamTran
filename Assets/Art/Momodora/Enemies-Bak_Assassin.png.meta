@@ -71,6 +71,9 @@ TextureImporter:
   - first:
       213: 900000023
     second: Attack_4
+  - first:
+      213: 6175102128477655385
+    second: Enemies-Bak_Assassin_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -292,6 +295,33 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5e8ebe021e391bb489acde8e856f3997
+      internalID: 6175102128477655385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+      internalID: 1550000005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a5a5a5a5a5a5a5a5a5a5a5a5a5a0005
       internalID: -899079904
       vertices: []
       indices: 
@@ -640,8 +670,7 @@ TextureImporter:
       Enemies-Bak_Assassin_23: -193669582
       Enemies-Bak_Assassin_3: 1990630493
       Enemies-Bak_Assassin_4: 290424845
-      Enemies-Bak_Assassin_5: 1860613368
-      Enemies-Bak_Assassin_6: -899079904
+        Enemies-Bak_Assassin_6: 6175102128477655385
       Enemies-Bak_Assassin_7: -1449992476
       Enemies-Bak_Assassin_8: 1938297412
       Enemies-Bak_Assassin_9: -203265798
