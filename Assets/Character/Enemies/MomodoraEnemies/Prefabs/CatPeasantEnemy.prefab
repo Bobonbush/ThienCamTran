@@ -207,6 +207,9 @@ MonoBehaviour:
   aimBombAtTarget: 1
   throwAngle: 55
   maxThrowSpeed: 16
+  targetHeadOffset: {x: 0, y: 0.5}
+  teleportPoints: []
+  teleportInterval: 4
   hovering: 1
   hoverAmplitude: 0.28
   hoverFrequency: 1.15
