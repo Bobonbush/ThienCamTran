@@ -625,10 +625,13 @@ public class PlayerController : MonoBehaviour
         if (Climbing) return;
         if (context.performed)
         {
-            if (StopCombo && stat.CanConsume(AttackStaminaCost[attackCNT]))
+            if (StopCombo)
             {
-                animator.SetTrigger(AnimationStrings.attackTrigger);
-                StopCombo = false;
+                Debug.Log(attackCNT);
+                if (stat.CanConsume(AttackStaminaCost[attackCNT])) {
+                    animator.SetTrigger(AnimationStrings.attackTrigger);
+                    StopCombo = false;
+                }
             }
         }
     }
@@ -637,7 +640,7 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = false;
         rb.gravityScale = gravityScale;
-        if(StopCombo == true)
+        if(StopCombo == true || attackCNT == 2)
         {
             attackCNT = 0;
         }
@@ -649,6 +652,7 @@ public class PlayerController : MonoBehaviour
     {
         StopCombo = true;
         attackCNT++;
+        attackCNT %= 3;
     }
 
     public void Attack1Trigger()
