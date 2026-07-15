@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a9620aa37a4b358b86f61e803d3050, type: 3}
+  m_Name: SfxLibrary
+  m_EditorClassIdentifier:
+  output: {fileID: 4902627120785838676, guid: 7b73d08ed7ac6ff4fbba271b8449f6f7, type: 2}
+  cues:
+  - id: player.footstep
+    clips:
+    - {fileID: 8300000, guid: fac81e51d8a2cfd4fbb61d7e63caf649, type: 3}
+    - {fileID: 8300000, guid: 3ed495aa2f4ef0345996931bb46ecc92, type: 3}
+    - {fileID: 8300000, guid: 3312fa40883b5e7429493d7db94e2ffd, type: 3}
+    - {fileID: 8300000, guid: c3645b21c658e2e42b52f33778e2636a, type: 3}
+    - {fileID: 8300000, guid: 668a1767ecd72ed4ebadabeaeea455be, type: 3}
+    volume: 0.45
+    minPitch: 0.92
+    maxPitch: 1.08
+    cooldown: 0.15
+  - id: player.jump
+    clips:
+    - {fileID: 8300000, guid: 38acbff321c30484d92434738af69269, type: 3}
+    - {fileID: 8300000, guid: 93aa1d9cab35ad447a9a263eb6beca36, type: 3}
+    volume: 0.55
+    minPitch: 0.95
+    maxPitch: 1.1
+    cooldown: 0.1
+  - id: player.land
+    clips:
+    - {fileID: 8300000, guid: 25968c5d8f52df847b281c1a21aa5d96, type: 3}
+    - {fileID: 8300000, guid: e3df0849390ac9a49a0f048e8b0e5062, type: 3}
+    - {fileID: 8300000, guid: c6ace2687dfa02c45998b3d11b07f441, type: 3}
+    volume: 0.6
+    minPitch: 0.92
+    maxPitch: 1.05
+    cooldown: 0.2
+  - id: player.dash
+    clips:
+    - {fileID: 8300000, guid: edc6221d2fbdcdc4f8ba86f82b7c3623, type: 3}
+    - {fileID: 8300000, guid: c40438498c3638748b83b7f513cf2693, type: 3}
+    volume: 0.7
+    minPitch: 0.9
+    maxPitch: 1
+    cooldown: 0.1
+  - id: player.attack
+    clips:
+    - {fileID: 8300000, guid: 7c1a831f9e718484a8794a2b227e4f28, type: 3}
+    - {fileID: 8300000, guid: 12d5e03c55dfa674e8c4a075508c70d2, type: 3}
+    - {fileID: 8300000, guid: c0307b8ae81a52649b7080818f665317, type: 3}
+    - {fileID: 8300000, guid: 2a664746de12bcc489b93b41ed28bbee, type: 3}
+    volume: 0.75
+    minPitch: 0.94
+    maxPitch: 1.06
+    cooldown: 0.08
+    layerClips:
+    - {fileID: 8300000, guid: 763a1f65fc71e22489a7e7f543d03735, type: 3}
+    - {fileID: 8300000, guid: e74df4258cccdbf4f836ce4bf123ad64, type: 3}
+    layerVolume: 0.4
+  - id: player.hurt
+    clips:
+    - {fileID: 8300000, guid: f86e0804c0b0dff4daae0ae089c43b02, type: 3}
+    - {fileID: 8300000, guid: f1b28ee6922083546bde0c2efd0ced6d, type: 3}
+    - {fileID: 8300000, guid: 9cad871f22dc9924ab04c77144d6b00e, type: 3}
+    volume: 0.8
+    minPitch: 0.95
+    maxPitch: 1.05
+    cooldown: 0.1
+    layerClips:
+    - {fileID: 8300000, guid: 9aa155b538b6fec42abcdfc22d00419c, type: 3}
+    layerVolume: 0.45
+  - id: player.death
+    clips:
+    - {fileID: 8300000, guid: 7b20ebca9c019494d8209f5a528bacd6, type: 3}
+    volume: 0.9
+    minPitch: 0.9
+    maxPitch: 0.95
+    cooldown: 0.5
+  - id: player.heal
+    clips:
+    - {fileID: 8300000, guid: fce5850edc6d6144d93ff01d2ec2eaa0, type: 3}
+    volume: 0.7
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.3
+  - id: player.pickup
+    clips:
+    - {fileID: 8300000, guid: 05cd7ef1a998af542b3a3ca3bcb89f06, type: 3}
+    - {fileID: 8300000, guid: 09d11c5c7a3a80c4ca718556771d6829, type: 3}
+    volume: 0.65
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.1
+  - id: player.revive
+    clips:
+    - {fileID: 8300000, guid: 54ce3012055477d43b49dcbd279decaa, type: 3}
+    volume: 0.8
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.5
+  - id: ui.hover
+    clips:
+    - {fileID: 8300000, guid: 1f2863503d7740b49ba34355c0a30c84, type: 3}
+    volume: 0.5
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.05
+  - id: ui.confirm
+    clips:
+    - {fileID: 8300000, guid: c441e5157bbdc8d4ab65b8479eabc350, type: 3}
+    volume: 0.65
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.05
+  - id: ui.decline
+    clips:
+    - {fileID: 8300000, guid: 824414cba1450974d805fa7737f690df, type: 3}
+    volume: 0.65
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.05
+  - id: ui.pause
+    clips:
+    - {fileID: 8300000, guid: a3148a4e8cb71f549a084918fa670df4, type: 3}
+    volume: 0.65
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.1
+  - id: ui.unpause
+    clips:
+    - {fileID: 8300000, guid: 7d7b440df14995f44b707618307bf64d, type: 3}
+    volume: 0.65
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0.1

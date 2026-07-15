@@ -21,6 +21,11 @@ internal class AnimationStrings
     internal static string lookDown = "lookDown";
     internal static string attackCooldown = "attackCooldown";
     internal static string rangedAttackTrigger = "rangedAttack";
+    internal static string meleeAttackTrigger = "meleeAttack";
+    internal static string isShielding = "isShielding";
+    internal static string blockHitTrigger = "blockHit";
+    internal static string hasStaff = "hasStaff";
+    internal static string catchProjectileTrigger = "catchProjectile";
     internal static string dashTrigger = "dash";
     internal static string isDashing = "isDashing";
     internal static string MoveImplitude = "MoveImplitude";

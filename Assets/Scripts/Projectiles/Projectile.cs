@@ -7,7 +7,13 @@ public class Projectile : MonoBehaviour
     public Vector2 knockback = new Vector2(0, 0);
     public float maxLifetime = 5f;   // tự huỷ nếu bay mãi không trúng gì
 
+    public bool damagesPlayerOnly = false;
+    public bool piercesWalls = false;   // đạn bay xuyên Ground thay vì ghim vào tường
     public float fall = 0f;
+
+    [Header("Audio")]
+    public AudioClip[] impactClips;
+    [Range(0f, 1f)] public float impactVolume = 0.8f;
 
     Rigidbody2D rb;
     Animator animator;       // có thể null (đạn sprite tĩnh như Arrow)
@@ -42,7 +48,10 @@ public class Projectile : MonoBehaviour
     {
         if (hasImpacted) return;
 
-        Damageable damageable = collision.GetComponent<Damageable>();
+        Damageable damageable = collision.GetComponentInParent<Damageable>();
+
+        if (damageable != null && damagesPlayerOnly && collision.GetComponentInParent<PlayerController>() == null)
+            return;
 
         if (damageable != null)
         {
@@ -50,15 +59,22 @@ public class Projectile : MonoBehaviour
             float dir = rb.linearVelocityX;
             Vector2 deliveredKnockback = dir > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
             // Hit the damageable object
-            bool gotHit = damageable.Hit(damage, deliveredKnockback);
+            bool gotHit = damageable.Hit(damage, deliveredKnockback, transform.position);
             if (gotHit)
             {
-                Debug.Log(collision.name + " hit for " + damage + " damage!");
+                if (!damageable.LastHitWasBlocked)
+                    Debug.Log(collision.name + " hit for " + damage + " damage!");
                 Impact();
             }
         }
-        else
+        else if (collision.GetComponentInParent<Ground>() != null)
         {
+            if (piercesWalls)
+                return;
+
+            hasImpacted = true;
+            PlayImpactSfx();
+
             // Touch ground
 
 
@@ -85,6 +101,7 @@ public class Projectile : MonoBehaviour
     private void Impact()
     {
         hasImpacted = true;
+        PlayImpactSfx();
         rb.linearVelocity = Vector2.zero;
         if (col != null) col.enabled = false;   // không trúng thêm lần nữa
 
@@ -104,5 +121,10 @@ public class Projectile : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    private void PlayImpactSfx()
+    {
+        EnemySfxController.PlayAtPoint(impactClips, transform.position, impactVolume);
     }
 }

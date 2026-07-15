@@ -39,18 +39,21 @@ namespace Game.UI
 
         public void OnStartGame()
         {
+            Sfx.Play(SfxId.UiConfirm);
             HideTitle();
             if (saveSlotSelect != null) saveSlotSelect.Open(onBack: ShowTitle);
         }
 
         public void OnOptions()
         {
+            Sfx.Play(SfxId.UiConfirm);
             HideTitle();
             if (optionsScreen != null) optionsScreen.Open();
         }
 
         public void OnQuitGame()
         {
+            Sfx.Play(SfxId.UiDecline);
             Application.Quit();
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;

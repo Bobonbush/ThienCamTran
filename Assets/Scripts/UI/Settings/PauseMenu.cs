@@ -57,6 +57,7 @@ namespace Game.UI
         {
             IsPaused = true;
             Time.timeScale = 0f;
+            Sfx.Play(SfxId.UiPause);
             Open();
         }
 
@@ -64,6 +65,7 @@ namespace Game.UI
         {
             IsPaused = false;
             Time.timeScale = 1f;
+            Sfx.Play(SfxId.UiUnpause);
             if (optionsScreen != null && optionsScreen.IsOpen) optionsScreen.Close();
             Close();
         }
@@ -74,12 +76,14 @@ namespace Game.UI
 
         public void OnOptions()
         {
+            Sfx.Play(SfxId.UiConfirm);
             if (menuButtons != null) menuButtons.SetActive(false);
             if (optionsScreen != null) optionsScreen.Open();
         }
 
         public void OnQuitToMenu()
         {
+            Sfx.Play(SfxId.UiConfirm);
             Time.timeScale = 1f;
             IsPaused = false;
             SceneManager.LoadScene(mainMenuScene);

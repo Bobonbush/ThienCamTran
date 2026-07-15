@@ -111,6 +111,8 @@ MonoBehaviour:
   moveSpeed: {x: 12, y: 0}
   knockback: {x: 2, y: 0}
   maxLifetime: 5
+  damagesPlayerOnly: 1
+  fall: 0
 --- !u!50 &5416156786535037951
 Rigidbody2D:
   serializedVersion: 5

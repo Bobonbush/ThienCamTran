@@ -18,6 +18,8 @@ public class EnemyMove : MonoBehaviour
 
     public Vector3 spawn = Vector3.zero;
 
+    public Vector3 offsetBlood = Vector3.zero;
+
     public bool moveInRange = false;
     public BoxCollider2D moveRange;
 
@@ -39,7 +41,7 @@ public class EnemyMove : MonoBehaviour
         Left
     }
 
-    [SerializeField] private Material flashMaterial;
+    private Material flashMaterial;
 
     [SerializeField] private float duration;
 
@@ -130,6 +132,8 @@ public class EnemyMove : MonoBehaviour
         animator = GetComponent<Animator>();
         damageable = GetComponent<Damageable>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        flashMaterial = Resources.Load<Material>("Material/WhiteOutShader");
 
         bloodPrefab = Resources.Load<ParticleSystem>("Effect/Blood");
 
@@ -354,7 +358,7 @@ public class EnemyMove : MonoBehaviour
         }
         Instantiate(
              bloodPrefab,
-             transform.position,
+             transform.position + offsetBlood,
              rotation
         );
     }

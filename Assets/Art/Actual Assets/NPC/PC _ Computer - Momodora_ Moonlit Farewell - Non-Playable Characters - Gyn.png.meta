@@ -1,0 +1,629 @@
+fileFormatVersion: 2
+guid: 9700413a227b5e54ea140be4141a2a41
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: VisionOS
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: tvOS
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 82
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85e60594ac0ed794fa6984603f4d4b9c
+      internalID: 1284288274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 82
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1c25a8d7ae214746943492c259089b7
+      internalID: -1296008092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_2
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 75
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de9e2d1b55d8b2541bdc1acfae34921b
+      internalID: 1963609491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_3
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 75
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ced0858482b965547880752ac05a0bcf
+      internalID: 1920182763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_4
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 82
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b841dfc6db6f2943b0f662da86f8483
+      internalID: 811153766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_5
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 82
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06e11696fdca1c8478c2398413b85fc6
+      internalID: 371223701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_6
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 75
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85fec19f505b2a544960425d5d9ac26b
+      internalID: 1428254140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_7
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 42
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eeba977dd52dce3448f5bfa0f0c70a5c
+      internalID: 1572789184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_8
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 42
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d2c1332e9a29ec4ca398a50c85bd1f9
+      internalID: 140073321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_9
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 42
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 488de9f572ca7694c87bb1a5998f5186
+      internalID: 841503270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_10
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 42
+        width: 25
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1086a507535972f4cbf745db520060d7
+      internalID: 621617073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_11
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 42
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62da6b6313fb8304287e4a7c9d9d792e
+      internalID: 879873604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_12
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 8
+        width: 25
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ac4a55e986eff1448ddbd0465b8ca7d
+      internalID: 1162411018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_13
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 8
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 474e33a4478912c4986aaeb92298098b
+      internalID: -1570185817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_14
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 1
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: facdc25d6be6d7f4a9f8472fb0114f22
+      internalID: 862367684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_15
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 8
+        width: 19
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0ed7973b5e4ff743b7a1339d130527a
+      internalID: -1905841131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_16
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 1
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d472f7586df699441bf8a28ff6103fc7
+      internalID: -1301078283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters
+        - Gyn_17
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 1
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25f3a7e49d81430448aa2a0960b876e9
+      internalID: -479364175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 54e294c859556f7498e7e03dce8d0176
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_0: 1284288274
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_1: -1296008092
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_10: 621617073
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_11: 879873604
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_12: 1162411018
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_13: -1570185817
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_14: 862367684
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_15: -1905841131
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_16: -1301078283
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_17: -479364175
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_2: 1963609491
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_3: 1920182763
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_4: 811153766
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_5: 371223701
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_6: 1428254140
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_7: 1572789184
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_8: 140073321
+      PC _ Computer - Momodora_ Moonlit Farewell - Non-Playable Characters - Gyn_9: 841503270
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

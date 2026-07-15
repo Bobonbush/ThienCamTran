@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,20 +14,17 @@ public class DetectionZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<PlayerController>())
-        {
+        if (collision.GetComponentInParent<PlayerController>() != null && !detectedColliders.Contains(collision))
             detectedColliders.Add(collision);
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        detectedColliders.Remove(collision);
+        if (!detectedColliders.Remove(collision))
+            return;
 
         if (detectedColliders.Count <= 0)
-        {
             noCollidersRemain.Invoke();
-        }
     }
 
 }

@@ -151,11 +151,11 @@ public class CutTrigger : MonoBehaviour
         if (!played)
         {
             Transform target = bubbleTarget != null ? bubbleTarget : transform;
-            DialogManager.Instance.StartDialog(startNode, style, target);
+            CutSceneDialogManager.Instance.StartDialog(startNode, style, target);
             played = true;
         }
 
-        if (!DialogManager.Instance.AnimationDone())
+        if (!CutSceneDialogManager.Instance.AnimationDone())
         {
             return;
         }
@@ -165,7 +165,7 @@ public class CutTrigger : MonoBehaviour
             return;
         }
 
-        DialogManager.Instance.EndDialog();
+        CutSceneDialogManager.Instance.EndDialog();
 
         if (time <= info.fadingTime + info.delayTime + info.showTime)
         {
@@ -193,7 +193,6 @@ public class CutTrigger : MonoBehaviour
 
         if(NoCutSceneRemain && startPlaying && firstAnimatorTrigger)
         {
-            Debug.Log("Finished");
             isDone = true;
             AbandoneTrigger();
         }

@@ -5,13 +5,22 @@ public class ProjectileTrajectory : MonoBehaviour
     public int damage = 10;
 
     public Vector2 knockback = new Vector2(10f, 0);
+    public bool damagesPlayerOnly = false;
+
+    public bool impactOnGround = false;
+    public bool piercesWalls = false;   // ƒë·∫°n bay xuy√™n Ground thay v√¨ ghim/n·ªï khi ch·∫°m t∆∞·ªùng
+
+    [Header("Audio")]
+    public AudioClip[] impactClips;
+    [Range(0f, 1f)] public float impactVolume = 0.9f;
+
     public float fall = 0f; // Hi?u ?ng c?m xu?ng d?t
-    public float maxLifetime = 5f;   // t? hu? n?u bay m„i khÙng tr˙ng gÏ
+    public float maxLifetime = 5f;   // t? hu? n?u bay mÔøΩi khÔøΩng trÔøΩng gÔøΩ
     [SerializeField]
     private float offsetRotation = 0.0f;  // Set the origin object to lie on the x axis
 
     Rigidbody2D rb;
-    Animator animator;       // cÛ th? null (d?n sprite tinh nhu Arrow)
+    Animator animator;       // cÔøΩ th? null (d?n sprite tinh nhu Arrow)
     Collider2D col;
     bool hasImpacted = false;
     bool hasLaunchVelocity = false;
@@ -58,7 +67,10 @@ public class ProjectileTrajectory : MonoBehaviour
         if (hasImpacted) return;
 
 
-        Damageable damageable = collision.GetComponent<Damageable>();
+        Damageable damageable = collision.GetComponentInParent<Damageable>();
+
+        if (damageable != null && damagesPlayerOnly && collision.GetComponentInParent<PlayerController>() == null)
+            return;
 
         if (damageable != null)
         {
@@ -67,14 +79,26 @@ public class ProjectileTrajectory : MonoBehaviour
             float dir = rb.linearVelocityX;
             Vector2 deliveredKnockback = dir > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
             // Hit the damageable object
-            bool gotHit = damageable.Hit(damage, deliveredKnockback);
+            bool gotHit = damageable.Hit(damage, deliveredKnockback, transform.position);
             if (gotHit)
             {
                 //Debug.Log(collision.name + " hit for " + damage + " damage!");
                 Impact();
             }
-        }else if(collision.GetComponent<Ground>() != null)
+        }else if(collision.GetComponentInParent<Ground>() != null)
         {
+            if (piercesWalls)
+                return;
+
+            if (impactOnGround)
+            {
+                Impact();
+                return;
+            }
+
+            hasImpacted = true;
+            PlayImpactSfx();
+
             // Touch ground
 
             
@@ -99,18 +123,19 @@ public class ProjectileTrajectory : MonoBehaviour
 
     }
 
-    // D?ng d?n l?i v‡ choi animation n?; n?u khÙng cÛ Animator thÏ hu? ngay (gi? h‡nh vi cu c?a Arrow)
+    // D?ng d?n l?i vÔøΩ choi animation n?; n?u khÔøΩng cÔøΩ Animator thÔøΩ hu? ngay (gi? hÔøΩnh vi cu c?a Arrow)
     private void Impact()
     {
         hasImpacted = true;
+        PlayImpactSfx();
         rb.linearVelocity = Vector2.zero;
-        if (col != null) col.enabled = false;   // khÙng tr˙ng thÍm l?n n?a
+        if (col != null) col.enabled = false;   // khÔøΩng trÔøΩng thÔøΩm l?n n?a
 
         if (animator != null)
         {
             animator.SetTrigger(AnimationStrings.hitTrigger);   // -> state Impact
             // Hu? object do Animation Event ? cu?i clip Impact g?i DestroySelf(),
-            // ho?c g?n FadeRemoveBehaviour lÍn state Impact.
+            // ho?c g?n FadeRemoveBehaviour lÔøΩn state Impact.
         }
         else
         {
@@ -123,5 +148,10 @@ public class ProjectileTrajectory : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    private void PlayImpactSfx()
+    {
+        EnemySfxController.PlayAtPoint(impactClips, transform.position, impactVolume);
     }
 }
