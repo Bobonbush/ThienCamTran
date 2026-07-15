@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83d0b0481880beb49bd60646c38a5d1b, type: 3}
-  m_Name: 5
+  m_Name: 2
   m_EditorClassIdentifier: Assembly-CSharp::DialogNode
   speakerName: 
-  text: "Ng\u01B0\u01A1i \u1EDF \u0111\xE2y t\u1EE9c l\xE0 ng\u01B0\u01A1i \u0111\xE3
-    \u0111\xE1nh b\u1EA1i b\u1ECDn ch\xFAng r\u1ED3i. Nh\xE2n c\u01A1 h\u1ED9i ch\xFAng
-    ch\u01B0a h\u1ED3i sinh ta \u0111i v\u1EC1 nh\xE9."
+  text: "\"   \u0110\xE1 m\xF2n, nh\u01B0ng d\u1EA1 ch\u1EB3ng m\xF2n\nT\xECnh d\xE2n
+    ngh\u0129a n\u01B0\u1EDBc m\u1ED9t l\xF2ng s\u1EAFt son\""
   choices:
   - choiceText: Next
-    nextNode: {fileID: 11400000, guid: 400b80333e8661b40bccab4f914b0989, type: 2}
+    nextNode: {fileID: 11400000, guid: c704d524a67fbdf4991ced73cef9a8c3, type: 2}

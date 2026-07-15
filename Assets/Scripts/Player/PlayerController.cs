@@ -36,6 +36,14 @@ public class PlayerController : MonoBehaviour
     private float maxComboTime = 0.3f;
 
 
+    [SerializeField] private float[] AttackStaminaCost = {5, 10, 20, 20 };
+
+    private int attackCNT = 0;
+
+
+    [SerializeField]
+    private float dashStaminaCost = 20f;
+
     private bool StopCombo = true;
 
     private bool skipDialogButtonPress = false;
@@ -332,9 +340,8 @@ public class PlayerController : MonoBehaviour
 
         UpdateInteractPrompts();
 
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame && DialogLock == false && CutSceneLock == false)
         {
-            
             InteractWithNearest();
         }
 
@@ -386,7 +393,7 @@ public class PlayerController : MonoBehaviour
             if (wasDashing)
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
-            if (!damageable.LockVelocity)
+            if (!damageable.LockVelocity && CutSceneLock == false && DialogLock == false)
             {
                 if (Climbing == false)
                 {
@@ -618,7 +625,7 @@ public class PlayerController : MonoBehaviour
         if (Climbing) return;
         if (context.performed)
         {
-            if (StopCombo)
+            if (StopCombo && stat.CanConsume(AttackStaminaCost[attackCNT]))
             {
                 animator.SetTrigger(AnimationStrings.attackTrigger);
                 StopCombo = false;
@@ -630,16 +637,23 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = false;
         rb.gravityScale = gravityScale;
+        if(StopCombo == true)
+        {
+            attackCNT = 0;
+        }
+             
     }
 
 
     public void ComboFrame()
     {
         StopCombo = true;
+        attackCNT++;
     }
 
     public void Attack1Trigger()
     {
+
         atk1.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         Sfx.Play(SfxId.PlayerAttack);
@@ -648,7 +662,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack2Trigger()
     {
-        
+
         atk2.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         Sfx.Play(SfxId.PlayerAttack);
@@ -657,6 +671,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack3Trigger()
     {
+
         atk3.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         Sfx.Play(SfxId.PlayerAttack);
@@ -692,6 +707,8 @@ public class PlayerController : MonoBehaviour
 
             lastDashTime = Time.time;
             dashDir = IsFacingRight ? 1 : -1;
+
+            SetInvisibleFrame();
 
             animator.SetTrigger(AnimationStrings.dashTrigger);
 
@@ -730,7 +747,7 @@ public class PlayerController : MonoBehaviour
         if (Time.time < lastDashTime + dashCooldown)
             return false;
 
-        return touchingDirections.IsGrounded || canAirDash;
+        return (touchingDirections.IsGrounded || canAirDash) && stat.CanConsume(dashStaminaCost);
     }
 
 
@@ -765,7 +782,8 @@ public class PlayerController : MonoBehaviour
         {
             if (context.performed)
             {
-                animator.SetTrigger(AnimationStrings.useItem);
+                if(stat.CanHeal())
+                    animator.SetTrigger(AnimationStrings.useItem);
             }
         }
         
@@ -1271,8 +1289,10 @@ public class PlayerController : MonoBehaviour
     public void LockCutScene()
     {
         CutSceneLock = true;
+        IsRunning = false;
         lockInput = true;
         rb.linearVelocityX = 0.0f;
+        IsMoving = false;
     }
 
     public void ReleaseLockCutScene()
@@ -1283,11 +1303,15 @@ public class PlayerController : MonoBehaviour
 
     public void LockDiaLog()
     {
+        IsMoving = false;
+        IsRunning = false;
         DialogLock = true;
         lockInput = true;
         rb.linearVelocityX = 0.0f;
         skipDialogButtonPress = false;
     }
+
+    
 
     public void ReleaseLockDialog()
     {

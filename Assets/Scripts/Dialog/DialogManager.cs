@@ -28,7 +28,14 @@ public class DialogManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if(Instance == null)
+        {
+            Instance = this;
+        }else
+        {
+            Destroy(gameObject);
+        }
+
         if (boxView != null) boxView.Close();
         if (bubbleView != null) bubbleView.Close();
     }
@@ -52,8 +59,7 @@ public class DialogManager : MonoBehaviour
             return;
         }
 
-        // Second press -> advance automatically
-        Debug.Log("Stop Here");
+
         if (currentNode == null)
             return;
         

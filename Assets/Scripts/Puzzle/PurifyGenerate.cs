@@ -263,13 +263,14 @@ public class PurifyGenerate : MonoBehaviour
     {
         cnt = 0;
         gen_code.Clear();
+        errorAnimation = false;
         for(int i = 0;  i< ob.Count; i++)
         {
             if (ob[i] != null)
                  Destroy(ob[i].gameObject);
         }
         ob.Clear();
-
+        
     }
 
     

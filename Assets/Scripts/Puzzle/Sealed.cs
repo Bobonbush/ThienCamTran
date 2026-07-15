@@ -10,15 +10,32 @@ public class Sealed : MonoBehaviour
     private List<SealedPuzzle> puzzles = new List<SealedPuzzle>();
 
 
+    private DialogInteractable interactable;
+
+    private void Awake()
+    {
+        interactable = GetComponentInChildren<DialogInteractable>();
+    }
 
     public bool isSealed()
     {
-        int cnt = 0;
         for (int i = 0; i < puzzles.Count; i++)
         {
-            cnt += (puzzles[i].Solved ? 0 : 1);
+
+            if (puzzles[i].Solved == false)
+            {
+                return true;
+            }
         }
 
-        return cnt > 0;
+        return false;
+    }
+
+    public void TriggerWarning()
+    {
+        if(interactable)
+        {
+            interactable.TriggerInteract();
+        }
     }
 }

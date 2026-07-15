@@ -186,6 +186,8 @@ public void Awake()
         Health -= damage;
         isInvincible = true;
 
+        
+
         animator.SetTrigger(AnimationStrings.hitTrigger);
         LockVelocity = true;
         damageableHit?.Invoke(damage, knockback);
