@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour
     float gravityScale = 0.0f;
 
     private bool isSaving = false;
+    private SaveZone activeSaveZone;
 
     private bool isPuzzleSolving = false;
 
@@ -1015,7 +1016,15 @@ public class PlayerController : MonoBehaviour
 
     public bool EnterSaving(Vector3 left, Vector3 right)
     {
+        return EnterSaving(left, right, null);
+    }
 
+    public bool EnterSaving(Vector3 left, Vector3 right, SaveZone saveZone)
+    {
+        if (isSaving)
+            return false;
+
+        activeSaveZone = saveZone;
         CanExitForcementState = false;
         isSaving = true;
         float distanceLeft = Mathf.Abs(left.x - transform.position.x);
@@ -1100,15 +1109,15 @@ public class PlayerController : MonoBehaviour
     {
         lockInput = false;
         saveLock = false;
-
-        // Turn off the UI here
-
+        SaveZone completedSaveZone = activeSaveZone;
+        activeSaveZone = null;
+        completedSaveZone?.OnSavingAnimationExited(this);
     }
 
     public void AnimationEnableSave()
     {
         CanExitForcementState = true;
-        // Implement the UI here.
+        activeSaveZone?.ShowMenu(this);
     }
 
     public void EnterPuzzle(Vector3 left, Vector3 right, SealedPuzzle puzzle)

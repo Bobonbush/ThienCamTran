@@ -68,7 +68,12 @@ namespace Game.UI
                 tabAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
                 tabAnimator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             }
+        }
 
+        private void Start()
+        {
+            // Animator.Update cannot be called safely from Awake because the
+            // Animator's native Awake may not have completed yet.
             ResetVisual();
         }
 

@@ -56,8 +56,10 @@ namespace Game.UI
 
         private int activeIndex = -1;
         private int lastSelectedIndex = -1;
+        private int requestedTabIndex = -1;
 
         private bool isTransitioning;
+        private bool initialized;
         private Coroutine transitionRoutine;
 
         private static readonly int OpenHash =
@@ -106,7 +108,11 @@ namespace Game.UI
             defaultTabIndex = GetValidDefaultIndex();
 
             HideAllPanels();
-            InitializeTabButtons();
+        }
+
+        private void Start()
+        {
+            EnsureInitialized();
         }
 
 #if UNITY_EDITOR
@@ -200,17 +206,48 @@ namespace Game.UI
             }
         }
 
+        private void EnsureInitialized()
+        {
+            if (initialized)
+                return;
+
+            initialized = true;
+            InitializeTabButtons();
+        }
+
         public void OpenOverlay()
         {
             if (IsOpen || isTransitioning)
                 return;
 
+            if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+            {
+                Debug.LogError("MenuOverlay cannot open while its controller is inactive.", this);
+                return;
+            }
+
+            EnsureInitialized();
+
             StopTransitionRoutine();
 
             Open();
-            Time.timeScale = 0f;
-
             transitionRoutine = StartCoroutine(OpenRoutine());
+            Time.timeScale = 0f;
+        }
+
+        public void OpenOverlayAtTab(string tabLabel)
+        {
+            requestedTabIndex = FindTabIndex(tabLabel);
+
+            if (IsOpen && !isTransitioning)
+            {
+                if (requestedTabIndex >= 0)
+                    SelectTab(requestedTabIndex);
+                requestedTabIndex = -1;
+                return;
+            }
+
+            OpenOverlay();
         }
 
         private IEnumerator OpenRoutine()
@@ -260,7 +297,10 @@ namespace Game.UI
                     tabButton.ShowResting();
             }
 
-            int tabToOpen = GetRestoredTabIndex();
+            int tabToOpen = requestedTabIndex >= 0
+                ? requestedTabIndex
+                : GetRestoredTabIndex();
+            requestedTabIndex = -1;
 
             if (tabToOpen >= 0)
                 SelectTabImmediate(tabToOpen);
@@ -497,6 +537,26 @@ namespace Game.UI
                    index < panels.Length;
         }
 
+        private int FindTabIndex(string tabLabel)
+        {
+            if (panels == null || string.IsNullOrWhiteSpace(tabLabel))
+                return -1;
+
+            for (int i = 0; i < panels.Length; i++)
+            {
+                if (panels[i] != null && string.Equals(
+                    panels[i].TabLabel,
+                    tabLabel,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return i;
+                }
+            }
+
+            Debug.LogWarning($"Menu tab '{tabLabel}' was not found.", this);
+            return -1;
+        }
+
         private void HideAllPanels()
         {
             if (panels == null)
@@ -606,6 +666,17 @@ namespace Game.UI
         {
             if (IsOpen)
                 Time.timeScale = 1f;
+        }
+
+        private void OnDisable()
+        {
+            if (!IsOpen && !isTransitioning)
+                return;
+
+            StopTransitionRoutine();
+            if (IsOpen)
+                Close();
+            Time.timeScale = 1f;
         }
     }
 }

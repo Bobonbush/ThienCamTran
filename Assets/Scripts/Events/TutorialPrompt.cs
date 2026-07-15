@@ -76,7 +76,23 @@ public class TutorialPrompt : MonoBehaviour
 
     private void StartAnimation(float targetState)
     {
-        if (activeAnimation != null) StopCoroutine(activeAnimation);
+        if (tmpText == null)
+            return;
+
+        if (activeAnimation != null)
+        {
+            StopCoroutine(activeAnimation);
+            activeAnimation = null;
+        }
+
+        // Disabling a trigger invokes OnTriggerExit2D after the GameObject may
+        // already be inactive. Coroutines cannot start in that state.
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+        {
+            SetTutorialState(targetState);
+            return;
+        }
+
         activeAnimation = StartCoroutine(AnimateTutorial(targetState));
     }
 
@@ -97,6 +113,21 @@ public class TutorialPrompt : MonoBehaviour
 
             yield return null;
         }
+
+        SetTutorialState(targetAlpha);
+        activeAnimation = null;
+    }
+
+    private void OnDisable()
+    {
+        if (activeAnimation != null)
+        {
+            StopCoroutine(activeAnimation);
+            activeAnimation = null;
+        }
+
+        if (tmpText != null)
+            SetTutorialState(0f);
     }
 
     private void SetTutorialState(float alpha)
