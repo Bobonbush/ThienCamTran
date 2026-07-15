@@ -147,7 +147,6 @@ public class SaveZone : MonoBehaviour, IInteractable
         PlayerStats stats = player.GetComponent<PlayerStats>();
         if (stats != null)
         {
-            stats.Tre = stats.MaxTre;
             stats.Mana = stats.MaxMana;
         }
 

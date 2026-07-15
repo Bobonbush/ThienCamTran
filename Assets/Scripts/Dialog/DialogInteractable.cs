@@ -75,6 +75,13 @@ public class DialogInteractable : MonoBehaviour
             DialogManager.Instance != null &&
             !DialogManager.Instance.IsActive;
 
+        if (promptObject != null && promptObject.activeSelf != canInteract && !OutSideTrigger)
+            if (promptObject != null &&
+                promptObject.activeSelf != canInteract)
+            {
+                promptObject.SetActive(canInteract);
+            }
+
         if (canInteract &&
             Keyboard.current != null &&
             Keyboard.current.eKey.wasPressedThisFrame)

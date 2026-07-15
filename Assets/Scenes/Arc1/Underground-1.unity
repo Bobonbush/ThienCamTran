@@ -2994,10 +2994,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0be9285d68f304b9efaea78a485314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TreUI
-  fullTreSprite: {fileID: 139214533, guid: d4daf021bf4fe004b971103ffb74cca3, type: 3}
-  usedTreSprite: {fileID: 21300000, guid: 18b7b8f9e1064a94e88983dd83874f85, type: 3}
-  TrePrefab: {fileID: 4830744373390256070, guid: 792b4766288e0cb4994b773654bf13df, type: 3}
-  playerStat: {fileID: 1469067603}
 --- !u!114 &785279464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5306,7 +5302,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 25b3ac5dd7b542d4c8c9c4a8f4fbbad0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 34.4375, y: 34.4375}
