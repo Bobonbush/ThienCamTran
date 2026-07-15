@@ -160,6 +160,11 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
     private void FixedUpdate()
     {
+        // Imp đứng đất là stationalEnemy nên không qua EnemyMove.Linger —
+        // phải tự hãm trượt ngang sau knockback (giống nhánh dừng của Linger)
+        if (!hovering && damageable.IsAlive && !damageable.LockVelocity)
+            rb.linearVelocityX = Mathf.Lerp(rb.linearVelocityX, 0f, 0.15f);
+
         if (!hovering || !damageable.IsAlive)
             return;
 
