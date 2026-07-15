@@ -1,0 +1,652 @@
+fileFormatVersion: 2
+guid: bef95c7511b1cef4da239484884881cf
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 900000001
+    second: Idle_0
+  - first:
+      213: 900000002
+    second: Idle_1
+  - first:
+      213: 900000003
+    second: Idle_2
+  - first:
+      213: 900000004
+    second: Idle_3
+  - first:
+      213: 900000005
+    second: Idle_4
+  - first:
+      213: 900000006
+    second: Hurt_0
+  - first:
+      213: 900000007
+    second: Run_0
+  - first:
+      213: 900000008
+    second: Run_1
+  - first:
+      213: 900000009
+    second: Run_2
+  - first:
+      213: 900000010
+    second: Run_3
+  - first:
+      213: 900000011
+    second: Run_4
+  - first:
+      213: 900000012
+    second: Run_5
+  - first:
+      213: 900000013
+    second: Vanish_0
+  - first:
+      213: 900000014
+    second: Vanish_1
+  - first:
+      213: 900000015
+    second: Vanish_2
+  - first:
+      213: 900000016
+    second: Appear_0
+  - first:
+      213: 900000017
+    second: Appear_1
+  - first:
+      213: 900000018
+    second: Appear_2
+  - first:
+      213: 900000019
+    second: Attack_0
+  - first:
+      213: 900000020
+    second: Attack_1
+  - first:
+      213: 900000021
+    second: Attack_2
+  - first:
+      213: 900000022
+    second: Attack_3
+  - first:
+      213: 900000023
+    second: Attack_4
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 218
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 380c170e575cf73419befdb5726dbcd4
+      internalID: 1263006168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_1
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 218
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af7a609c283fa82489478a2a924f5322
+      internalID: 1647392481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_2
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 218
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f4ef36545a41d64ea65a7986fdfafc8
+      internalID: -885176644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_3
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 218
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e5cea81293c5eb479646e93c9fc44db
+      internalID: 1990630493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_4
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 218
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9f6448a5221dd141bcd0095f7a516aa
+      internalID: 290424845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e8ebe021e391bb489acde8e856f3997
+      internalID: -899079904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_7
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36353178c090b6a4cba1b46b3f387eb9
+      internalID: -1449992476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_8
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c681c9008f1c1f14fbefd2d9b4fdccc6
+      internalID: 1938297412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_9
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ac92dc9baf9616429c60933cef50ab4
+      internalID: -203265798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_10
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 261ac70cab53ec548a1b2f643e87d8ae
+      internalID: 1127332907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_11
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 146
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb113af924b23e24c85d4bd7c41c6e23
+      internalID: -712580303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 74
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 825eb71f362395c45a05f28e66f71074
+      internalID: -190568540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_13
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 74
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c56673fc3636868459b5ad2126917e2a
+      internalID: 23229180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_14
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 74
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c48df4f89d3a4834c925ab9006d463a9
+      internalID: 15875673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_15
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 74
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02a2c6812956e904da3ecf351142c229
+      internalID: -519102358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_16
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 74
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec62152892f2319438608297ad038bbe
+      internalID: -1817493174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_17
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 74
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 428bfd910a25df54d8ce93ea84315beb
+      internalID: -1441189475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5922d6a56933b8e4d86a44b48292ce29
+      internalID: 40431094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_19
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 8
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a79cb1bb3a3b534d84029caee6ba114
+      internalID: 88722289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemies-Bak_Assassin_20
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 8
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dca0f18ea84f7c4fa585ea9b76fe333
+      internalID: -1151346525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: c385e8c4af51f1b4a898c396df47d75e
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":2.0,"y":8.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Enemies-Bak_Assassin_0: 1263006168
+      Enemies-Bak_Assassin_1: 1647392481
+      Enemies-Bak_Assassin_10: 1127332907
+      Enemies-Bak_Assassin_11: -712580303
+      Enemies-Bak_Assassin_12: -190568540
+      Enemies-Bak_Assassin_13: 23229180
+      Enemies-Bak_Assassin_14: 15875673
+      Enemies-Bak_Assassin_15: -519102358
+      Enemies-Bak_Assassin_16: -1817493174
+      Enemies-Bak_Assassin_17: -1441189475
+      Enemies-Bak_Assassin_18: 40431094
+      Enemies-Bak_Assassin_19: 88722289
+      Enemies-Bak_Assassin_2: -885176644
+      Enemies-Bak_Assassin_20: -1151346525
+      Enemies-Bak_Assassin_21: -178504689
+      Enemies-Bak_Assassin_22: 1974308876
+      Enemies-Bak_Assassin_23: -193669582
+      Enemies-Bak_Assassin_3: 1990630493
+      Enemies-Bak_Assassin_4: 290424845
+      Enemies-Bak_Assassin_5: 1860613368
+      Enemies-Bak_Assassin_6: -899079904
+      Enemies-Bak_Assassin_7: -1449992476
+      Enemies-Bak_Assassin_8: 1938297412
+      Enemies-Bak_Assassin_9: -203265798
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

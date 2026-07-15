@@ -26,6 +26,8 @@ internal class AnimationStrings
     internal static string blockHitTrigger = "blockHit";
     internal static string hasStaff = "hasStaff";
     internal static string catchProjectileTrigger = "catchProjectile";
+    internal static string vanishTrigger = "vanish";
+    internal static string appearTrigger = "appear";
     internal static string dashTrigger = "dash";
     internal static string isDashing = "isDashing";
     internal static string MoveImplitude = "MoveImplitude";
