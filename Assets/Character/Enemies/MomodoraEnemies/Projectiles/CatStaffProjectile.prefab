@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CatStaffProjectile
   damage: 12
-  knockback: {x: 3, y: 2}
+  knockback: {x: 5, y: 2}
   damagesPlayerOnly: 1
   outwardDistance: 5.5
   returnSpeed: 14

@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileTrajectory
   damage: 15
-  knockback: {x: 3, y: 2}
+  knockback: {x: 7, y: 3}
   damagesPlayerOnly: 1
   impactOnGround: 1
   impactClips:
