@@ -450,6 +450,8 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.5
+  minKnockbackLockTime: 0.25
+  knockbackResistance: 0.237
 --- !u!114 &7976450959491248197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,7 +627,6 @@ MonoBehaviour:
   attackRange: 1.9
   knockback: {x: 0.7, y: 0.5}
   lockFacingDuringAttack: 0
-  knockbackResistance: 0.237
   hyperArmorWhileAttacking: 1
   useAnimationHitbox: 1
   animationAttackHitbox: {fileID: 8811223344556603}

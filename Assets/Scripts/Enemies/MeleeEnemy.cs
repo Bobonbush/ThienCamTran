@@ -171,7 +171,8 @@ public class MeleeEnemy : MonoBehaviour
 
     public void OnHit(int damage, Vector2 knockback)
     {
-        rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+        // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
+        rb.linearVelocity = new Vector2(knockback.x, Mathf.Max(rb.linearVelocity.y, knockback.y));
 
         Vector2 dirHit = Vector2.Normalize(rb.linearVelocity);
 

@@ -12,9 +12,7 @@ public class PlantMeleeEnemy : MonoBehaviour
     public bool lockFacingDuringAttack;
 
     [Header("Knockback Resistance")]
-    [Tooltip("0 = bị đánh bật như cũ, 1 = trụ hoàn toàn khi trúng đòn.")]
-    [Range(0f, 1f)] public float knockbackResistance = 0f;
-    [Tooltip("Đang vung đòn thì không bị đẩy lùi, giữ nguyên nhịp đánh.")]
+    [Tooltip("Đang vung đòn thì không bị đẩy lùi, giữ nguyên nhịp đánh. Kháng knockback thường xuyên chỉnh ở Damageable.knockbackResistance (poise).")]
     public bool hyperArmorWhileAttacking = true;
 
     [Header("Animation Hitbox")]
@@ -258,19 +256,17 @@ public class PlantMeleeEnemy : MonoBehaviour
     {
         // Armor chỉ trong frame đòn đang chém thật (hitbox bật) —
         // windup/recovery vẫn ăn knockback để người chơi trade đòn được
+        // (kháng knockback thường xuyên đã trừ sẵn trong Damageable)
         bool strikeActive = useAnimationHitbox && animationAttackHitbox != null
             ? animationAttackHitbox.enabled
             : IsAttacking;
 
-        float shoveScale = hyperArmorWhileAttacking && strikeActive
-            ? 0f
-            : 1f - knockbackResistance;
-
-        if (shoveScale > 0f)
+        if (!(hyperArmorWhileAttacking && strikeActive))
         {
+            // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
             rb.linearVelocity = new Vector2(
-                hitKnockback.x * shoveScale,
-                rb.linearVelocity.y + hitKnockback.y * shoveScale);
+                hitKnockback.x,
+                Mathf.Max(rb.linearVelocity.y, hitKnockback.y));
         }
         else
         {

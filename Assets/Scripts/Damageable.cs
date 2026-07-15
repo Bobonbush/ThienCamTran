@@ -69,6 +69,10 @@ public class Damageable : MonoBehaviour
     public float minKnockbackLockTime = 0.25f;
     private float velocityLockUntil;
 
+    [Header("Poise")]
+    [Tooltip("Gan lì: 0 = bật đầy đủ theo lực đánh, 1 = đứng trơ không xê dịch")]
+    [Range(0f, 1f)] public float knockbackResistance = 0f;
+
     private float timeInvisibleFrame = 1.0f;
     private float maxTimeInvisibleFrame = 0.0f;
 
@@ -188,6 +192,10 @@ public bool Hit(int damage, Vector2 knockback)
 
         Health -= damage;
         isInvincible = true;
+
+        // Poise: giảm lực knockback ngay tại nguồn, mọi listener nhận giá trị đã trừ kháng
+        if (knockbackResistance > 0f)
+            knockback *= 1f - knockbackResistance;
 
         animator.SetTrigger(AnimationStrings.hitTrigger);
         LockVelocity = true;

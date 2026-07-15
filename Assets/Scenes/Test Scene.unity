@@ -10246,14 +10246,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8511591593991291973, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: knockback.x
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8511591593991291973, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: knockback.y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8511591593991291973, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: attackDamage
       value: 30
       objectReference: {fileID: 0}
