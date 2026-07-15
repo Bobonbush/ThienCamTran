@@ -40,8 +40,8 @@ public class CatStaffProjectile : MonoBehaviour
         owner = projectileOwner;
         launchPosition = transform.position;
 
-        Vector2 horizontalDirection = direction.x >= 0f ? Vector2.right : Vector2.left;
-        rb.linearVelocity = horizontalDirection * speed;
+        // Bay đúng hướng ngắm (chủ nhân đã nhắm thẳng đầu player), không ép ngang nữa
+        rb.linearVelocity = direction.normalized * speed;
     }
 
     private void FixedUpdate()
