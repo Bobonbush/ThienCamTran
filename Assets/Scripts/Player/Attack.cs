@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
+    // Hệ số quy đổi knockback toàn cục: nhập số nhỏ trong Inspector,
+    // lực thật = (x * 6, y * 3). Đổi 2 hằng này là đổi cảm giác knockback cả game.
+    public const float knockbackScaleX = 6f;
+    public const float knockbackScaleY = 3f;
+
     public int attackDamage = 10;
     public Vector2 knockback = Vector2.zero;
 
@@ -13,10 +18,14 @@ private void OnTriggerEnter2D(Collider2D collision)
         Damageable damageable = collision.GetComponent<Damageable>();
         if (damageable == null)
             return;
-        
-        Vector2 deliveredKnockback = transform.parent.localScale.x > 0
-            ? knockback
-            : new Vector2(-knockback.x, knockback.y);
+
+        // Đẩy mục tiêu ra xa người đánh theo vị trí tương đối,
+        // không dựa vào localScale vì mỗi sprite sheet quay mặt một hướng khác nhau
+        Vector2 attackerPosition = transform.parent != null ? transform.parent.position : transform.position;
+        float pushDirection = collision.bounds.center.x >= attackerPosition.x ? 1f : -1f;
+        Vector2 deliveredKnockback = new Vector2(
+            Mathf.Abs(knockback.x) * knockbackScaleX * pushDirection,
+            knockback.y * knockbackScaleY);
 
         bool handled = damageable.Hit(
             attackDamage,

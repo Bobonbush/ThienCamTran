@@ -146,7 +146,8 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
     private void FixedUpdate()
     {
-        if (!hovering || !damageable.IsAlive)
+        // LockVelocity: đang dính knockback thì không lái hover đè lên cú bật
+        if (!hovering || !damageable.IsAlive || damageable.LockVelocity)
             return;
 
         float angle = (Time.fixedTime + hoverPhase) * hoverFrequency * Mathf.PI * 2f;
@@ -378,6 +379,10 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     public void OnHit(int damage, Vector2 knockback)
     {
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+
+        // Bị đánh lén: quay về phía kẻ đánh (knockback đẩy ra xa kẻ đánh)
+        if (faceTarget && Mathf.Abs(knockback.x) > 0.01f)
+            FaceTarget(transform.position + new Vector3(-Mathf.Sign(knockback.x), 0f, 0f));
 
         if (enemyMove != null)
         {
