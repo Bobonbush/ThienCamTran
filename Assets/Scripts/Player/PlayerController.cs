@@ -542,6 +542,10 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         // TODO Check if alive as well
+        if(context.started && CutSceneLock == true)
+        {
+            skipDialogButtonPress = true;
+        }
         if (lockInput) return;
 
         if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
@@ -693,8 +697,19 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
+        if (CutSceneLock == true && lockInput == true)
+        {
+            skipDialogButtonPress = true;
+        }
+
+        if(lockInput)
+        {
+            return;
+        }
+
         if (context.started || context.performed)
         {
+            
             InteractWithNearest();
         }
     }

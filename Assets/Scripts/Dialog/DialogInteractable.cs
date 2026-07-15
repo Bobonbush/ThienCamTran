@@ -75,12 +75,6 @@ public class DialogInteractable : MonoBehaviour
             DialogManager.Instance != null &&
             !DialogManager.Instance.IsActive;
 
-        if (promptObject != null &&
-            promptObject.activeSelf != canInteract)
-        {
-            promptObject.SetActive(canInteract);
-        }
-
         if (canInteract &&
             Keyboard.current != null &&
             Keyboard.current.eKey.wasPressedThisFrame)
@@ -119,6 +113,9 @@ public class DialogInteractable : MonoBehaviour
             currentDialogIndex++;
         }
 
+        if (triggerOnce) {
+            this.enabled = false;
+        }
         // If already at the last dialogue,
         // stay there forever and replay it.
     }

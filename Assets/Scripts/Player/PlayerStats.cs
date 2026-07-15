@@ -10,6 +10,9 @@ public class PlayerStats : MonoBehaviour
     SkillSlotUI skillSlot;
 
 
+   
+
+
     private int _Mana = 0;
     private int _MaxMana = 100;
 
