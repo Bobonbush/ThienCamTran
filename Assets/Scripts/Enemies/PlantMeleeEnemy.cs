@@ -8,8 +8,12 @@ public class PlantMeleeEnemy : MonoBehaviour
     [Header("Attack")]
     public int attackDamage = 8;
     public float attackRange = 1.75f;
-    public Vector2 knockback = new Vector2(5f, 2f);
+    public Vector2 knockback = new Vector2(0.8f, 0.7f);
     public bool lockFacingDuringAttack;
+
+    [Header("Knockback Resistance")]
+    [Tooltip("Đang vung đòn thì không bị đẩy lùi, giữ nguyên nhịp đánh. Kháng knockback thường xuyên chỉnh ở Damageable.knockbackResistance (poise).")]
+    public bool hyperArmorWhileAttacking = true;
 
     [Header("Animation Hitbox")]
     [Tooltip("Dame đến từ hitbox keyframe trong clip (kiểu Knight/SwordAttack) thay vì event AttackImpact.")]
@@ -87,6 +91,9 @@ public class PlantMeleeEnemy : MonoBehaviour
         bool hasTarget = HasTarget;
         bool isAttacking = IsAttacking;
 
+        // Đang dính knockback (hurt window): không đè velocity, để cú bật diễn ra
+        bool velocityLocked = damageable.LockVelocity;
+
         if (enemyMove != null)
         {
             enemyMove.shouldMove = !hasTarget && !isAttacking;
@@ -95,7 +102,8 @@ public class PlantMeleeEnemy : MonoBehaviour
 
         if (isAttacking)
         {
-            rb.linearVelocityX = 0f;
+            if (!velocityLocked)
+                rb.linearVelocityX = 0f;
 
             if (lockFacingDuringAttack)
                 MaintainAttackFacing();
@@ -107,7 +115,8 @@ public class PlantMeleeEnemy : MonoBehaviour
         if (!isAttacking || !lockFacingDuringAttack)
             FaceTarget(currentTarget.transform.position);
 
-        rb.linearVelocityX = 0f;
+        if (!velocityLocked)
+            rb.linearVelocityX = 0f;
     }
 
     // Animation Event ở frame đầu clip attack: sfx vung + khoá hướng đánh
@@ -154,9 +163,10 @@ public class PlantMeleeEnemy : MonoBehaviour
         if (targetDamageable == null)
             return;
 
-        Vector2 deliveredKnockback = facingSign >= 0f
-            ? knockback
-            : new Vector2(-knockback.x, knockback.y);
+        // Cùng hệ quy đổi với Attack.cs: số nhỏ trong Inspector, lực thật = (x*6, y*3)
+        Vector2 deliveredKnockback = new Vector2(
+            Mathf.Abs(knockback.x) * Attack.knockbackScaleX * facingSign,
+            knockback.y * Attack.knockbackScaleY);
 
         targetDamageable.Hit(attackDamage, deliveredKnockback, transform.position);
     }
@@ -244,7 +254,30 @@ public class PlantMeleeEnemy : MonoBehaviour
 
     public void OnHit(int damage, Vector2 hitKnockback)
     {
-        rb.linearVelocity = new Vector2(hitKnockback.x, rb.linearVelocity.y + hitKnockback.y);
+        // Armor chỉ trong frame đòn đang chém thật (hitbox bật) —
+        // windup/recovery vẫn ăn knockback để người chơi trade đòn được
+        // (kháng knockback thường xuyên đã trừ sẵn trong Damageable)
+        bool strikeActive = useAnimationHitbox && animationAttackHitbox != null
+            ? animationAttackHitbox.enabled
+            : IsAttacking;
+
+        if (!(hyperArmorWhileAttacking && strikeActive))
+        {
+            // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
+            rb.linearVelocity = new Vector2(
+                hitKnockback.x,
+                Mathf.Max(rb.linearVelocity.y, hitKnockback.y));
+        }
+        else
+        {
+            // Trụ lại chịu đòn: chặn cả đà trượt ngang đang có
+            rb.linearVelocityX = 0f;
+        }
+
+        // Bị đánh lén ngoài vùng phát hiện: quay mặt về phía kẻ đánh
+        // (knockback đẩy ra xa kẻ đánh nên kẻ đánh ở phía ngược lại)
+        if (!strikeActive && Mathf.Abs(hitKnockback.x) > 0.01f)
+            FaceTarget(transform.position + new Vector3(-Mathf.Sign(hitKnockback.x), 0f, 0f));
 
         if (enemyMove != null)
         {

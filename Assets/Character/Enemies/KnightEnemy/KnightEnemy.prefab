@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   attackDamage: 10
-  knockback: {x: 5, y: 2}
+  knockback: {x: 0.8, y: 0.7}
 --- !u!1 &3812250474075147849
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +388,7 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.25
+  knockbackResistance: 0.3
 --- !u!114 &8036775491050591284
 MonoBehaviour:
   m_ObjectHideFlags: 0

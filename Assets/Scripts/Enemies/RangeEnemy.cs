@@ -53,6 +53,16 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     [Range(15f, 85f)] public float throwAngle = 55f;
     [Min(1f)] public float maxThrowSpeed = 16f;
 
+    [Header("Staff Aim")]
+    [Tooltip("Ném thẳng vào đầu player thay vì ném ngang (giống Mushroom.targetHeadOffset)")]
+    public Vector2 targetHeadOffset = new Vector2(0f, 0.5f);
+
+    [Header("Teleport")]
+    [Tooltip("Các vị trí dịch chuyển lần lượt khi đang giao chiến; để trống = đứng yên như cũ")]
+    public Transform[] teleportPoints;
+    [Tooltip("Bao lâu thì dịch chuyển sang vị trí kế tiếp")]
+    [Min(0.5f)] public float teleportInterval = 4f;
+
     [Header("Hover")]
     public bool hovering;
     [Min(0f)] public float hoverAmplitude = 0.25f;
@@ -73,6 +83,9 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
     float hoverCenterX;
     float hoverCenterY;
     float hoverPhase;
+    int teleportIndex;
+    float teleportTimer;
+    float hoverKnockbackUntil;
 
     public bool IsShielding
     {
@@ -127,6 +140,7 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         if (enemyType == EnemyType.Staff)
             animator.SetBool(AnimationStrings.hasStaff, true);
         lastFacingSign = Mathf.Sign(transform.localScale.x);
+        teleportTimer = teleportInterval;
 
         if (hovering)
         {
@@ -146,8 +160,23 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
     private void FixedUpdate()
     {
+        // Imp đứng đất là stationalEnemy nên không qua EnemyMove.Linger —
+        // phải tự hãm trượt ngang sau knockback (giống nhánh dừng của Linger)
+        if (!hovering && damageable.IsAlive && !damageable.LockVelocity)
+            rb.linearVelocityX = Mathf.Lerp(rb.linearVelocityX, 0f, 0.15f);
+
         if (!hovering || !damageable.IsAlive)
             return;
+
+        // Đang dính knockback: không lái hover đè lên cú bật, nhưng phải hãm dần —
+        // gravity = 0 nên không có gì khác cản, thả trôi là bay vô hạn khi bị đánh liên tục.
+        // Gate bằng timer thay vì lockVelocity: bool animator có thể kẹt true khi 2 hit
+        // dính sát nhau làm hover chết luôn, còn timer thì luôn hết hạn
+        if (Time.time < hoverKnockbackUntil)
+        {
+            rb.linearVelocity *= 0.92f;
+            return;
+        }
 
         float angle = (Time.fixedTime + hoverPhase) * hoverFrequency * Mathf.PI * 2f;
         float targetY = hoverCenterY + Mathf.Sin(angle) * hoverAmplitude;
@@ -194,10 +223,43 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
         if (faceTarget)
             FaceTarget(currentTarget.transform.position);
 
+        // Đang giao chiến thì vài giây dịch chuyển sang vị trí kế tiếp trong danh sách
+        if (teleportPoints != null && teleportPoints.Length > 0)
+        {
+            teleportTimer -= Time.deltaTime;
+            if (teleportTimer <= 0f)
+            {
+                teleportTimer = teleportInterval;
+                TeleportToNextPoint();
+            }
+        }
+
         // Knife/Bomb/Staff: animator tự tấn công qua điều kiện hasTarget + attackCooldown (+ hasStaff).
         // Shield cần trình tự giơ khiên -> ném nên vẫn chạy coroutine.
         if (enemyType == EnemyType.Shield && combatRoutine == null)
             combatRoutine = StartCoroutine(CombatLoop());
+    }
+
+    private void TeleportToNextPoint()
+    {
+        Transform point = teleportPoints[teleportIndex % teleportPoints.Length];
+        teleportIndex++;
+        if (point == null)
+            return;
+
+        // Teleport qua transform để vị trí cập nhật ngay cho FaceTarget (rb.position trễ 1 physics step)
+        transform.position = point.position;
+        Physics2D.SyncTransforms();
+
+        // Hover phải dời tâm theo, không nó bị lò xo kéo ngược về chỗ cũ
+        if (hovering)
+        {
+            hoverCenterX = point.position.x;
+            hoverCenterY = point.position.y;
+        }
+
+        if (currentTarget != null)
+            FaceTarget(currentTarget.transform.position);
     }
 
     private IEnumerator CombatLoop()
@@ -248,9 +310,14 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
             CatStaffProjectile staffProjectile = projectile.GetComponent<CatStaffProjectile>();
             if (staffProjectile != null)
             {
+                // Ném thẳng vào đầu player (giống Mushroom.GetAimDirection)
+                Vector2 aimDirection = direction;
+                if (currentTarget != null)
+                    aimDirection = ((Vector2)currentTarget.bounds.center + targetHeadOffset - LaunchPosition).normalized;
+
                 hasStaff = false;
                 animator.SetBool(AnimationStrings.hasStaff, false);
-                staffProjectile.Launch(this, direction, straightProjectileSpeed);
+                staffProjectile.Launch(this, aimDirection, straightProjectileSpeed);
                 return;
             }
         }
@@ -377,7 +444,13 @@ public class RangeEnemy : MonoBehaviour, IDirectionalDamageBlocker
 
     public void OnHit(int damage, Vector2 knockback)
     {
-        rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+        // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
+        rb.linearVelocity = new Vector2(knockback.x, Mathf.Max(rb.linearVelocity.y, knockback.y));
+        hoverKnockbackUntil = Time.time + 0.35f;
+
+        // Bị đánh lén: quay về phía kẻ đánh (knockback đẩy ra xa kẻ đánh)
+        if (faceTarget && Mathf.Abs(knockback.x) > 0.01f)
+            FaceTarget(transform.position + new Vector3(-Mathf.Sign(knockback.x), 0f, 0f));
 
         if (enemyMove != null)
         {

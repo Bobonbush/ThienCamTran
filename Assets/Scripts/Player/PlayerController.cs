@@ -352,8 +352,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [Tooltip("Tốc độ suy giảm lực đẩy ngang khi trúng đòn (unit/s^2)")]
+    public float hurtKnockbackDecay = 40f;
+    private float hurtVelocityX;
+
     private void FixedUpdate()
     {
+        // Tái áp knockback X mỗi physics frame trong hurt window —
+        // nếu chỉ gán 1 lần trong OnHit thì trục X bị triệt tiêu ngay frame sau
+        if (damageable.LockVelocity && Mathf.Abs(hurtVelocityX) > 0.01f)
+        {
+            rb.linearVelocityX = hurtVelocityX;
+            hurtVelocityX = Mathf.MoveTowards(hurtVelocityX, 0f, hurtKnockbackDecay * Time.fixedDeltaTime);
+        }
+        else if (!damageable.LockVelocity)
+        {
+            hurtVelocityX = 0f;
+        }
 
         if (isAttacking)
         {
@@ -788,9 +803,14 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         Climbing = false;
         StopCombo = true;
-        
+
+        // Đòn attack đang chờ trong queue sẽ kéo animator ra khỏi player_hit
+        // ngay lập tức làm mất knockback — huỷ nó khi trúng đòn
+        animator.ResetTrigger(AnimationStrings.attackTrigger);
+
         rb.gravityScale = gravityScale;
         rb.linearVelocity = new Vector2(knockback.x, rb.linearVelocity.y + knockback.y);
+        hurtVelocityX = knockback.x;
     }
     
 

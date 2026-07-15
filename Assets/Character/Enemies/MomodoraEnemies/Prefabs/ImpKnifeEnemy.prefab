@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 5702959270526437600}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9, y: 1.15, z: 0}
+  m_LocalPosition: {x: 0.9, y: 0.747, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -239,6 +239,8 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.5
+  minKnockbackLockTime: 0.25
+  knockbackResistance: 0.5
 --- !u!114 &5121399276468000291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +272,9 @@ MonoBehaviour:
   aimBombAtTarget: 1
   throwAngle: 55
   maxThrowSpeed: 16
+  targetHeadOffset: {x: 0, y: 0.5}
+  teleportPoints: []
+  teleportInterval: 4
   hovering: 0
   hoverAmplitude: 0.25
   hoverFrequency: 1.2

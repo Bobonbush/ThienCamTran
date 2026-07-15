@@ -65,6 +65,14 @@ public class Damageable : MonoBehaviour
     private float timeSinceHit = 0;
     public float invicibilityTimer = 0.5f;
 
+    [Tooltip("Thời gian tối thiểu knockback được giữ sau khi trúng đòn, kể cả khi animator rời state hit sớm (vd đang mash attack)")]
+    public float minKnockbackLockTime = 0.25f;
+    private float velocityLockUntil;
+
+    [Header("Poise")]
+    [Tooltip("Gan lì: 0 = bật đầy đủ theo lực đánh, 1 = đứng trơ không xê dịch")]
+    [Range(0f, 1f)] public float knockbackResistance = 0f;
+
     private float timeInvisibleFrame = 1.0f;
     private float maxTimeInvisibleFrame = 0.0f;
 
@@ -85,11 +93,15 @@ public class Damageable : MonoBehaviour
     {
         get
         {
-            return animator.GetBool(AnimationStrings.lockVelocity);
+            // Animator giữ khoá theo state hit; timer đảm bảo knockback sống tối thiểu
+            // minKnockbackLockTime kể cả khi state hit bị trigger khác cắt sớm
+            return animator.GetBool(AnimationStrings.lockVelocity) || Time.time < velocityLockUntil;
         }
         private set
         {
             animator.SetBool(AnimationStrings.lockVelocity, value);
+            if (value)
+                velocityLockUntil = Time.time + minKnockbackLockTime;
         }
     }
 
@@ -186,7 +198,9 @@ public void Awake()
         Health -= damage;
         isInvincible = true;
 
-        
+        // Poise: giảm lực knockback ngay tại nguồn, mọi listener nhận giá trị đã trừ kháng
+        if (knockbackResistance > 0f)
+            knockback *= 1f - knockbackResistance;
 
         animator.SetTrigger(AnimationStrings.hitTrigger);
         LockVelocity = true;
