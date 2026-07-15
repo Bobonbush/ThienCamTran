@@ -625,6 +625,8 @@ MonoBehaviour:
   attackRange: 1.9
   knockback: {x: 4, y: 1.5}
   lockFacingDuringAttack: 0
+  knockbackResistance: 0.7
+  hyperArmorWhileAttacking: 1
   useAnimationHitbox: 1
   animationAttackHitbox: {fileID: 8811223344556603}
   sightBlockerMask:

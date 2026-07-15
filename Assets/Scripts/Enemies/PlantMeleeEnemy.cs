@@ -11,6 +11,12 @@ public class PlantMeleeEnemy : MonoBehaviour
     public Vector2 knockback = new Vector2(5f, 2f);
     public bool lockFacingDuringAttack;
 
+    [Header("Knockback Resistance")]
+    [Tooltip("0 = bị đánh bật như cũ, 1 = trụ hoàn toàn khi trúng đòn.")]
+    [Range(0f, 1f)] public float knockbackResistance = 0f;
+    [Tooltip("Đang vung đòn thì không bị đẩy lùi, giữ nguyên nhịp đánh.")]
+    public bool hyperArmorWhileAttacking = true;
+
     [Header("Animation Hitbox")]
     [Tooltip("Dame đến từ hitbox keyframe trong clip (kiểu Knight/SwordAttack) thay vì event AttackImpact.")]
     public bool useAnimationHitbox;
@@ -244,7 +250,21 @@ public class PlantMeleeEnemy : MonoBehaviour
 
     public void OnHit(int damage, Vector2 hitKnockback)
     {
-        rb.linearVelocity = new Vector2(hitKnockback.x, rb.linearVelocity.y + hitKnockback.y);
+        float shoveScale = hyperArmorWhileAttacking && IsAttacking
+            ? 0f
+            : 1f - knockbackResistance;
+
+        if (shoveScale > 0f)
+        {
+            rb.linearVelocity = new Vector2(
+                hitKnockback.x * shoveScale,
+                rb.linearVelocity.y + hitKnockback.y * shoveScale);
+        }
+        else
+        {
+            // Trụ lại chịu đòn: chặn cả đà trượt ngang đang có
+            rb.linearVelocityX = 0f;
+        }
 
         if (enemyMove != null)
         {
