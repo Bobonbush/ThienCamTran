@@ -14,7 +14,19 @@ public class CutSceneInfo : ScriptableObject
         public float delaybeforeMove = 0.0f;
         public float moveDuration = 1.0f;  // move time
         public float stayDuration = 1.0f; // stay time till the next move
+
+        public enum Effect
+        {
+            None,
+            Shake,
+            EarthWake,
+            Zoom
+        }
+
+        public Effect effect;
+        public float lensImplitude = 0.0f;
     };
+
 
     [System.Serializable]
     public class PlayerForceData

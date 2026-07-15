@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d0b0481880beb49bd60646c38a5d1b, type: 3}
+  m_Name: 2
+  m_EditorClassIdentifier: Assembly-CSharp::DialogNode
+  speakerName: 
+  text: "Ta l\xE0 th\xE1m t\u1EED c\u1EE7a tri\u1EC1u \u0111\xECnh \u0111\u1EBFn
+    \u0111\xE2y \u0111i\u1EC1u tra v\u1EC1 s\u1EF1 ki\u1EC7n trong th\xE0nh V\u1EC7
+    An. Kh\xE1 ch\u1EAFc ng\u01B0\u01A1i c\u0169ng \u0111\u1EBFn \u0111\xE2y theo
+    l\u1EC7nh chi\u1EBFu."
+  choices:
+  - choiceText: Next
+    nextNode: {fileID: 11400000, guid: f9e745097becc254882d1adeca9b5c72, type: 2}

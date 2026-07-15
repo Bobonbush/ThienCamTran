@@ -577,6 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogManager
   boxView: {fileID: 2123677212}
   bubbleView: {fileID: 1864989180}
+  controller: {fileID: 0}
 --- !u!4 &523728222
 Transform:
   m_ObjectHideFlags: 0

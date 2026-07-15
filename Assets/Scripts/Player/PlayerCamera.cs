@@ -1,12 +1,14 @@
-using Unity.Cinemachine;
-using UnityEngine;
 using System.Collections;
+using Unity.Cinemachine;
+using Unity.Mathematics;
+using UnityEngine;
 public class PlayerCamera : MonoBehaviour
 {
     [Header("Target Setup")]
     [SerializeField] private Transform cameraTarget; // Drag 'CameraFollowTarget' here
     [SerializeField] private PlayerController player;
 
+    [SerializeField] private CinemachineCamera cmCamera;
     [SerializeField] private CinemachineConfiner2D confiner;
     [SerializeField] private Collider2D globalBoundary; // Assign your world map boundary here
 
@@ -15,12 +17,26 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float activationDelay = 0.15f;   // How long you must hold the button
     [SerializeField] private float shiftSpeed = 8f;         // How fast the target moves
 
+
+    [Header("Fall Camera")]
+    [SerializeField] private float fallVelocityThreshold = -12f;
+    [SerializeField] private float fallOffset = -3f;
+    [SerializeField] private float fallOffsetSpeed = 5f;
     [SerializeField] private float offsetTransitionSpeed = 3f;
+
+
+    [Header("Default Hurt Shake")]
+    [SerializeField] private float amplitude = 2f;
+    [SerializeField] private float frequency = 8f;
+    [SerializeField] private float duration = 0.15f;
+
+
+    private float currentFallOffset = 0f;
 
     private Vector3 currentOffsetLocalPosition = Vector3.zero;
 
 
-
+    private CinemachineImpulseSource impulseSource;
 
     private float timer = 0f;
     private Vector3 defaultLocalPosition;
@@ -30,8 +46,13 @@ public class PlayerCamera : MonoBehaviour
 
     public bool CutSceneLock = false;
 
-    private Collider2D saveLocalBounds = null; 
+    private Collider2D saveLocalBounds = null;
 
+
+    private void Awake()
+    {
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
     void Start()
     {
         if (player == null)
@@ -52,8 +73,9 @@ public class PlayerCamera : MonoBehaviour
         {
             defaultLocalPosition = cameraTarget.localPosition;
             targetLocalPosition = defaultLocalPosition;
-            
         }
+
+
     }
 
     void Update()
@@ -83,7 +105,7 @@ public class PlayerCamera : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= activationDelay)
             {
-                targetLocalPosition = defaultLocalPosition + new Vector3(0, lookDistance, 0) + currentOffsetLocalPosition;
+                targetLocalPosition = defaultLocalPosition + new Vector3(0, lookDistance, 0) + currentOffsetLocalPosition + Vector3.up * currentFallOffset;
             } 
         }
         else if (player.IsIdle && verticalInput < -0.1f) // Holding DOWN
@@ -91,7 +113,7 @@ public class PlayerCamera : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= activationDelay)
             {
-                targetLocalPosition = defaultLocalPosition + new Vector3(0, -lookDistance, 0) + currentOffsetLocalPosition;
+                targetLocalPosition = defaultLocalPosition + new Vector3(0, -lookDistance, 0) + currentOffsetLocalPosition + Vector3.up * currentFallOffset;
             }
         }
         else // Moving or not pressing anything: instantly reset
@@ -100,6 +122,19 @@ public class PlayerCamera : MonoBehaviour
             timer = 0f;
             targetLocalPosition = defaultLocalPosition + currentOffsetLocalPosition;
         }
+
+        float desiredFallOffset = 0f;
+
+        if (player.CurrentVelocity().y < fallVelocityThreshold)
+        {
+            desiredFallOffset = fallOffset;
+        }
+
+        currentFallOffset = Mathf.Lerp(
+            currentFallOffset,
+            desiredFallOffset,
+            fallOffsetSpeed * Time.deltaTime
+        );
 
         // 3. Smoothly slide the target to its destination
         cameraTarget.localPosition = Vector3.MoveTowards(
@@ -243,5 +278,54 @@ public class PlayerCamera : MonoBehaviour
         {
             UpdateLocalCameraBoundary(saveLocalBounds);
         }
+    }
+
+    public void ZoomTo(float targetSize, float duration)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ZoomRoutine(targetSize, duration));
+    }
+
+    private IEnumerator ZoomRoutine(float targetSize, float duration)
+    {
+        float startSize = cmCamera.Lens.OrthographicSize;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / duration);
+            t = Mathf.SmoothStep(0, 1, t); // Ease in/out
+
+            var lens = cmCamera.Lens;
+            lens.OrthographicSize = Mathf.Lerp(startSize, targetSize, t);
+            cmCamera.Lens = lens;
+
+            yield return null;
+        }
+
+        var finalLens = cmCamera.Lens;
+        finalLens.OrthographicSize = targetSize;
+        cmCamera.Lens = finalLens;
+    }
+
+
+    public IEnumerator Earthquake(float duration)
+    {
+        float timer = 0;
+
+        while (timer < duration)
+        {
+            impulseSource.GenerateImpulse(UnityEngine.Random.insideUnitCircle * 0.8f);
+
+            timer += 0.15f;
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
+
+    public void Shake()
+    {
+        impulseSource.GenerateImpulse();
     }
 }

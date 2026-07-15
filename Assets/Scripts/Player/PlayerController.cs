@@ -36,7 +36,17 @@ public class PlayerController : MonoBehaviour
     private float maxComboTime = 0.3f;
 
 
+    [SerializeField] private float[] AttackStaminaCost = {5, 10, 20, 20 };
+
+    private int attackCNT = 0;
+
+
+    [SerializeField]
+    private float dashStaminaCost = 20f;
+
     private bool StopCombo = true;
+
+    private bool skipDialogButtonPress = false;
 
     private float lockInputFor = -1.0f;
 
@@ -97,7 +107,10 @@ public class PlayerController : MonoBehaviour
 
     public bool CutSceneLock = false;
 
+    private bool DialogLock = false;
 
+
+    private PlayerEffect playerEffect;
     
 
     public float CurrentSpeed
@@ -280,13 +293,14 @@ public class PlayerController : MonoBehaviour
         gravityScale = rb.gravityScale;
         inventory = GetComponent<Inventory>();
         inventoryUI = GetComponent<InventoryUI>();
-
+        playerEffect = GetComponent<PlayerEffect>();
         if (inventoryUI == null)
             inventoryUI = gameObject.AddComponent<InventoryUI>();
     }
 
     private void Update()
     {
+        
         if(lockInputFor > 0.0f && setLock)
         {
             lockInput = true;
@@ -326,9 +340,8 @@ public class PlayerController : MonoBehaviour
 
         UpdateInteractPrompts();
 
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame && DialogLock == false && CutSceneLock == false)
         {
-            
             InteractWithNearest();
         }
 
@@ -364,7 +377,11 @@ public class PlayerController : MonoBehaviour
         {
             lockInput = true;
         }
-        if (lockInput && setLock == false && saveLock == false && CutSceneLock == false)
+        if (DialogLock)
+        {
+            lockInput = true;
+        }
+        if (lockInput && setLock == false && saveLock == false && CutSceneLock == false && DialogLock == false)
         {
 
             TargetMoveX -= Mathf.Abs(transform.position.x - oldTransformPosition.x);
@@ -379,20 +396,19 @@ public class PlayerController : MonoBehaviour
             }
 
             rb.linearVelocity = new Vector2(Mathf.Max(CurrentSpeed, rb.linearVelocityX, walkSpeed), rb.linearVelocity.y) * lockDirection;
-            
-            return ;
+
+            return;
         }
         if (IsDashing)
         {
             rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
-            damageable.setInvisibleFrame(0.1f);
         }
         else 
         {
             if (wasDashing)
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
-            if (!damageable.LockVelocity)
+            if (!damageable.LockVelocity && CutSceneLock == false && DialogLock == false)
             {
                 if (Climbing == false)
                 {
@@ -541,6 +557,10 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         // TODO Check if alive as well
+        if(context.started && CutSceneLock == true)
+        {
+            skipDialogButtonPress = true;
+        }
         if (lockInput) return;
 
         if (context.started && (touchingDirections.IsGrounded || Climbing) && CanMove)
@@ -615,14 +635,22 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (DialogLock && context.performed)
+        {
+            skipDialogButtonPress = true;
+        }
+
         if (lockInput) return;
         if (Climbing) return;
         if (context.performed)
         {
             if (StopCombo)
             {
-                animator.SetTrigger(AnimationStrings.attackTrigger);
-                StopCombo = false;
+                Debug.Log(attackCNT);
+                if (stat.CanConsume(AttackStaminaCost[attackCNT])) {
+                    animator.SetTrigger(AnimationStrings.attackTrigger);
+                    StopCombo = false;
+                }
             }
         }
     }
@@ -631,16 +659,24 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = false;
         rb.gravityScale = gravityScale;
+        if(StopCombo == true || attackCNT == 2)
+        {
+            attackCNT = 0;
+        }
+             
     }
 
 
     public void ComboFrame()
     {
         StopCombo = true;
+        attackCNT++;
+        attackCNT %= 3;
     }
 
     public void Attack1Trigger()
     {
+
         atk1.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         Sfx.Play(SfxId.PlayerAttack);
@@ -649,7 +685,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack2Trigger()
     {
-        
+
         atk2.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         Sfx.Play(SfxId.PlayerAttack);
@@ -658,6 +694,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack3Trigger()
     {
+
         atk3.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         Sfx.Play(SfxId.PlayerAttack);
@@ -675,8 +712,19 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
+        if (CutSceneLock == true && lockInput == true)
+        {
+            skipDialogButtonPress = true;
+        }
+
+        if(lockInput)
+        {
+            return;
+        }
+
         if (context.started || context.performed)
         {
+            
             InteractWithNearest();
         }
     }
@@ -693,7 +741,11 @@ public class PlayerController : MonoBehaviour
 
             lastDashTime = Time.time;
             dashDir = IsFacingRight ? 1 : -1;
+
+            SetInvisibleFrame();
+
             animator.SetTrigger(AnimationStrings.dashTrigger);
+
             Sfx.Play(SfxId.PlayerDash);
         }
     }
@@ -729,7 +781,7 @@ public class PlayerController : MonoBehaviour
         if (Time.time < lastDashTime + dashCooldown)
             return false;
 
-        return touchingDirections.IsGrounded || canAirDash;
+        return (touchingDirections.IsGrounded || canAirDash) && stat.CanConsume(dashStaminaCost);
     }
 
 
@@ -739,6 +791,13 @@ public class PlayerController : MonoBehaviour
 
         ExitPuzzle();
         AnimationExitPuzzle();
+
+        playerEffect.BloodEffect(knockback.normalized);
+        playerEffect.Flash();
+
+
+
+        GetComponentInChildren<PlayerCamera>().Shake();
 
         isAttacking = false;
         Climbing = false;
@@ -762,7 +821,8 @@ public class PlayerController : MonoBehaviour
         {
             if (context.performed)
             {
-                animator.SetTrigger(AnimationStrings.useItem);
+                if(stat.CanHeal())
+                    animator.SetTrigger(AnimationStrings.useItem);
             }
         }
         
@@ -1258,6 +1318,8 @@ public class PlayerController : MonoBehaviour
         return isPuzzleSolving;
     }
 
+    
+
     public IEnumerator Wait(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -1266,21 +1328,60 @@ public class PlayerController : MonoBehaviour
     public void LockCutScene()
     {
         CutSceneLock = true;
+        IsRunning = false;
         lockInput = true;
-
-        Debug.Log("Locked");
-        
+        rb.linearVelocityX = 0.0f;
+        IsMoving = false;
     }
 
     public void ReleaseLockCutScene()
     {
         CutSceneLock = false;
         lockInput = false;
-
-
     }
 
+    public void LockDiaLog()
+    {
+        IsMoving = false;
+        IsRunning = false;
+        DialogLock = true;
+        lockInput = true;
+        rb.linearVelocityX = 0.0f;
+        skipDialogButtonPress = false;
+    }
 
+    
+
+    public void ReleaseLockDialog()
+    {
+        DialogLock = false;
+        lockInput = false;
+    }
+
+    public bool isSkipDialog()
+    {
+        if(skipDialogButtonPress)
+        {
+            skipDialogButtonPress = false;
+            return true;
+        }
+        return false;
+    }
+    
+    public void SetInvisibleFrame()
+    {
+        damageable.setInvisibleFrame(100.0f);
+    }
+
+    public void SetUnInvisibleFrame()
+    {
+        damageable.setInvisibleFrame(-1.0f);
+    }
+
+    public Vector2 CurrentVelocity()
+    {
+        return rb.linearVelocity;
+    }
 
 
 }
