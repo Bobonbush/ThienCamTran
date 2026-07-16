@@ -505,6 +505,7 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         if (lockInput) return;
+        if (CutSceneLock) return;
         moveInput = context.ReadValue<Vector2>();
 
         if (IsAlive)
@@ -785,6 +786,11 @@ public class PlayerController : MonoBehaviour
         return (touchingDirections.IsGrounded || canAirDash) && stat.CanConsume(dashStaminaCost);
     }
 
+    public void SetAnimationTrigger(string triggername)
+    {
+        if (CutSceneLock == false) return;
+        animator.SetTrigger(triggername);
+    }
 
     public void OnHit(int damage, Vector2 knockback)
     {
@@ -858,6 +864,7 @@ public class PlayerController : MonoBehaviour
 
     public void RunForwardForXDistance(float X)
     {
+        if (X == 0) return;
         lockInput = true;
         if(X > 0 )
         {
@@ -1384,7 +1391,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetUnInvisibleFrame()
     {
-        damageable.setInvisibleFrame(-1.0f);
+        //damageable.setInvisibleFrame(-1.0f);
     }
 
     public Vector2 CurrentVelocity()

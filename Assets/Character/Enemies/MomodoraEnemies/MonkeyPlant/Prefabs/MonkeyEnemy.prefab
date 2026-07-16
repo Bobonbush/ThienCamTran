@@ -444,9 +444,9 @@ MonoBehaviour:
   damageableHit:
     m_PersistentCalls:
       m_Calls: []
-  _maxHealth: 100
+  _maxHealth: 35
   canRevive: 0
-  _health: 45
+  _health: 35
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.5

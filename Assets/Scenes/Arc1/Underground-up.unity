@@ -53469,6 +53469,20 @@ MonoBehaviour:
     - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
       spawnPrefab: {fileID: 660238719}
       spawnOffset: {x: 0, y: 0, z: 0}
+  - delayTime: 0
+    enemies:
+    - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
+      spawnPrefab: {fileID: 692241891}
+      spawnOffset: {x: 0, y: 0, z: 0}
+    - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
+      spawnPrefab: {fileID: 660238719}
+      spawnOffset: {x: 0, y: 0, z: 0}
+    - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
+      spawnPrefab: {fileID: 660238719}
+      spawnOffset: {x: 0, y: 0, z: 0}
+    - enemiesPrefab: {fileID: 3812250474075147849, guid: 46bf8f555550f5143a88cf0a39e86517, type: 3}
+      spawnPrefab: {fileID: 660238719}
+      spawnOffset: {x: 0, y: 0, z: 0}
   trapList:
   - round: 0
     delayTime: 3

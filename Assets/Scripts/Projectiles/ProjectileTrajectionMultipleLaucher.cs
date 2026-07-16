@@ -148,6 +148,7 @@ public class ProjectileTrajectionMultipleLaucher : MonoBehaviour
 
     void DrawTrajectory(Vector3 velocity)
     {
+        return;
         lineRenderer.positionCount = lineResolution;
         Vector3 startPosition = transform.position;
         float g = Physics.gravity.y;

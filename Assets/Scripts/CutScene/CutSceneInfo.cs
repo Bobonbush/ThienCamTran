@@ -6,11 +6,13 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewCutsceneInfo", menuName = "Cutscenes/Cutscene Info")]
 public class CutSceneInfo : ScriptableObject
 {
+
+    public bool HideUI = true;
+
     [System.Serializable]
     public class CameraForceData
     {
         public Vector3 position = Vector3.zero;   // TargetPosition 
-        public float Zoom = 1.0f;   // Zoom value
         public float delaybeforeMove = 0.0f;
         public float moveDuration = 1.0f;  // move time
         public float stayDuration = 1.0f; // stay time till the next move
@@ -24,9 +26,22 @@ public class CutSceneInfo : ScriptableObject
         }
 
         public Effect effect;
-        public float lensImplitude = 0.0f;
+        public float effectDuration = 0.0f;
+        public float lensImplitude = 0.0f; // 8 for enemy fight
+        public bool effectStays = false;
     };
 
+    [System.Serializable]
+    public class ActiveObject
+    {
+        public float delayDuration = 0.0f;
+        public string gameobject;
+        public float TurnOnDuration = 0.0f;
+        public bool TurnOnForever = false;
+    }
+
+    
+    
 
     [System.Serializable]
     public class PlayerForceData
@@ -35,6 +50,9 @@ public class CutSceneInfo : ScriptableObject
         public float scaleX = 0.0f;
         public float MoveDuration = 0.0f;
         public float stayDuration = 0.0f;
+
+        public bool useTrigger = false;
+        public string triggerName = "";
     };
 
     [System.Serializable]
@@ -69,8 +87,8 @@ public class CutSceneInfo : ScriptableObject
 
     public bool UsedCamera = false;
 
+    public List<ActiveObject> EnableObjects;
     public List<CameraForceData> ForceCameraMovement;
-
     public List<PlayerForceData> PlayerForceDatas;
 
     public bool ComeBackCamera = true;

@@ -105,7 +105,7 @@ public class Damageable : MonoBehaviour
         }
     }
 
-public void Awake()
+     public void Awake()
     {
         animator = GetComponent<Animator>();
         animator.SetBool(AnimationStrings.isAlive, _isAlive);
