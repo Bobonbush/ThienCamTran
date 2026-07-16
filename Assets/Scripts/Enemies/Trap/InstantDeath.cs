@@ -16,6 +16,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
             if (gotHit)
             {
+                Sfx.PlayAt(SfxId.WorldSpike, collision.bounds.center);
                 Debug.Log(collision.name + " hit because trap");
             }
         }

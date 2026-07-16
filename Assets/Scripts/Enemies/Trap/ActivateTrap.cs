@@ -150,6 +150,8 @@ public class ActivateTrap : MonoBehaviour
     {
         if (movementRoutine != null) StopCoroutine(movementRoutine);
 
+        Sfx.PlayAt(SfxId.WorldPlatePress, realTransform.position);
+
         Vector3 targetPos = initialPosition + (moveDistance * moveDir);
 
         float duration = moveDuration;
@@ -196,10 +198,13 @@ public class ActivateTrap : MonoBehaviour
             duration = moveDuration - duration;
         }
 
+        // Bản đá nhả ra — cùng cue với lúc nhấn nhưng nhẹ hơn
+        Sfx.PlayAt(SfxId.WorldPlatePress, realTransform.position, 0.6f, 1.08f);
+
         yield return StartCoroutine(SmoothMove(targetPosition, duration));
 
-        
-        
+
+
     }
 
     

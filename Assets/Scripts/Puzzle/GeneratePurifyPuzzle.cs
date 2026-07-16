@@ -71,8 +71,9 @@ public class GeneratePurifyPuzzle : MonoBehaviour
             {
 
                 StopAllCoroutines();
+                Sfx.Play(SfxId.PuzzleFail);
                 OnPuzzleFail?.Invoke();
-                
+
 
             }
         }
@@ -88,6 +89,7 @@ public class GeneratePurifyPuzzle : MonoBehaviour
     private void HandlePuzzleCompleted()
     {
         finishCnt++;
+        Sfx.Play(SfxId.PuzzleRound);
 
         puzzle.Clear();
 
@@ -102,6 +104,7 @@ public class GeneratePurifyPuzzle : MonoBehaviour
 
     private void HandleRoundCompleted()
     {
+        Sfx.Play(SfxId.PuzzleComplete);
         OnPuzzleCompleted?.Invoke();
     }
     private void Start()

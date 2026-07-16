@@ -23,5 +23,12 @@ public class SfxLibrary : ScriptableObject
 
     [Tooltip("Mixer group every SFX voice is routed through, so the SfxVolume slider applies.")]
     public AudioMixerGroup output;
+
+    [Header("Positional falloff (Sfx.PlayAt)")]
+    [Tooltip("Within this distance from the camera a positional cue plays at full volume.")]
+    public float nearHearingRadius = 10f;
+    [Tooltip("Beyond this distance from the camera a positional cue is culled entirely.")]
+    public float farHearingRadius = 24f;
+
     public Cue[] cues;
 }

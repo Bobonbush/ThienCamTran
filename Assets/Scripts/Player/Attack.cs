@@ -32,7 +32,19 @@ private void OnTriggerEnter2D(Collider2D collision)
             deliveredKnockback,
             transform.root.position);
 
-        if (handled && !damageable.LastHitWasBlocked)
+        if (!handled)
+            return;
+
+        // Lớp impact chung cho mọi đòn cận chiến (player lẫn enemy):
+        // trúng thịt = hit, bị đỡ = tiếng khiên/vũ khí chạm nhau
+        if (damageable.LastHitWasBlocked)
+        {
+            Sfx.PlayAt(SfxId.CombatBlock, collision.bounds.center);
+        }
+        else
+        {
+            Sfx.PlayAt(SfxId.CombatHit, collision.bounds.center);
             Debug.Log(collision.name + " hit for " + attackDamage + " damage!");
+        }
     }
 }

@@ -46,6 +46,7 @@ public class InventoryUI : MonoBehaviour
 
     public void Toggle()
     {
+        Sfx.Play(isOpen ? SfxId.UiClose : SfxId.UiOpen);
         SetOpen(!isOpen);
     }
 

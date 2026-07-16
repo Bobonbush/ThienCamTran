@@ -103,6 +103,7 @@ public class TrapMove : MonoBehaviour
     public void ActivateTrap()
     {
         HasOutSideBothTriggered = true;
+        Sfx.PlayAt(SfxId.WorldTrapMove, transform.position);
         if (movementRoutine != null)
         {
             StopCoroutine(movementRoutine);
@@ -125,6 +126,7 @@ public class TrapMove : MonoBehaviour
 
     public void StopTrap()
     {
+        Sfx.PlayAt(SfxId.WorldTrapMove, transform.position, 0.7f, 0.94f);
         if (movementRoutine != null) StopCoroutine(movementRoutine);
 
         Vector3 targetPos = initialPosition;

@@ -33,6 +33,7 @@ public class HiddenPath : MonoBehaviour
             if (triggerCount == 0)
             {
                 // Player entered -> Fade OUT (Alpha 255 to 0)
+                Sfx.PlayAt(SfxId.WorldHiddenReveal, other.bounds.center);
                 StartFade(0f);
             }
             triggerCount++;

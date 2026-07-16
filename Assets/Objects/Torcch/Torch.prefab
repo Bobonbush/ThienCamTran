@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 2994428640734478922}
   - component: {fileID: 1960304667651833836}
   - component: {fileID: 3123860474708357281}
+  - component: {fileID: 6195697179437841353}
   m_Layer: 0
   m_Name: Torch
   m_TagString: Untagged
@@ -213,8 +214,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TorchFlicker
   light2D: {fileID: 312643217679675415}
-  baseIntensity: 1
-  intensityVariation: 0.25
   smoothSpeed: 15
-  baseRadius: 9.267215
   radiusVariation: 0.2
+--- !u!114 &6195697179437841353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6844932302986237976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15175c6a9e989254a9c0e8563e31e0d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmbientSfxEmitter
+  loopClip: {fileID: 8300000, guid: 04e3380f8d580f347969df1bc6bdbfd1, type: 3}
+  oneShotClips: []
+  minInterval: 5
+  maxInterval: 11
+  minPitch: 0.97
+  maxPitch: 1.03
+  maxVolume: 0.22
+  nearRadius: 2.5
+  farRadius: 9
+  fadeTime: 0.6

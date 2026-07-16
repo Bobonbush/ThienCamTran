@@ -85,6 +85,8 @@ public class PlayerStats : MonoBehaviour
         {
             _Tre--;
             damagable.Health += HealValue;
+            // Heals here bypass Damageable.Heal, so characterHealed never fires — cue directly.
+            Sfx.Play(SfxId.PlayerHeal);
         }
     }
 
@@ -92,9 +94,10 @@ public class PlayerStats : MonoBehaviour
     public void TriggerSlot1(Animator animator)
     {
         if (slot1 == null) return;
-        
+
         if(slot1.GetManaCost() > Mana)
         {
+            Sfx.Play(SfxId.UiDenied);
             return;
         }
 
@@ -103,6 +106,7 @@ public class PlayerStats : MonoBehaviour
         if(slot1.Trigger())
         {
             animator.SetTrigger(slot1.GetAnimationString());
+            Sfx.Play(SfxId.PlayerSkillCast);
         }
     }
 
@@ -112,6 +116,7 @@ public class PlayerStats : MonoBehaviour
 
         if (slot2.GetManaCost() > Mana)
         {
+            Sfx.Play(SfxId.UiDenied);
             return;
         }
 
@@ -120,6 +125,7 @@ public class PlayerStats : MonoBehaviour
         if (slot2.Trigger())
         {
             animator.SetTrigger(slot2.GetAnimationString());
+            Sfx.Play(SfxId.PlayerSkillCast);
         }
     }
 }

@@ -68,6 +68,7 @@ namespace Game.UI
 
         public void OpenOverlay()
         {
+            Sfx.Play(SfxId.UiOpen);
             Open();
             Time.timeScale = 0f; // pause world while browsing menus
             SelectTab(Mathf.Max(0, activeIndex));
@@ -75,6 +76,7 @@ namespace Game.UI
 
         public void CloseOverlay()
         {
+            Sfx.Play(SfxId.UiClose);
             ActivePanel?.OnPanelClosed();
             foreach (var p in panels)
                 if (p != null) p.SetActivePanel(false);
@@ -93,6 +95,10 @@ namespace Game.UI
         public void SelectTab(int index)
         {
             if (index < 0 || index >= panels.Length || index == activeIndex) return;
+
+            // First tab after opening is part of the open sound, not a tab switch.
+            if (activeIndex >= 0)
+                Sfx.Play(SfxId.UiTab);
 
             if (ActivePanel != null)
             {

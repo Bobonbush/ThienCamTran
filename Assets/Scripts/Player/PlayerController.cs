@@ -245,6 +245,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool IsClimbing
+    {
+        get
+        {
+            return Climbing;
+        }
+    }
+
 
     
 
@@ -649,10 +657,11 @@ public class PlayerController : MonoBehaviour
 
     public void Attack2Trigger()
     {
-        
+
         atk2.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
-        Sfx.Play(SfxId.PlayerAttack);
+        // Mỗi bậc combo cao hơn một chút — nghe được đà đánh dồn không cần thêm clip
+        Sfx.Play(SfxId.PlayerAttack, 1f, 1.06f);
         //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1), transform.position.y, transform.position.z);
     }
 
@@ -660,7 +669,7 @@ public class PlayerController : MonoBehaviour
     {
         atk3.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
-        Sfx.Play(SfxId.PlayerAttack);
+        Sfx.Play(SfxId.PlayerAttack, 1f, 1.12f);
 
         //transform.position = new Vector3(transform.position.x + dashToAttack * (IsFacingRight ? 1 : -1) * 2, transform.position.y, transform.position.z);
     }
@@ -670,7 +679,7 @@ public class PlayerController : MonoBehaviour
         air_atk.GetComponent<TriggerAttack>().Trigger();
         isAttacking = true;
         rb.gravityScale = 0.0f;
-        Sfx.Play(SfxId.PlayerAttack);
+        Sfx.Play(SfxId.PlayerAttack, 1f, 0.95f);
     }
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -834,8 +843,18 @@ public class PlayerController : MonoBehaviour
         SafeGround.y = LastOnGroundY;
     }
 
+    // Một lần bấm E có thể gọi hàm này tới 3 lần (started + performed của
+    // input action, cộng check phím thô trong Update) — debounce để mỗi cú
+    // bấm chỉ tương tác đúng 1 lần, tránh toggle/SFX bị nhân đôi
+    private float lastInteractAt = -999f;
+    private const float interactDebounce = 0.25f;
+
     private void InteractWithNearest()
     {
+        if (Time.unscaledTime < lastInteractAt + interactDebounce)
+            return;
+        lastInteractAt = Time.unscaledTime;
+
         IInteractable interactable = FindNearestInteractable();
         if (interactable != null && interactable.CanInteract)
         {
@@ -844,7 +863,7 @@ public class PlayerController : MonoBehaviour
                 LockInput(0.25f);
 
                 animator.SetTrigger(AnimationStrings.pickItem);
-                Sfx.Play(SfxId.PlayerPickup);
+                // Pickup cue lives in Item.Interact so auto-pickup items sound too.
             }
             interactable.Interact(this);    
         }
@@ -1136,6 +1155,9 @@ public class PlayerController : MonoBehaviour
     public void AnimationEnableSave()
     {
         CanExitForcementState = true;
+        // Tiếng chuông điểm lưu: phát theo vị trí, âm lượng vừa phải; cooldown
+        // dài của cue trong SfxLibrary chặn chuông dồn dập nếu bị re-trigger
+        Sfx.PlayAt(SfxId.WorldCheckpoint, transform.position);
         // Implement the UI here.
     }
 

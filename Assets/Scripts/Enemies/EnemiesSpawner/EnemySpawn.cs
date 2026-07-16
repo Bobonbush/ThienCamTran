@@ -129,6 +129,7 @@ public class EnemySpawn : MonoBehaviour
             Transform actualTransform = info.spawnPrefab.transform;
             actualTransform.position += info.spawnOffset;
             currentEnemies.Add(Instantiate(info.enemiesPrefab, actualTransform));
+            Sfx.PlayAt(SfxId.EnemySpawn, actualTransform.position);
         }
         spawning = null;
     }
