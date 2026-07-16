@@ -43,6 +43,9 @@ public class Inventory : MonoBehaviour
             amount = amount
         });
 
+        // Lần đầu loại vật phẩm này vào túi -> popup giới thiệu
+        NewItemDialog.Show(item);
+
         return true;
     }
 }

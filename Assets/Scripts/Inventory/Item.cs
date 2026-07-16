@@ -20,6 +20,13 @@ public class Item : MonoBehaviour, IInteractable
     public float pickupDelay = 0.25f;
     public bool ignorePlayerCollision = true;
 
+    [Header("Presentation")]
+    [Tooltip("Icon cho popup 'Vật Phẩm Mới'; bỏ trống sẽ lấy sprite trên SpriteRenderer")]
+    public Sprite icon;
+    [TextArea]
+    [Tooltip("Cốt truyện/mô tả hiện trong popup khi nhặt vật phẩm này lần đầu")]
+    public string description;
+
     Animator anim;
 
     Rigidbody2D rb;
@@ -41,6 +48,18 @@ public class Item : MonoBehaviour, IInteractable
     public Item InventoryPrefab
     {
         get { return itemPrefab != null ? itemPrefab : this; }
+    }
+
+    public Sprite Icon
+    {
+        get
+        {
+            if (icon != null)
+                return icon;
+
+            SpriteRenderer sprite = GetComponentInChildren<SpriteRenderer>();
+            return sprite != null ? sprite.sprite : null;
+        }
     }
 
     private void Awake()
@@ -88,6 +107,7 @@ public class Item : MonoBehaviour, IInteractable
         {
             picked = true;
             rb.gravityScale = -1.0f;
+            Sfx.PlayAt(SfxId.PlayerPickup, transform.position);
 
             if (anim != null)
             {
