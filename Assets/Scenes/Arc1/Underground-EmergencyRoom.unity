@@ -1455,7 +1455,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6683747395998582027, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
   m_PrefabInstance: {fileID: 2446647710409221450}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 365244638}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afe75580a6ebde84191c998103c1feff, type: 3}
@@ -5299,32 +5299,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d53a54306ab5ec46b2ca668790e1786, type: 3}
---- !u!1 &365244638 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8881800031566834162, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
-  m_PrefabInstance: {fileID: 2446647710409221450}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &365244640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 365244638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f110d654214f8c4d921864ada8c30fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogInteractable
-  dialogNodes:
-  - {fileID: 11400000, guid: 93f0d54d4cf2a9b47943b8fb16ce6fa3, type: 2}
-  style: 0
-  bubbleTarget: {fileID: 0}
-  promptObject: {fileID: 0}
-  interactRange: 2
-  triggerOnce: 1
-  playerPassesThrough: 0
-  OutSideTrigger: 1
 --- !u!1 &384732813
 GameObject:
   m_ObjectHideFlags: 0
@@ -101065,28 +101039,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6943487862228064776, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
-      propertyPath: moveDistance
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943487862228064776, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
-      propertyPath: oneTimeTriggerSave
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943487862228064776, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
       propertyPath: trapSequence.Array.data[0].trapObject
       value: 
       objectReference: {fileID: 1496691786}
-    - target: {fileID: 6943487862228064776, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
-      propertyPath: trapSequence.Array.data[0].activationDelay
-      value: 2.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8881800031566834162, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 365244640}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
 --- !u!1001 &5602117135145589893
 PrefabInstance:

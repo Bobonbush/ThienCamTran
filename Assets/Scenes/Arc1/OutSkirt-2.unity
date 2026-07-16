@@ -21466,11 +21466,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6103925287971399474, guid: 65cc837ef44ef904ab3399c4f866e034, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.19099
+      value: -1.42
       objectReference: {fileID: 0}
     - target: {fileID: 6103925287971399474, guid: 65cc837ef44ef904ab3399c4f866e034, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.557522
+      value: -14.49
       objectReference: {fileID: 0}
     - target: {fileID: 6103925287971399474, guid: 65cc837ef44ef904ab3399c4f866e034, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24222,6 +24222,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Chest (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6328194368873943841, guid: dc1edc36754163b4b8e97f245a628ee0, type: 3}
+      propertyPath: itemPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328194368873943841, guid: dc1edc36754163b4b8e97f245a628ee0, type: 3}
+      propertyPath: itemPrefabs.Array.data[1].item
+      value: 
+      objectReference: {fileID: 3393830918241770400, guid: 929671835a81a384dbff2a2016383eae, type: 3}
+    - target: {fileID: 6328194368873943841, guid: dc1edc36754163b4b8e97f245a628ee0, type: 3}
+      propertyPath: itemPrefabs.Array.data[1].count
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7063370907253477733, guid: dc1edc36754163b4b8e97f245a628ee0, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -24232,7 +24244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7063370907253477733, guid: dc1edc36754163b4b8e97f245a628ee0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.96
+      value: -17.06
       objectReference: {fileID: 0}
     - target: {fileID: 7063370907253477733, guid: dc1edc36754163b4b8e97f245a628ee0, type: 3}
       propertyPath: m_LocalPosition.z

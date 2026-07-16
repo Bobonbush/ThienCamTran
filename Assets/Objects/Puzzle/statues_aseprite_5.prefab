@@ -110,13 +110,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ActivateTrap
   Reusable: 0
   moveDuration: 0.3
-  moveDistance: 0.25
+  moveDistance: 0.35
   delayRestore: 3
   moveDir: {x: 0, y: -1, z: 0}
-  oneTimeTriggerSave: 0
+  oneTimeTriggerSave: 1
   trapSequence:
   - trapObject: {fileID: 0}
-    activationDelay: 0
+    activationDelay: 2.5
   mode: 0
   type: 0
   triggerType: 1
@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 6683747395998582027}
   - component: {fileID: 7761626449447327601}
   - component: {fileID: 7116487255667139698}
+  - component: {fileID: 6455401056650808296}
   m_Layer: 0
   m_Name: Purify Curse
   m_TagString: Untagged
@@ -387,3 +388,24 @@ MonoBehaviour:
   startNode: {fileID: 0}
   style: 0
   bubbleTarget: {fileID: 0}
+--- !u!114 &6455401056650808296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8881800031566834162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f110d654214f8c4d921864ada8c30fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogInteractable
+  dialogNodes:
+  - {fileID: 11400000, guid: 93f0d54d4cf2a9b47943b8fb16ce6fa3, type: 2}
+  style: 0
+  bubbleTarget: {fileID: 0}
+  promptObject: {fileID: 0}
+  interactRange: 2
+  triggerOnce: 1
+  playerPassesThrough: 0
+  OutSideTrigger: 1
