@@ -67,8 +67,11 @@ public class PlayerStats : MonoBehaviour
 
     public bool CanConsume(float stamina_value)
     {
-        if (stamina_value > stamina) return false;
-
+        if (stamina_value > stamina)
+        {
+            Sfx.Play(SfxId.UiDenied);
+            return false;
+        }
         stamina -= stamina_value;
         return true;
     }
@@ -86,26 +89,22 @@ public class PlayerStats : MonoBehaviour
 
     public bool CanHeal()
     {
-        return Mana == MaxMana;
-    }
-
-
-    public void Heal()
-    {
-        if (damagable == null)
+        bool yesOrNo = (Mana == MaxMana);
+        if(yesOrNo)
         {
-            return;
+            Sfx.Play(SfxId.UiDenied);
         }
-
-
-        damagable.Health += HealValue;
-        
+        return yesOrNo;
     }
 
-    public void OnHeal()
+
+   
+
+    public void OnHealing()
     {
         damagable.Health += HealValue;
         Mana = 0;
+        Sfx.Play(SfxId.PlayerHeal);
     }
 
 

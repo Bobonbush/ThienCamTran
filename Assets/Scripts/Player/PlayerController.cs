@@ -268,6 +268,8 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
+
     
 
 
@@ -720,6 +722,8 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0.0f;
         Sfx.Play(SfxId.PlayerAttack, 1f, 0.95f);
     }
+
+
 
     public void OnInteract(InputAction.CallbackContext context)
     {
@@ -1231,6 +1235,7 @@ public class PlayerController : MonoBehaviour
     public void AnimationEnableSave()
     {
         CanExitForcementState = true;
+        Sfx.PlayAt(SfxId.WorldCheckpoint, transform.position);
         activeSaveZone?.ShowMenu(this);
     }
 

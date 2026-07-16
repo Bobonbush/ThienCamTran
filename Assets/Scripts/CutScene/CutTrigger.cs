@@ -80,9 +80,13 @@ public class CutTrigger : MonoBehaviour
             CutSceneManager manager = CutSceneManager.Instance;
             manager.OnCutSceneStart(info);
             startPlaying = true;
-            playerCamera = manager.playerCamera;
-            playerController = manager.playerController;
-            Trigger();
+            if (info.RealTimeAnimation)
+            {
+                
+                playerCamera = manager.playerCamera;
+                playerController = manager.playerController;
+                Trigger();
+            }
         }
 
         for (int i = 0; i < info.EnableObjects.Count; i++)

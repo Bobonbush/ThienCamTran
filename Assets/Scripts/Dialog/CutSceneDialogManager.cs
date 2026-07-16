@@ -68,8 +68,6 @@ public class CutSceneDialogManager : MonoBehaviour
         }
     }
 
-    // style = box or bubble.
-    // target = the character the bubble follows (only needed for the Bubble style).
     public void StartDialog(DialogNode startNode, DialogStyle style, Transform target = null)
     {
         controller.LockDiaLog();
