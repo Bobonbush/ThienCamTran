@@ -183,6 +183,11 @@ MonoBehaviour:
   promptObject: {fileID: 0}
   pickupDelay: 0.25
   ignorePlayerCollision: 1
+  icon: {fileID: 0}
+  description: " Xu \u0111\xFAc b\u1EB1ng \u0111\u1ED3ng ho\u1EB7c k\u1EBDm, th\u01B0\u1EDDng
+    c\xF3 l\u1ED7 h\xECnh vu\xF4ng ho\u1EB7c tr\xF2n \u1EDF gi\u1EEFa \u0111\u1EC3
+    x\xE2u th\xE0nh chu\u1ED7i. Nh\u01B0ng \u1EDF \u0111\xE2y n\xF3 \u0111\u01B0\u1EE3c
+    m\u1EA1 v\xE0ng."
 --- !u!50 &8089119450151433691
 Rigidbody2D:
   serializedVersion: 5

@@ -277,8 +277,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemContainer
   itemPrefabs:
-  - item: {fileID: 0}
-    count: 0
+  - item: {fileID: 9173735856922127448, guid: ecdee8fb12c7635498f48acfbb166249, type: 3}
+    count: 30
   openOnce: 1
   dropPoint: {fileID: 8458048184477981810}
   burstForce: 4
