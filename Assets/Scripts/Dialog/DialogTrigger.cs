@@ -25,6 +25,7 @@ public class DialogTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            
             TriggerDialog();
         }
     }

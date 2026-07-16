@@ -1249,6 +1249,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Attack
   attackDamage: 10
   knockback: {x: 10, y: 0}
+--- !u!1001 &387058625
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 669357979126908146, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_Name
+      value: Tre Laucher Multi
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 85.493286
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.728496
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664300585562227176, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221620219830139309, guid: a947f150153ee8a44836df886c482e88, type: 3}
+      propertyPath: targetPlayer
+      value: 
+      objectReference: {fileID: 1935197683}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a947f150153ee8a44836df886c482e88, type: 3}
 --- !u!1001 &396133406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17368,10 +17429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0be9285d68f304b9efaea78a485314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TreUI
-  fullTreSprite: {fileID: 139214533, guid: d4daf021bf4fe004b971103ffb74cca3, type: 3}
-  usedTreSprite: {fileID: 21300000, guid: 18b7b8f9e1064a94e88983dd83874f85, type: 3}
-  TrePrefab: {fileID: 4830744373390256070, guid: 792b4766288e0cb4994b773654bf13df, type: 3}
-  playerStat: {fileID: 1935197674}
 --- !u!114 &1316313962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38613,3 +38670,4 @@ SceneRoots:
   - {fileID: 471726403}
   - {fileID: 1153911276}
   - {fileID: 2006474508}
+  - {fileID: 387058625}

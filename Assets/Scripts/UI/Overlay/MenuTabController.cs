@@ -1,132 +1,682 @@
-using System.Collections.Generic;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Game.UI
 {
     /// <summary>
-    /// In-game overlay "Slider" / tab bar (doc lines 369–377): Status — Map — Inventory — Database.
-    /// Opens with I, closes with Q, switches tabs with '[' and ']'. The Map tab is intentionally
-    /// left empty for now (the author fills it later).
+    /// Controls the animated book menu.
     ///
-    /// Owns the tabs and drives the active <see cref="MenuPanel"/> through its contract, so Nghi's
-    /// Status / Inventory / Database panels only implement <see cref="MenuPanel"/> and never touch
-    /// tab-switching logic. Pass an empty (placeholder) panel for Map.
+    /// I              = open/close
+    /// Q              = close
+    /// [ / Page Up    = previous tab
+    /// ] / Page Down  = next tab
+    ///
+    /// Panels and tabButtons must use the same ordering.
     /// </summary>
     public class MenuTabController : UIScreen
     {
-        [Tooltip("Tabs in display order. Map can be an empty placeholder MenuPanel.")]
+        [Header("UI Structure")]
+        [Tooltip("Panels in tab order.")]
         [SerializeField] private MenuPanel[] panels;
-        [Tooltip("Optional tab-bar labels/highlights, one per panel, kept in sync with selection.")]
+
+        [Tooltip("Tab buttons in exactly the same order as Panels.")]
         [SerializeField] private TabButton[] tabButtons;
 
+        [Header("Default Tab")]
+        [Tooltip("Inventory tab index. Used only before any tab has been selected.")]
+        [SerializeField, Min(0)] private int defaultTabIndex = 0;
+
+        [Header("Book Animator")]
+        [SerializeField] private Animator bookAnimator;
+
+        [Tooltip("Duration of the book-opening animation.")]
+        [SerializeField, Min(0f)] private float openingSequenceDuration = 1.9f;
+
+        [Tooltip("Duration of the book-closing animation.")]
+        [SerializeField, Min(0f)] private float closingSequenceDuration = 1.9f;
+
+        [Header("Tab Reveal")]
+        [Tooltip("Delay between each tab popping out.")]
+        [SerializeField, Min(0f)] private float tabRevealStagger = 0.06f;
+
+        [Tooltip("Duration of one tab's pop-out animation.")]
+        [SerializeField, Min(0f)] private float tabOpenAnimationDuration = 0.42f;
+
+        [Tooltip("Delay between each tab retracting when the menu closes.")]
+        [SerializeField, Min(0f)] private float tabCloseStagger = 0.06f;
+
+        [Tooltip("Duration of one tab's retract animation.")]
+        [SerializeField, Min(0f)] private float tabCloseAnimationDuration = 0.52f;
+
+        [Header("Page Navigation")]
+        [Tooltip("Duration of one page-flip animation.")]
+        [SerializeField, Min(0f)] private float pageFlipDuration = 0.8f;
+
         private int activeIndex = -1;
+        private int lastSelectedIndex = -1;
+        private int requestedTabIndex = -1;
+
+        private bool isTransitioning;
+        private bool initialized;
+        private Coroutine transitionRoutine;
+
+        private static readonly int OpenHash =
+            Animator.StringToHash("Book_Cover_Open");
+
+        private static readonly int CloseHash =
+            Animator.StringToHash("Book_Cover_Close");
+
+        private static readonly int FlipLeftHash =
+            Animator.StringToHash("Book_Flip_Left");
+
+        private static readonly int FlipRightHash =
+            Animator.StringToHash("Book_Flip_Right");
+
+        private MenuPanel ActivePanel
+        {
+            get
+            {
+                if (panels == null ||
+                    activeIndex < 0 ||
+                    activeIndex >= panels.Length)
+                {
+                    return null;
+                }
+
+                return panels[activeIndex];
+            }
+        }
 
         protected override void Awake()
         {
             base.Awake();
-            // Hide all panels initially.
-            foreach (var p in panels)
-                if (p != null) p.SetActivePanel(false);
 
-            if (tabButtons != null)
-                for (int i = 0; i < tabButtons.Length; i++)
-                {
-                    int idx = i;
-                    if (tabButtons[i] != null) tabButtons[i].Bind(() => SelectTab(idx));
-                }
+            panels ??= Array.Empty<MenuPanel>();
+            tabButtons ??= Array.Empty<TabButton>();
+
+            if (bookAnimator == null)
+                bookAnimator = GetComponentInChildren<Animator>(true);
+
+            if (bookAnimator != null)
+            {
+                bookAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+                bookAnimator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            }
+
+            defaultTabIndex = GetValidDefaultIndex();
+
+            HideAllPanels();
         }
+
+        private void Start()
+        {
+            EnsureInitialized();
+        }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            openingSequenceDuration = Mathf.Max(0f, openingSequenceDuration);
+            closingSequenceDuration = Mathf.Max(0f, closingSequenceDuration);
+            tabRevealStagger = Mathf.Max(0f, tabRevealStagger);
+            tabOpenAnimationDuration = Mathf.Max(0f, tabOpenAnimationDuration);
+            tabCloseStagger = Mathf.Max(0f, tabCloseStagger);
+            tabCloseAnimationDuration = Mathf.Max(0f, tabCloseAnimationDuration);
+            pageFlipDuration = Mathf.Max(0f, pageFlipDuration);
+
+            if (panels != null && panels.Length > 0)
+                defaultTabIndex = Mathf.Clamp(defaultTabIndex, 0, panels.Length - 1);
+            else
+                defaultTabIndex = 0;
+        }
+#endif
 
         private void Update()
         {
-            var kb = Keyboard.current;
-            if (kb == null) return;
+            Keyboard keyboard = Keyboard.current;
 
-            // Toggle the whole overlay with I; close with Q when open.
-            if (kb.iKey.wasPressedThisFrame)
+            if (keyboard == null)
+                return;
+
+            if (keyboard.iKey.wasPressedThisFrame)
             {
-                if (IsOpen) CloseOverlay();
-                else OpenOverlay();
+                if (IsOpen)
+                    CloseOverlay();
+                else
+                    OpenOverlay();
+
                 return;
             }
-            if (!IsOpen) return;
 
-            if (kb.qKey.wasPressedThisFrame) { CloseOverlay(); return; }
+            if (!IsOpen || isTransitioning)
+                return;
 
-            // Tab switching with [ and ] (mirrors the Player map's Previous/Next bindings).
-            if (kb.leftBracketKey.wasPressedThisFrame) Step(-1);
-            else if (kb.rightBracketKey.wasPressedThisFrame) Step(+1);
+            if (keyboard.qKey.wasPressedThisFrame)
+            {
+                CloseOverlay();
+                return;
+            }
 
-            // Forward directional + submit input to the active panel.
-            Vector2 nav = ReadNavigation(kb);
-            if (nav != Vector2.zero) ActivePanel?.OnNavigate(nav);
-            if (kb.eKey.wasPressedThisFrame) ActivePanel?.OnSubmit();
+            if (keyboard.leftBracketKey.wasPressedThisFrame ||
+                keyboard.pageUpKey.wasPressedThisFrame)
+            {
+                Step(-1);
+            }
+            else if (keyboard.rightBracketKey.wasPressedThisFrame ||
+                     keyboard.pageDownKey.wasPressedThisFrame)
+            {
+                Step(1);
+            }
+
+            Vector2 navigation = ReadNavigation(keyboard);
+
+            if (navigation != Vector2.zero)
+                ActivePanel?.OnNavigate(navigation);
+
+            if (keyboard.eKey.wasPressedThisFrame)
+                ActivePanel?.OnSubmit();
         }
 
-        private MenuPanel ActivePanel =>
-            (activeIndex >= 0 && activeIndex < panels.Length) ? panels[activeIndex] : null;
+        private void InitializeTabButtons()
+        {
+            if (panels.Length != tabButtons.Length)
+            {
+                Debug.LogWarning(
+                    $"{nameof(MenuTabController)} on '{name}' has " +
+                    $"{panels.Length} panels but {tabButtons.Length} tab buttons. " +
+                    "Both arrays should have the same length and order.",
+                    this
+                );
+            }
+
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                TabButton tabButton = tabButtons[i];
+
+                if (tabButton == null)
+                    continue;
+
+                int capturedIndex = i;
+
+                tabButton.Bind(() => OnTabClicked(capturedIndex));
+                tabButton.SetInputEnabled(false);
+                tabButton.ResetVisual();
+            }
+        }
+
+        private void EnsureInitialized()
+        {
+            if (initialized)
+                return;
+
+            initialized = true;
+            InitializeTabButtons();
+        }
 
         public void OpenOverlay()
         {
-            Sfx.Play(SfxId.UiOpen);
+            if (IsOpen || isTransitioning)
+                return;
+
+            if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+            {
+                Debug.LogError("MenuOverlay cannot open while its controller is inactive.", this);
+                return;
+            }
+
+            EnsureInitialized();
+
+            StopTransitionRoutine();
+
             Open();
-            Time.timeScale = 0f; // pause world while browsing menus
-            SelectTab(Mathf.Max(0, activeIndex));
+            transitionRoutine = StartCoroutine(OpenRoutine());
+            Time.timeScale = 0f;
+        }
+
+        public void OpenOverlayAtTab(string tabLabel)
+        {
+            requestedTabIndex = FindTabIndex(tabLabel);
+
+            if (IsOpen && !isTransitioning)
+            {
+                if (requestedTabIndex >= 0)
+                    SelectTab(requestedTabIndex);
+                requestedTabIndex = -1;
+                return;
+            }
+
+            OpenOverlay();
+        }
+
+        private IEnumerator OpenRoutine()
+        {
+            isTransitioning = true;
+            activeIndex = -1;
+
+            HideAllPanels();
+            SetTabInputEnabled(false);
+
+            foreach (TabButton tabButton in tabButtons)
+            {
+                if (tabButton != null)
+                    tabButton.ResetVisual();
+            }
+
+            PlayBookState(OpenHash, resetAnimator: true);
+
+            yield return new WaitForSecondsRealtime(openingSequenceDuration);
+
+            // Reveal every tab.
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                if (tabButtons[i] != null)
+                    tabButtons[i].PlayOpeningAnimation();
+
+                if (tabRevealStagger > 0f &&
+                    i < tabButtons.Length - 1)
+                {
+                    yield return new WaitForSecondsRealtime(tabRevealStagger);
+                }
+            }
+
+            // Let the final tab finish its pop-out animation.
+            if (tabOpenAnimationDuration > 0f)
+            {
+                yield return new WaitForSecondsRealtime(
+                    tabOpenAnimationDuration
+                );
+            }
+
+            // Explicitly put every tab into its visible resting state.
+            // This fixes the problem where only the selected tab remains visible.
+            foreach (TabButton tabButton in tabButtons)
+            {
+                if (tabButton != null)
+                    tabButton.ShowResting();
+            }
+
+            int tabToOpen = requestedTabIndex >= 0
+                ? requestedTabIndex
+                : GetRestoredTabIndex();
+            requestedTabIndex = -1;
+
+            if (tabToOpen >= 0)
+                SelectTabImmediate(tabToOpen);
+
+            SetTabInputEnabled(true);
+
+            isTransitioning = false;
+            transitionRoutine = null;
         }
 
         public void CloseOverlay()
         {
-            Sfx.Play(SfxId.UiClose);
-            ActivePanel?.OnPanelClosed();
-            foreach (var p in panels)
-                if (p != null) p.SetActivePanel(false);
-            activeIndex = -1;
-            Time.timeScale = 1f;
-            Close();
+            if (!IsOpen || isTransitioning)
+                return;
+
+            StopTransitionRoutine();
+            transitionRoutine = StartCoroutine(CloseRoutine());
         }
 
-        private void Step(int dir)
+        private IEnumerator CloseRoutine()
         {
-            if (panels.Length == 0) return;
-            int next = (activeIndex + dir + panels.Length) % panels.Length;
-            SelectTab(next);
+            isTransitioning = true;
+            SetTabInputEnabled(false);
+
+            if (activeIndex >= 0)
+                lastSelectedIndex = activeIndex;
+
+            ActivePanel?.OnPanelClosed();
+            HideAllPanels();
+
+            activeIndex = -1;
+
+            // Retract every tab before closing the book cover.
+            for (int i = tabButtons.Length - 1; i >= 0; i--)
+            {
+                if (tabButtons[i] != null)
+                    tabButtons[i].PlayClosingAnimation();
+
+                if (tabCloseStagger > 0f && i > 0)
+                    yield return new WaitForSecondsRealtime(tabCloseStagger);
+            }
+
+            if (tabCloseAnimationDuration > 0f)
+                yield return new WaitForSecondsRealtime(tabCloseAnimationDuration);
+
+            foreach (TabButton tabButton in tabButtons)
+            {
+                if (tabButton != null)
+                    tabButton.ResetVisual();
+            }
+
+            // Some older versions of the controller do not contain the close
+            // state. Reversing the open state keeps the menu functional while
+            // still preferring the dedicated close animation when available.
+            bool usedDedicatedCloseState = PlayBookState(
+                CloseHash,
+                warnIfMissing: false
+            );
+
+            if (!usedDedicatedCloseState)
+            {
+                PlayBookState(
+                    OpenHash,
+                    normalizedTime: 1f,
+                    playbackSpeed: -1f
+                );
+            }
+
+            float bookCloseDuration = usedDedicatedCloseState
+                ? closingSequenceDuration
+                : openingSequenceDuration;
+
+            yield return new WaitForSecondsRealtime(bookCloseDuration);
+
+            Close();
+            Time.timeScale = 1f;
+
+            isTransitioning = false;
+            transitionRoutine = null;
         }
 
+        private void OnTabClicked(int index)
+        {
+            if (!IsOpen || isTransitioning)
+                return;
+
+            SelectTab(index);
+        }
+
+        private void Step(int direction)
+        {
+            if (panels == null || panels.Length == 0)
+                return;
+
+            int currentIndex = activeIndex;
+
+            if (currentIndex < 0)
+                currentIndex = GetRestoredTabIndex();
+
+            int nextIndex = Mathf.Clamp(
+                currentIndex + direction,
+                0,
+                panels.Length - 1
+            );
+
+            SelectTab(nextIndex);
+        }
+
+        /// <summary>
+        /// Selects a tab and plays a page flip when moving between tabs.
+        /// Hovering does not call this method.
+        /// </summary>
         public void SelectTab(int index)
         {
-            if (index < 0 || index >= panels.Length || index == activeIndex) return;
+            if (!IsOpen || isTransitioning)
+                return;
 
-            // First tab after opening is part of the open sound, not a tab switch.
-            if (activeIndex >= 0)
-                Sfx.Play(SfxId.UiTab);
+            if (!IsValidTabIndex(index) || index == activeIndex)
+                return;
 
-            if (ActivePanel != null)
+            if (activeIndex < 0)
             {
-                ActivePanel.OnPanelClosed();
-                ActivePanel.SetActivePanel(false);
+                SelectTabImmediate(index);
+                return;
+            }
+
+            transitionRoutine = StartCoroutine(NavigateRoutine(index));
+        }
+
+        private IEnumerator NavigateRoutine(int targetIndex)
+        {
+            isTransitioning = true;
+            SetTabInputEnabled(false);
+
+            MenuPanel previousPanel = ActivePanel;
+
+            if (previousPanel != null)
+            {
+                previousPanel.OnPanelClosed();
+                previousPanel.SetActivePanel(false);
+            }
+
+            int direction = targetIndex > activeIndex ? 1 : -1;
+            int flipHash = direction > 0 ? FlipLeftHash : FlipRightHash;
+
+            while (activeIndex != targetIndex)
+            {
+                PlayBookState(flipHash);
+
+                if (pageFlipDuration > 0f)
+                    yield return new WaitForSecondsRealtime(pageFlipDuration);
+
+                activeIndex += direction;
+                UpdateSelectedTabs();
+            }
+
+            lastSelectedIndex = activeIndex;
+
+            MenuPanel selectedPanel = ActivePanel;
+
+            if (selectedPanel != null)
+            {
+                selectedPanel.SetActivePanel(true);
+                selectedPanel.OnPanelOpened();
+            }
+
+            SetTabInputEnabled(true);
+            isTransitioning = false;
+            transitionRoutine = null;
+        }
+
+        private void SelectTabImmediate(int index)
+        {
+            if (!IsValidTabIndex(index))
+                return;
+
+            MenuPanel previousPanel = ActivePanel;
+
+            if (previousPanel != null)
+            {
+                previousPanel.OnPanelClosed();
+                previousPanel.SetActivePanel(false);
             }
 
             activeIndex = index;
+            lastSelectedIndex = index;
 
-            if (ActivePanel != null)
+            MenuPanel selectedPanel = ActivePanel;
+
+            if (selectedPanel != null)
             {
-                ActivePanel.SetActivePanel(true);
-                ActivePanel.OnPanelOpened();
+                selectedPanel.SetActivePanel(true);
+                selectedPanel.OnPanelOpened();
             }
 
-            if (tabButtons != null)
-                for (int i = 0; i < tabButtons.Length; i++)
-                    if (tabButtons[i] != null) tabButtons[i].SetSelected(i == index);
+            UpdateSelectedTabs();
         }
 
-        private static Vector2 ReadNavigation(Keyboard kb)
+        private void UpdateSelectedTabs()
         {
-            float x = 0f, y = 0f;
-            if (kb.leftArrowKey.wasPressedThisFrame || kb.aKey.wasPressedThisFrame) x -= 1f;
-            if (kb.rightArrowKey.wasPressedThisFrame || kb.dKey.wasPressedThisFrame) x += 1f;
-            if (kb.upArrowKey.wasPressedThisFrame || kb.wKey.wasPressedThisFrame) y += 1f;
-            if (kb.downArrowKey.wasPressedThisFrame || kb.sKey.wasPressedThisFrame) y -= 1f;
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                if (tabButtons[i] != null)
+                    tabButtons[i].SetSelected(i == activeIndex);
+            }
+        }
+
+        private int GetValidDefaultIndex()
+        {
+            if (panels == null || panels.Length == 0)
+                return -1;
+
+            return Mathf.Clamp(defaultTabIndex, 0, panels.Length - 1);
+        }
+
+        private int GetRestoredTabIndex()
+        {
+            if (panels == null || panels.Length == 0)
+                return -1;
+
+            if (lastSelectedIndex >= 0 &&
+                lastSelectedIndex < panels.Length)
+            {
+                return lastSelectedIndex;
+            }
+
+            return GetValidDefaultIndex();
+        }
+
+        private bool IsValidTabIndex(int index)
+        {
+            return panels != null &&
+                   index >= 0 &&
+                   index < panels.Length;
+        }
+
+        private int FindTabIndex(string tabLabel)
+        {
+            if (panels == null || string.IsNullOrWhiteSpace(tabLabel))
+                return -1;
+
+            for (int i = 0; i < panels.Length; i++)
+            {
+                if (panels[i] != null && string.Equals(
+                    panels[i].TabLabel,
+                    tabLabel,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return i;
+                }
+            }
+
+            Debug.LogWarning($"Menu tab '{tabLabel}' was not found.", this);
+            return -1;
+        }
+
+        private void HideAllPanels()
+        {
+            if (panels == null)
+                return;
+
+            foreach (MenuPanel panel in panels)
+            {
+                if (panel != null)
+                    panel.SetActivePanel(false);
+            }
+        }
+
+        private void SetTabInputEnabled(bool enabled)
+        {
+            foreach (TabButton tabButton in tabButtons)
+            {
+                if (tabButton != null)
+                    tabButton.SetInputEnabled(enabled);
+            }
+        }
+
+        private bool PlayBookState(
+            int stateHash,
+            bool resetAnimator = false,
+            float normalizedTime = 0f,
+            float playbackSpeed = 1f,
+            bool warnIfMissing = true
+        )
+        {
+            if (bookAnimator == null)
+                return false;
+
+            bookAnimator.enabled = true;
+            bookAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            bookAnimator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            bookAnimator.speed = 1f;
+
+            if (resetAnimator)
+            {
+                bookAnimator.Rebind();
+                bookAnimator.Update(0f);
+            }
+
+            if (!bookAnimator.HasState(0, stateHash))
+            {
+                if (warnIfMissing)
+                {
+                    Debug.LogWarning(
+                        $"Animator state hash '{stateHash}' was not found " +
+                        $"on '{bookAnimator.name}'.",
+                        bookAnimator
+                    );
+                }
+
+                return false;
+            }
+
+            bookAnimator.Play(stateHash, 0, normalizedTime);
+            bookAnimator.Update(0f);
+            bookAnimator.speed = playbackSpeed;
+
+            return true;
+        }
+
+        private void StopTransitionRoutine()
+        {
+            if (transitionRoutine == null)
+                return;
+
+            StopCoroutine(transitionRoutine);
+            transitionRoutine = null;
+        }
+
+        private static Vector2 ReadNavigation(Keyboard keyboard)
+        {
+            float x = 0f;
+            float y = 0f;
+
+            if (keyboard.leftArrowKey.wasPressedThisFrame ||
+                keyboard.aKey.wasPressedThisFrame)
+            {
+                x -= 1f;
+            }
+
+            if (keyboard.rightArrowKey.wasPressedThisFrame ||
+                keyboard.dKey.wasPressedThisFrame)
+            {
+                x += 1f;
+            }
+
+            if (keyboard.upArrowKey.wasPressedThisFrame ||
+                keyboard.wKey.wasPressedThisFrame)
+            {
+                y += 1f;
+            }
+
+            if (keyboard.downArrowKey.wasPressedThisFrame ||
+                keyboard.sKey.wasPressedThisFrame)
+            {
+                y -= 1f;
+            }
+
             return new Vector2(x, y);
+        }
+
+        private void OnDestroy()
+        {
+            if (IsOpen)
+                Time.timeScale = 1f;
+        }
+
+        private void OnDisable()
+        {
+            if (!IsOpen && !isTransitioning)
+                return;
+
+            StopTransitionRoutine();
+            if (IsOpen)
+                Close();
+            Time.timeScale = 1f;
         }
     }
 }

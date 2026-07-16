@@ -10,9 +10,11 @@ public class TrapMove : MonoBehaviour
     [SerializeField] private float moveDuration = 0.35f;
     [SerializeField] private float moveDistance = 2.0f;
     [SerializeField] private float resetDelay = 3.0f; // X seconds to wait before resetting
+    [SerializeField] private bool ActivateOnStart = false;
 
+    [SerializeField] private bool ActiveAndDeActive = false;
 
-    
+    private bool ActiveState = false;
 
     [SerializeField] private bool DestroyOnActivate = false;
     [SerializeField] private bool reset = true; // Turn this on to enable auto-resetting
@@ -41,6 +43,7 @@ public class TrapMove : MonoBehaviour
 
     private float invertDistance = 1.0f;
 
+
     void Start()
     {
         initialPosition = transform.position;
@@ -50,9 +53,15 @@ public class TrapMove : MonoBehaviour
 
         box = GetComponent<BoxCollider2D>();
 
-        box.enabled = false;
+        if(turnOffColliderOnDeActive)
+            box.enabled = false;
 
         if (useBothDeAndActive && needActivator == false) reset = false;
+
+        if(ActivateOnStart)
+        {
+            ActivateTrap();
+        }
     }
 
 
@@ -102,6 +111,14 @@ public class TrapMove : MonoBehaviour
 
     public void ActivateTrap()
     {
+        if(ActiveAndDeActive )
+        {
+            if(ActiveState)
+            {
+                StopTrap();
+                return;
+            }
+        }
         HasOutSideBothTriggered = true;
         Sfx.PlayAt(SfxId.WorldTrapMove, transform.position);
         if (movementRoutine != null)
@@ -126,7 +143,7 @@ public class TrapMove : MonoBehaviour
 
     public void StopTrap()
     {
-        Sfx.PlayAt(SfxId.WorldTrapMove, transform.position, 0.7f, 0.94f);
+
         if (movementRoutine != null) StopCoroutine(movementRoutine);
 
         Vector3 targetPos = initialPosition;
@@ -169,10 +186,14 @@ public class TrapMove : MonoBehaviour
         }
 
         movementRoutine = null;
+        ActiveState = true;
+
         if (initialPosition == transform.position && turnOffColliderOnDeActive == true)
         {
             box.enabled = false;
+            ActiveState = false;
         }
+        
     }
 
 

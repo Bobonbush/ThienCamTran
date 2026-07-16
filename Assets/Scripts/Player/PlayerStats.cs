@@ -10,11 +10,13 @@ public class PlayerStats : MonoBehaviour
     SkillSlotUI skillSlot;
 
 
+   
+
+
     private int _Mana = 0;
     private int _MaxMana = 100;
 
-    private int _Tre = 3;
-    private int _MaxTre = 3;
+    
 
     private int HealValue = 10;
 
@@ -33,7 +35,7 @@ public class PlayerStats : MonoBehaviour
 
     public int Mana
     {
-        set {if(value <= _MaxMana) _Mana = value; }
+        set { if (value <= _MaxMana) _Mana = value; else _Mana = _MaxMana; }
         get { return _Mana; }
     }
 
@@ -42,19 +44,12 @@ public class PlayerStats : MonoBehaviour
         set { _MaxMana = value; }
         get { return _MaxMana; }
     }
-    
 
-    public int Tre
-    {
-        set { _Tre = value; _Tre = Mathf.Clamp(_Tre, 0, _MaxTre); }
-        get { return _Tre; }
-    }
 
-    public int MaxTre
-    {
-        set { _MaxTre = value; }
-        get { return _MaxTre; }
-    }
+    public float stamina = 100;
+    private float maxStamina = 100;
+
+    private int rateUpdate = 10;
 
     void Start()
     {
@@ -62,6 +57,20 @@ public class PlayerStats : MonoBehaviour
         slot1 = GetComponent<ThrowTalisman>();
 
         SetSkillAvatar();
+    }
+
+    private void Update()
+    {
+        stamina += (int) 10 * Time.deltaTime;
+        stamina = Mathf.Clamp(stamina, 0, maxStamina);
+    }
+
+    public bool CanConsume(float stamina_value)
+    {
+        if (stamina_value > stamina) return false;
+
+        stamina -= stamina_value;
+        return true;
     }
 
     private void SetSkillAvatar()
@@ -74,6 +83,13 @@ public class PlayerStats : MonoBehaviour
         skillSlot.SetAvatar(slot1, slot2);
     }
 
+
+    public bool CanHeal()
+    {
+        return Mana == MaxMana;
+    }
+
+
     public void Heal()
     {
         if (damagable == null)
@@ -81,13 +97,15 @@ public class PlayerStats : MonoBehaviour
             return;
         }
 
-        if (_Tre > 0)
-        {
-            _Tre--;
-            damagable.Health += HealValue;
-            // Heals here bypass Damageable.Heal, so characterHealed never fires — cue directly.
-            Sfx.Play(SfxId.PlayerHeal);
-        }
+
+        damagable.Health += HealValue;
+        
+    }
+
+    public void OnHeal()
+    {
+        damagable.Health += HealValue;
+        Mana = 0;
     }
 
 

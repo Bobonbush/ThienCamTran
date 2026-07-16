@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CutSceneManager : MonoBehaviour
@@ -6,6 +7,12 @@ public class CutSceneManager : MonoBehaviour
 
     public static CutSceneManager Instance { get; private set; }
     public GameObject gameplayObject;
+    public GameObject UIObject;
+
+    [NonSerialized]
+    public PlayerController playerController;
+    [NonSerialized]
+    public PlayerCamera playerCamera;
 
     private void Awake()
     {
@@ -13,12 +20,17 @@ public class CutSceneManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+
+            GameObject player = gameplayObject = GameObject.Find("Player");
+            playerController = player.GetComponent<PlayerController>();
+            playerCamera = player.GetComponentInChildren<PlayerCamera>();
             DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+
     }
 
     public void OnCutSceneStart(CutSceneInfo info)
@@ -32,30 +44,41 @@ public class CutSceneManager : MonoBehaviour
         }
         if (gameplayObject != null)
         {
-            gameplayObject.SetActive(false);
-            Debug.Log("[CutScene] gameplayObject hidden successfully.");
+            
+            if (info.useBigDialog)
+            {
+                gameplayObject.SetActive(false);
+            }
         }
         else
         {
             Debug.LogError("[CutScene] gameplayObject is MISSING/NULL in the inspector!");
         }
-        
+
+        if(UIObject != null && info.HideUI)
+        {
+            UIObject.SetActive(false);
+        }
     }
 
     public void OnCutSceneEnd(CutSceneInfo info)
     {
 
         // Turn on Hub Again
-        gameplayObject.SetActive(true);
-        
+        if (info.useBigDialog)
+        {
+            gameplayObject.SetActive(true);
+        }
 
-        if(info.newScene)
+        if (UIObject != null)
+        {
+            UIObject.SetActive(true);
+        }
+
+        if (info.newScene && info.HideUI)
         {
             SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
             sceneManager.TransitionToScene(info.SceneID, info.SpawnID, info.SpawnOffset);
-
-            Debug.Log(info.SceneID);
-            Debug.Log(info.SpawnID);
         }
     }
 }

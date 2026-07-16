@@ -24,8 +24,12 @@ public class ActivateTrap : MonoBehaviour
 
     public enum Type { oneTimeTrigger, multipleTimeTrigger, continuousTrigger};
 
+   
+
     [SerializeField]
     private bool oneTimeTriggerSave = false;
+
+    public bool isoneTimeTriggerSave { get { return oneTimeTriggerSave; } }
 
     public enum TriggerType { stand, purify};
 
@@ -140,8 +144,9 @@ public class ActivateTrap : MonoBehaviour
         if (trap != null)
         {
             trap.SetActive(true);
+
             trap.GetComponent<TrapMove>().ActivateTrap();
-            
+
         }
     }
 
@@ -182,9 +187,9 @@ public class ActivateTrap : MonoBehaviour
         foreach (TrapData data in trapSequence)
         {
             TrapMove trap = data.trapObject.GetComponent<TrapMove>();
-            if(trap != null)
+            if (trap != null)
             {
-                if(trap.ReliedOnActivator)
+                if (trap.ReliedOnActivator)
                 {
                     trap.StopTrap();
                 }
@@ -198,13 +203,11 @@ public class ActivateTrap : MonoBehaviour
             duration = moveDuration - duration;
         }
 
-        // Bản đá nhả ra — cùng cue với lúc nhấn nhưng nhẹ hơn
-        Sfx.PlayAt(SfxId.WorldPlatePress, realTransform.position, 0.6f, 1.08f);
-
-        yield return StartCoroutine(SmoothMove(targetPosition, duration));
-
-
-
+        if (!isoneTimeTriggerSave) {
+             yield return StartCoroutine(SmoothMove(targetPosition, duration));
+        }
+        
+        
     }
 
     

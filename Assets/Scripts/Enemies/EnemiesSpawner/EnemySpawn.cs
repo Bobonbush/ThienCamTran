@@ -45,17 +45,27 @@ public class EnemySpawn : MonoBehaviour
         // which round done for activate these traps
         public int round = 0;
         public float delayTime = 0.5f;
-        List<TrapInfo> trapInfos = new();    
+        public List<TrapInfo> trapInfos = new();    
     }
 
+    //Custom Traps
     public List<TrapRound> trapList = new List<TrapRound>();
 
     private int round = -1;
 
+    private int trapCounter = 0;
+
     private bool start = false;
 
-    public List<GameObject> currentEnemies;
-    
+    private List<GameObject> currentEnemies  = new List<GameObject>();
+    private List<GameObject> currentTrapList = new List<GameObject>();
+
+    private PlayerController playerController;
+    private PlayerCamera playerCamera;
+
+
+    private CutTrigger cut;
+    private bool LastenemiesFinish = false;
 
 
     private ActivateTrap activeTrap; // use for close the door
@@ -65,6 +75,7 @@ public class EnemySpawn : MonoBehaviour
     private void Awake()
     {
         activeTrap = GetComponent<ActivateTrap>();
+        cut = GetComponent<CutTrigger>();
     }
 
     private void Start()
@@ -99,6 +110,7 @@ public class EnemySpawn : MonoBehaviour
 
     public void Spawn()
     {
+
         if(isDone() && spawning == null)
         {
             round++;
@@ -134,22 +146,68 @@ public class EnemySpawn : MonoBehaviour
         spawning = null;
     }
 
-
-
-    private bool isDone()
+    public IEnumerator ActivateAdditionalTraps()
     {
-        for(int i = 0; i < currentEnemies.Count; i++)
+        if (trapList[trapCounter].round != round) yield break;
+
+        yield return new WaitForSeconds(trapList[trapCounter].delayTime);
+
+        currentTrapList.Clear();
+        for (int i = 0; i < trapList[round].trapInfos.Count; i++)
+        {
+            TrapInfo info = trapList[round].trapInfos[i];
+            info.traps.ActivateTrap();
+        }
+        trapCounter++;
+        spawning = null;
+    }
+
+
+    private bool isEnemiesDone()
+    {
+        for (int i = 0; i < currentEnemies.Count; i++)
         {
             if (currentEnemies[i] != null) return false;
         }
         return true;
     }
 
+    private bool isTrapDone()
+    {
+        for(int i = 0; i< currentTrapList.Count; i++)
+        {
+            if (currentTrapList[i] != null) return false;
+        }
+        return true;
+    }
+
+    private bool isDone()
+    {
+        bool isEFinish = isEnemiesDone();
+        if(isEFinish && LastenemiesFinish == false)
+        {
+            spawning = StartCoroutine(ActivateAdditionalTraps());
+        }
+        LastenemiesFinish = isEFinish;
+        return isEFinish && LastenemiesFinish && isTrapDone();
+    }
+
     private void Done()
     {
-        Debug.Log("Done");
+        if(cut != null)
+        {
+            cut.Trigger(playerController, playerCamera);
+        }
+
+        
         ActivateTrap(false);
 
         this.enabled = false;
+    }
+
+    public void SetUpCutScene(PlayerController controller , PlayerCamera p_camera)
+    {
+        playerController = controller;
+        playerCamera = p_camera;
     }
 }

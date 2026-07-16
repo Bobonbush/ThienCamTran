@@ -8,6 +8,8 @@ public class TriggerAttack : MonoBehaviour
 
     // Turn off in the animator event
     SpriteRenderer spriteRenderer;
+
+    bool successAttack = false;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -16,7 +18,22 @@ public class TriggerAttack : MonoBehaviour
 
     public void Trigger()
     {
+        
+        successAttack = false;
         anim.SetTrigger(AnimationStrings.attack);
 
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!successAttack)
+        {
+            Debug.Log("Sucess Attack");
+            PlayerStats stats = GetComponentInParent<PlayerStats>();
+            stats.Mana += 10;
+        }
+        successAttack = true;
+    }
+
+
 }

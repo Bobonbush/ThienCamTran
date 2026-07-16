@@ -202,9 +202,9 @@ MonoBehaviour:
   damageableHit:
     m_PersistentCalls:
       m_Calls: []
-  _maxHealth: 100
+  _maxHealth: 40
   canRevive: 0
-  _health: 100
+  _health: 40
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.5
@@ -413,7 +413,6 @@ MonoBehaviour:
   moveInRange: 0
   moveRange: {fileID: 0}
   FlipWaitingMaxTime: 2
-  flashMaterial: {fileID: 0}
   duration: 0
   _walkDiretionVector: {x: 1, y: 0}
   lockedMove: 1

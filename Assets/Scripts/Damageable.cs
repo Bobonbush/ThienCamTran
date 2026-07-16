@@ -105,7 +105,7 @@ public class Damageable : MonoBehaviour
         }
     }
 
-public void Awake()
+     public void Awake()
     {
         animator = GetComponent<Animator>();
         animator.SetBool(AnimationStrings.isAlive, _isAlive);
@@ -158,13 +158,18 @@ public void Awake()
 
     public void setInvisibleFrame(float duration)
     {
+        
         isInvincible = true;
         timeInvisibleFrame = 0.0f;
         maxTimeInvisibleFrame = duration;
+        if(timeInvisibleFrame > maxTimeInvisibleFrame)
+        {
+            isInvincible = false;
+        }
     }
 
     
-public bool Hit(int damage, Vector2 knockback)
+    public bool Hit(int damage, Vector2 knockback)
     {
         return ApplyHit(damage, knockback, null);
     }

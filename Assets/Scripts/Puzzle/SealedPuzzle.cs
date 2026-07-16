@@ -3,6 +3,7 @@ using UnityEngine;
 public class SealedPuzzle : MonoBehaviour, IInteractable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private static bool firstEncounter = false;
 
     [Header("Prompt")]
     public GameObject promptObject;
@@ -10,6 +11,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     [SerializeField] private Transform left;
     [SerializeField] private Transform right;
 
+    DialogInteractable dialogTrigger;
 
     private ActivateTrap activateTrap;
 
@@ -43,6 +45,8 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         e_spawn = GetComponentInParent<EnemySpawn>();
         activateTrap = GetComponentInParent<ActivateTrap>();
         cutTrigger = GetComponentInParent<CutTrigger>();
+
+        dialogTrigger = GetComponent<DialogInteractable>();
     }
 
     void Start()
@@ -62,7 +66,12 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     public void Interact(PlayerController player)
     {
         if (!CanInteract || collisionCnt == 0 ) return;
-        
+        if(firstEncounter == false)
+        {
+            dialogTrigger.TriggerInteract();
+            firstEncounter = true;
+            return;
+        }
         if(!player.isPuzzling())
         {
             Puzzle(player);
@@ -80,6 +89,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         if(e_spawn != null)
         {
             e_spawn.StartUp();
+            e_spawn.SetUpCutScene(playerController, player);
         }
     }
 

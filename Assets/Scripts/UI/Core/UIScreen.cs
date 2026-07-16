@@ -12,7 +12,7 @@ namespace Game.UI
     [RequireComponent(typeof(CanvasGroup))]
     public class UIScreen : MonoBehaviour
     {
-        [SerializeField] private float fadeDuration = 0.15f;
+        [SerializeField] private float fadeDuration = 0f;
 
         private CanvasGroup canvasGroup;
         private Coroutine fadeRoutine;
@@ -22,8 +22,14 @@ namespace Game.UI
         protected virtual void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
-            // Start hidden but keep the component active so coroutines can run.
-            SetVisible(false, instant: true);
+
+            if (fadeRoutine != null)
+            {
+                StopCoroutine(fadeRoutine);
+                fadeRoutine = null;
+            }
+
+            SetVisible(false, true);
         }
 
         public virtual void Open()
@@ -47,6 +53,12 @@ namespace Game.UI
         {
             canvasGroup.interactable = visible;
             canvasGroup.blocksRaycasts = visible;
+        
+            if (fadeRoutine != null)
+            {
+                StopCoroutine(fadeRoutine);
+                fadeRoutine = null;
+            }
 
             if (instant || fadeDuration <= 0f)
             {
@@ -54,19 +66,24 @@ namespace Game.UI
                 return;
             }
 
-            if (fadeRoutine != null) StopCoroutine(fadeRoutine);
             fadeRoutine = StartCoroutine(Fade(visible ? 1f : 0f));
         }
 
         private IEnumerator Fade(float target)
         {
             float speed = 1f / fadeDuration;
-            // Use unscaled time so menus still fade while the game is paused (timeScale = 0).
+        
             while (!Mathf.Approximately(canvasGroup.alpha, target))
             {
-                canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, target, speed * Time.unscaledDeltaTime);
+                canvasGroup.alpha = Mathf.MoveTowards(
+                    canvasGroup.alpha,
+                    target,
+                    speed * Time.unscaledDeltaTime);
+
                 yield return null;
             }
+
+            canvasGroup.alpha = target;
             fadeRoutine = null;
         }
     }

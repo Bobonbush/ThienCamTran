@@ -18,8 +18,6 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
     private Sealed seal = null;
 
 
-    WorldSpacePrompt promp;
-
 
     [SerializeField]
 
@@ -28,13 +26,12 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
 
     public bool CanInteract
     {
-        get { return promp == null || promp.FinishAnimation(); }
+        get { return true; }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
     {
-        promp = GetComponentInChildren<WorldSpacePrompt>();
         seal = GetComponent<Sealed>();
         SetPromptVisible(false);
     }
@@ -55,13 +52,9 @@ public class InteractiveRoom : MonoBehaviour, IInteractable
         if (!CanInteract )
             return;
 
-        Debug.Log(seal != null);
         if(seal != null && seal.isSealed())
         {
-            if (promp != null)
-            {
-                promp.OutSideActivate();
-            }
+            seal.TriggerWarning();
             return;
         }
         EnterNextRoom();   
