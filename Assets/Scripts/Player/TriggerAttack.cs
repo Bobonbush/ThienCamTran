@@ -26,7 +26,7 @@ public class TriggerAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!successAttack)
+        if (!successAttack && collision.GetComponent<Damageable>())
         {
             Debug.Log("Sucess Attack");
             PlayerStats stats = GetComponentInParent<PlayerStats>();
