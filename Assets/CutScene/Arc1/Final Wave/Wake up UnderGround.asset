@@ -30,7 +30,7 @@ MonoBehaviour:
   - forceX: 0
     scaleX: 0
     MoveDuration: 0
-    stayDuration: 6
+    stayDuration: 11
     useTrigger: 1
     triggerName: SceneDead
   ComeBackCamera: 0

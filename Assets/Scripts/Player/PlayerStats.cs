@@ -67,8 +67,11 @@ public class PlayerStats : MonoBehaviour
 
     public bool CanConsume(float stamina_value)
     {
-        if (stamina_value > stamina) return false;
-
+        if (stamina_value > stamina)
+        {
+            Sfx.Play(SfxId.UiDenied);
+            return false;
+        }
         stamina -= stamina_value;
         return true;
     }
@@ -86,35 +89,32 @@ public class PlayerStats : MonoBehaviour
 
     public bool CanHeal()
     {
-        return Mana == MaxMana;
-    }
-
-
-    public void Heal()
-    {
-        if (damagable == null)
+        bool yesOrNo = (Mana == MaxMana);
+        if(yesOrNo)
         {
-            return;
+            Sfx.Play(SfxId.UiDenied);
         }
-
-
-        damagable.Health += HealValue;
-        
+        return yesOrNo;
     }
 
-    public void OnHeal()
+
+   
+
+    public void OnHealing()
     {
         damagable.Health += HealValue;
         Mana = 0;
+        Sfx.Play(SfxId.PlayerHeal);
     }
 
 
     public void TriggerSlot1(Animator animator)
     {
         if (slot1 == null) return;
-        
+
         if(slot1.GetManaCost() > Mana)
         {
+            Sfx.Play(SfxId.UiDenied);
             return;
         }
 
@@ -123,6 +123,7 @@ public class PlayerStats : MonoBehaviour
         if(slot1.Trigger())
         {
             animator.SetTrigger(slot1.GetAnimationString());
+            Sfx.Play(SfxId.PlayerSkillCast);
         }
     }
 
@@ -132,6 +133,7 @@ public class PlayerStats : MonoBehaviour
 
         if (slot2.GetManaCost() > Mana)
         {
+            Sfx.Play(SfxId.UiDenied);
             return;
         }
 
@@ -140,6 +142,7 @@ public class PlayerStats : MonoBehaviour
         if (slot2.Trigger())
         {
             animator.SetTrigger(slot2.GetAnimationString());
+            Sfx.Play(SfxId.PlayerSkillCast);
         }
     }
 }

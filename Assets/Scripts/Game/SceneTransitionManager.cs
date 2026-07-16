@@ -58,6 +58,8 @@ public class SceneTransitionManager : MonoBehaviour
         }
         coolDownTransition = maxcoolDownTransition;
 
+        Sfx.Play(SfxId.WorldTransition);
+
         targetSpawnPointId = spawnPointId;
         offsetSpawn = _offsetSpawn;
 

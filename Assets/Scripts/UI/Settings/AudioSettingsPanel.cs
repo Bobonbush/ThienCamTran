@@ -25,8 +25,24 @@ namespace Game.UI
         }
 
         // Wire each slider's OnValueChanged to the matching method below.
-        public void OnMasterChanged(float v) => SettingsService.Instance?.SetMasterVolume(v);
-        public void OnMusicChanged(float v) => SettingsService.Instance?.SetMusicVolume(v);
-        public void OnSfxChanged(float v) => SettingsService.Instance?.SetSfxVolume(v);
+        // The tick doubles as a live preview of the volume being set; the cue's
+        // cooldown keeps a drag from machine-gunning.
+        public void OnMasterChanged(float v)
+        {
+            SettingsService.Instance?.SetMasterVolume(v);
+            Sfx.Play(SfxId.UiSlider);
+        }
+
+        public void OnMusicChanged(float v)
+        {
+            SettingsService.Instance?.SetMusicVolume(v);
+            Sfx.Play(SfxId.UiSlider);
+        }
+
+        public void OnSfxChanged(float v)
+        {
+            SettingsService.Instance?.SetSfxVolume(v);
+            Sfx.Play(SfxId.UiSlider);
+        }
     }
 }

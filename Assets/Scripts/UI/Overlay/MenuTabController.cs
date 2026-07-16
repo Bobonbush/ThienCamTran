@@ -229,7 +229,7 @@ namespace Game.UI
             EnsureInitialized();
 
             StopTransitionRoutine();
-
+            Sfx.Play(SfxId.UiOpen);
             Open();
             transitionRoutine = StartCoroutine(OpenRoutine());
             Time.timeScale = 0f;
@@ -315,7 +315,7 @@ namespace Game.UI
         {
             if (!IsOpen || isTransitioning)
                 return;
-
+            Sfx.Play(SfxId.UiClose);
             StopTransitionRoutine();
             transitionRoutine = StartCoroutine(CloseRoutine());
         }

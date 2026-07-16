@@ -22,11 +22,12 @@ public class Breakable : MonoBehaviour
     {
 
         animator.SetTrigger("hit"); // if have.
-        
+
         dm.invicibilityTimer = -1.0f;
 
         if(!dm.IsAlive)
         {
+            Sfx.PlayAt(SfxId.WorldBreak, transform.position);
             StartCoroutine(DieRoutine());
         }
 

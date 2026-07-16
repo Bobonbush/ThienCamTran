@@ -88,6 +88,8 @@ public class DialogView : MonoBehaviour
     public void Open()
     {
         Init();
+        if (!isOpen)
+            Sfx.Play(SfxId.DialogOpen);
         isOpen = true;
 
         // Set the starting state BEFORE showing so there is no 1-frame flash.
@@ -108,6 +110,7 @@ public class DialogView : MonoBehaviour
             return;
         }
         isOpen = false;
+        Sfx.Play(SfxId.DialogClose);
         StartAnim(AnimateOut());
     }
 
@@ -211,6 +214,11 @@ public class DialogView : MonoBehaviour
                 yield return new WaitForSecondsRealtime(newLinePause);
             }
 
+            // Typewriter blip per revealed char; the cue's own cooldown turns
+            // this into a steady tick instead of one blip per frame.
+            if (currentIndex > lastIndex && currentIndex < count)
+                Sfx.Play(SfxId.DialogBlip);
+
             lastIndex = currentIndex;
             ApplyReveal(dialog, info, head, fade);
             yield return null;
@@ -246,6 +254,7 @@ public class DialogView : MonoBehaviour
     {
         Button button = Instantiate(choiceButtonPrefab, choicesContainer);
         button.GetComponentInChildren<TMP_Text>().text = label;
+        button.onClick.AddListener(() => Sfx.Play(SfxId.UiConfirm));
         button.onClick.AddListener(onClick);
         spawnedButtons.Add(button);
     }

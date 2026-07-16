@@ -70,6 +70,7 @@ public class ItemContainer : MonoBehaviour, IInteractable
 
         opened = true;
         anim.SetBool(AnimationStrings.openChest, opened);
+        Sfx.PlayAt(SfxId.WorldChestOpen, transform.position);
 
         if (promptObject != null)
             promptObject.SetActive(false);

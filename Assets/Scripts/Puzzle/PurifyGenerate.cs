@@ -92,9 +92,15 @@ public class PurifyGenerate : MonoBehaviour
 
         if (type == gen_code[cnt])
         {
+            // Mỗi nốt đúng cao dần theo tiến độ chuỗi — nghe là biết sắp xong
+            Sfx.Play(SfxId.PuzzleInput, 1f, 1f + cnt * 0.08f);
             StartCoroutine(Correct());
         }
-        else StartCoroutine(Wrong());
+        else
+        {
+            Sfx.Play(SfxId.PuzzleWrong);
+            StartCoroutine(Wrong());
+        }
     }
 
 

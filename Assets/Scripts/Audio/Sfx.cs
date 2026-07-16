@@ -34,6 +34,11 @@ public static class Sfx
 
     public static void Play(string cueId, float volumeScale = 1f)
     {
+        Play(cueId, volumeScale, 1f);
+    }
+
+    public static void Play(string cueId, float volumeScale, float pitchScale)
+    {
         SfxLibrary.Cue cue = ResolveCue(cueId);
         if (cue == null)
             return;
@@ -53,7 +58,7 @@ public static class Sfx
         if (voice == null)
             return;
 
-        voice.pitch = Random.Range(cue.minPitch, cue.maxPitch);
+        voice.pitch = Random.Range(cue.minPitch, cue.maxPitch) * pitchScale;
         voice.PlayOneShot(clip, Mathf.Clamp01(cue.volume * volumeScale));
 
         if (cue.layerClips != null && cue.layerClips.Length > 0)
@@ -62,6 +67,42 @@ public static class Sfx
             if (layer != null)
                 voice.PlayOneShot(layer, Mathf.Clamp01(cue.volume * cue.layerVolume * volumeScale));
         }
+    }
+
+    /// <summary>
+    /// Positional variant: volume falls off with distance from the camera and the
+    /// cue is culled entirely once it is far off-screen, so a room full of traps,
+    /// chests and enemies only sounds like the part of it the player can see.
+    /// </summary>
+    public static void PlayAt(string cueId, Vector3 worldPosition, float volumeScale = 1f, float pitchScale = 1f)
+    {
+        float attenuation = DistanceScale(worldPosition);
+        if (attenuation <= 0.01f)
+            return;
+
+        Play(cueId, volumeScale * attenuation, pitchScale);
+    }
+
+    /// <summary>
+    /// 1 near the camera, quadratic falloff to 0 at the library's far hearing
+    /// radius. Shared by PlayAt and EnemySfxController so every positional
+    /// sound in the game attenuates the same way.
+    /// </summary>
+    public static float DistanceScale(Vector3 worldPosition)
+    {
+        SfxLibrary lib = GetLibrary();
+        Camera listener = Camera.main;
+        if (lib == null || listener == null)
+            return 1f;
+
+        float distance = Vector2.Distance(listener.transform.position, worldPosition);
+        if (distance <= lib.nearHearingRadius)
+            return 1f;
+        if (distance >= lib.farHearingRadius)
+            return 0f;
+
+        float remaining = 1f - Mathf.InverseLerp(lib.nearHearingRadius, lib.farHearingRadius, distance);
+        return remaining * remaining;
     }
 
     private static SfxLibrary.Cue ResolveCue(string cueId)
@@ -144,8 +185,13 @@ public static class Sfx
 public static class SfxId
 {
     public const string PlayerFootstep = "player.footstep";
+    public const string PlayerFootstepGrass = "player.footstep.grass";
+    public const string PlayerFootstepWood = "player.footstep.wood";
+    public const string PlayerFootstepWater = "player.footstep.water";
     public const string PlayerJump = "player.jump";
     public const string PlayerLand = "player.land";
+    public const string PlayerLandHard = "player.land.hard";
+    public const string PlayerClimb = "player.climb";
     public const string PlayerDash = "player.dash";
     public const string PlayerAttack = "player.attack";
     public const string PlayerHurt = "player.hurt";
@@ -153,10 +199,40 @@ public static class SfxId
     public const string PlayerHeal = "player.heal";
     public const string PlayerPickup = "player.pickup";
     public const string PlayerRevive = "player.revive";
+    public const string PlayerSkillCast = "player.skill.cast";
+
+    public const string CombatHit = "combat.hit";
+    public const string CombatBlock = "combat.block";
+    public const string EnemySpawn = "enemy.spawn";
+
+    public const string WorldChestOpen = "world.chest.open";
+    public const string WorldBreak = "world.break";
+    public const string WorldTrapMove = "world.trap.move";
+    public const string WorldPlatePress = "world.plate.press";
+    public const string WorldSpike = "world.trap.spike";
+    public const string WorldHiddenReveal = "world.hidden.reveal";
+    public const string WorldCheckpoint = "world.checkpoint";
+    public const string WorldTransition = "world.transition";
+
+    public const string PuzzleInput = "puzzle.input";
+    public const string PuzzleWrong = "puzzle.wrong";
+    public const string PuzzleRound = "puzzle.round";
+    public const string PuzzleComplete = "puzzle.complete";
+    public const string PuzzleFail = "puzzle.fail";
+
+    public const string DialogOpen = "dialog.open";
+    public const string DialogClose = "dialog.close";
+    public const string DialogBlip = "dialog.blip";
 
     public const string UiHover = "ui.hover";
     public const string UiConfirm = "ui.confirm";
     public const string UiDecline = "ui.decline";
+    public const string UiDenied = "ui.denied";
     public const string UiPause = "ui.pause";
     public const string UiUnpause = "ui.unpause";
+    public const string UiOpen = "ui.open";
+    public const string UiClose = "ui.close";
+    public const string UiTab = "ui.tab";
+    public const string UiSlider = "ui.slider";
+    public const string UiNewItem = "ui.newitem";
 }

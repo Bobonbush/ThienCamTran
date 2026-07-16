@@ -96,6 +96,9 @@ public class TouchingDirections : MonoBehaviour
 
 
 
+    /// <summary>Collider currently stood on (first ground hit this physics step), for surface-aware SFX.</summary>
+    public Collider2D GroundCollider { get; private set; }
+
     private int slidableLayer;
     private void Awake()
     {
@@ -125,6 +128,7 @@ public class TouchingDirections : MonoBehaviour
 
         int groundHitCount = boxCol.Cast(Vector2.down, castFilter, groundHits, groundDistance);
         IsGrounded = groundHitCount > 0;
+        GroundCollider = groundHitCount > 0 ? groundHits[0].collider : null;
 
         IsOnSlidable = false;
 

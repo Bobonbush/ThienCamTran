@@ -388,6 +388,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbba6add392dd974e93038d522f7ed05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySfxController
+  alertClips:
+  - {fileID: 8300000, guid: 00a2a68134df41099fcf228a7bd3f3cd, type: 3}
+  alertVolume: 0.55
+  realertCooldown: 4
+  footstepClips: []
+  footstepInterval: 0.38
+  footstepVolume: 0.4
   shieldRaiseClips: []
   attackWindupClips:
   - {fileID: 8300000, guid: 4721dc1dcac6ac441bba3fde629cd3f6, type: 3}
@@ -409,6 +416,7 @@ MonoBehaviour:
   minimumPitch: 0.96
   maximumPitch: 1.05
   spatialBlend: 0
+  distanceFalloff: 1
 --- !u!114 &948189536084078934
 MonoBehaviour:
   m_ObjectHideFlags: 0
