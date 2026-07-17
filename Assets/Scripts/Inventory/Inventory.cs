@@ -23,9 +23,15 @@ public class Inventory : MonoBehaviour
         Item prefab = item.InventoryPrefab;
         foreach (ItemStack stack in items)
         {
-            if (stack.itemPrefab == prefab)
+            // Stack khôi phục từ save chỉ có tên (prefab null) — gộp theo tên
+            // và gắn lại prefab ở lần nhặt đầu tiên sau khi load
+            bool samePrefab = stack.itemPrefab == prefab;
+            bool sameRestoredName = stack.itemPrefab == null && stack.itemName == item.ItemName;
+            if (samePrefab || sameRestoredName)
             {
                 stack.amount += amount;
+                if (stack.itemPrefab == null)
+                    stack.itemPrefab = prefab;
                 return true;
             }
         }

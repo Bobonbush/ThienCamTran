@@ -51,7 +51,18 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
 
     void Start()
     {
-        SetPromptVisible(false);   
+        SetPromptVisible(false);
+
+        // Puzzle đã giải trong save -> mở lại cổng ngay, không cutscene/không spawn quái
+        if (SaveManager.Instance.IsPuzzleSolved(SaveIdUtility.For(this)))
+        {
+            _solve = true;
+            if (activateTrap != null)
+            {
+                activateTrap.TriggerAnimation();
+                activateTrap.ActivateTraps();
+            }
+        }
     }
 
     public void SetPromptVisible(bool visible)
@@ -82,6 +93,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     public void Done(PlayerController playerController, PlayerCamera player)
     {
         _solve = true;
+        SaveManager.Instance.MarkPuzzleSolved(SaveIdUtility.For(this));
         cutTrigger.Trigger(playerController, player);
         activateTrap.TriggerAnimation();
         activateTrap.ActivateTraps();

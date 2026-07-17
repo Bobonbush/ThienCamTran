@@ -52,6 +52,10 @@ public class ItemContainer : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        // Rương đã mở trong save -> load lại scene vẫn mở và rỗng
+        if (openOnce && SaveManager.Instance.IsChestOpened(SaveIdUtility.For(this)))
+            opened = true;
+
         anim = GetComponent<Animator>();
         anim.SetBool(AnimationStrings.openChest, opened);
     }
@@ -69,6 +73,8 @@ public class ItemContainer : MonoBehaviour, IInteractable
             return;
 
         opened = true;
+        if (openOnce)
+            SaveManager.Instance.MarkChestOpened(SaveIdUtility.For(this));
         anim.SetBool(AnimationStrings.openChest, opened);
         Sfx.PlayAt(SfxId.WorldChestOpen, transform.position);
 
@@ -98,12 +104,15 @@ public class ItemContainer : MonoBehaviour, IInteractable
                     continue;
 
                 Vector3 offset = new Vector3(UnityEngine.Random.Range(-spreadX, spreadX), UnityEngine.Random.Range(0f, spreadY), 0f);
-                Item droppedItem = Instantiate(prefab, origin + offset, Quaternion.identity);
+                // Rương kê sát tường: điểm spawn có thể lọt sau tường -> kẹp lại
+                Vector3 spawnPosition = ItemDropPhysics.ClampSpawnPosition(origin, origin + offset);
+                Item droppedItem = Instantiate(prefab, spawnPosition, Quaternion.identity);
                 droppedItem.itemPrefab = prefab;
 
                 Rigidbody2D rb = droppedItem.GetComponent<Rigidbody2D>();
                 if (rb != null)
                 {
+                    ItemDropPhysics.PrepareRigidbody(rb);
                     float direction = UnityEngine.Random.value < 0.5f ? -1f : 1f;
                     Vector2 force = new Vector2(direction * UnityEngine.Random.Range(0.5f, burstForce), upwardForce);
                     rb.AddForce(force, ForceMode2D.Impulse);

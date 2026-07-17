@@ -15,7 +15,14 @@ public class Breakable : MonoBehaviour
         animator = GetComponentInParent<Animator>();
         dm = GetComponentInParent<Damageable>();
         dm.Health = 1;  // 1 hits
-        
+
+        // Đã vỡ trong save -> dọn luôn không animation/SFX khi vào lại scene
+        if (SaveManager.Instance.IsObjectBroken(SaveIdUtility.For(this)))
+        {
+            if (attachedDeletation != null)
+                Destroy(attachedDeletation.gameObject);
+            Destroy(transform.parent.gameObject);
+        }
     }
 
     public void OnHit(int damage, Vector2 knockback)
@@ -27,6 +34,7 @@ public class Breakable : MonoBehaviour
 
         if(!dm.IsAlive)
         {
+            SaveManager.Instance.MarkObjectBroken(SaveIdUtility.For(this));
             Sfx.PlayAt(SfxId.WorldBreak, transform.position);
             StartCoroutine(DieRoutine());
         }

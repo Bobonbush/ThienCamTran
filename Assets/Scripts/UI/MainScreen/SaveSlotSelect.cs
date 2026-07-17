@@ -28,20 +28,24 @@ namespace Game.UI
             {
                 if (slots[i] == null) continue;
                 int index = i;
+                slots[i].SetHasData(SaveManager.Instance.HasSave(index));
                 slots[i].Bind(index, () => SelectSlot(index), () => ClearSlot(index));
             }
         }
 
         private void SelectSlot(int index)
         {
-            // Placeholder: every slot starts the first gameplay scene. Replace with load-or-new later.
-            Debug.Log($"[SaveSlotSelect] Slot {index} selected -> loading '{firstGameplayScene}'.");
-            SceneManager.LoadScene(firstGameplayScene);
+            // Load slot vào bộ nhớ; có save thì continue đúng scene đã lưu,
+            // slot trống thì bắt đầu game mới.
+            SaveManager.Instance.Load(index);
+            string scene = SaveManager.Instance.SavedScene ?? firstGameplayScene;
+            Debug.Log($"[SaveSlotSelect] Slot {index} selected -> loading '{scene}'.");
+            SceneManager.LoadScene(scene);
         }
 
         private void ClearSlot(int index)
         {
-            Debug.Log($"[SaveSlotSelect] Clear save for slot {index} (placeholder).");
+            SaveManager.Instance.DeleteSave(index);
             if (index >= 0 && index < slots.Length && slots[index] != null)
                 slots[index].SetEmpty();
         }

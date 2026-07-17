@@ -62,7 +62,8 @@ public class SaveZone : MonoBehaviour, IInteractable
 
         RestorePlayer(player);
         RespawnRegularEnemies();
-        SaveCheckpoint(player);
+        // Nghỉ = xoá dữ liệu tạm (quái chết các scene, death drop) + save vĩnh viễn
+        SaveManager.Instance.RestAtSaveZone(SaveIdUtility.For(this), player);
         CloseMenu(false);
     }
 
@@ -179,17 +180,18 @@ public class SaveZone : MonoBehaviour, IInteractable
 
             damageable.Health = damageable.MaxHealth;
             damageable.IsAlive = true;
+
+            EnemyDeathReporter reporter = enemy.GetComponent<EnemyDeathReporter>();
+            if (reporter != null)
+                reporter.ResetReport();
         }
     }
 
     private void SaveCheckpoint(PlayerController player)
     {
-        Vector3 position = player.transform.position;
-        PlayerPrefs.SetString("Checkpoint.Scene", SceneManager.GetActiveScene().name);
-        PlayerPrefs.SetFloat("Checkpoint.X", position.x);
-        PlayerPrefs.SetFloat("Checkpoint.Y", position.y);
-        PlayerPrefs.SetFloat("Checkpoint.Z", position.z);
-        PlayerPrefs.Save();
+        // SaveManager ghi Save_x.json (scene, save zone, vị trí, inventory)
+        // và tự viết lại các key PlayerPrefs Checkpoint.* cũ cho tương thích.
+        SaveManager.Instance.CheckpointSave(SaveIdUtility.For(this), player);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

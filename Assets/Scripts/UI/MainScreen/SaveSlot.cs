@@ -43,8 +43,13 @@ namespace Game.UI
 
         public void SetEmpty()
         {
-            hasData = false;
-            if (clearButton != null) clearButton.gameObject.SetActive(false);
+            SetHasData(false);
+        }
+
+        public void SetHasData(bool value)
+        {
+            hasData = value;
+            if (clearButton != null) clearButton.gameObject.SetActive(value);
             Render();
         }
 
