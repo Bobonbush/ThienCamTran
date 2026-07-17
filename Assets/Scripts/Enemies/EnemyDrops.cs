@@ -71,12 +71,15 @@ public class EnemyDrops : MonoBehaviour
                     continue;
 
                 Vector3 offset = new Vector3(Random.Range(-spreadX, spreadX), Random.Range(0f, spreadY), 0f);
-                Item droppedItem = Instantiate(info.itemPrefab, origin + offset, Quaternion.identity);
+                // Quái chết sát tường: kẹp điểm spawn để đồ không lọt sau tường
+                Vector3 spawnPosition = ItemDropPhysics.ClampSpawnPosition(origin, origin + offset);
+                Item droppedItem = Instantiate(info.itemPrefab, spawnPosition, Quaternion.identity);
                 droppedItem.itemPrefab = info.itemPrefab;
 
                 Rigidbody2D rb = droppedItem.GetComponent<Rigidbody2D>();
                 if (rb != null)
                 {
+                    ItemDropPhysics.PrepareRigidbody(rb);
                     float direction = Random.value < 0.5f ? -1f : 1f;
                     Vector2 force = new Vector2(direction * Random.Range(0.5f, burstForce), upwardForce);
                     rb.AddForce(force, ForceMode2D.Impulse);

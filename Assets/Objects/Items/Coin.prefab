@@ -179,7 +179,7 @@ MonoBehaviour:
   itemPrefab: {fileID: 0}
   amount: 1
   type: 1
-  autoPickUp: 0
+  autoPickUp: 1
   promptObject: {fileID: 0}
   pickupDelay: 0.25
   ignorePlayerCollision: 1
@@ -213,5 +213,5 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
