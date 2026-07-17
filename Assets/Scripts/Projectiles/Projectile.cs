@@ -21,6 +21,18 @@ public class Projectile : MonoBehaviour
     bool hasImpacted = false;
     bool hasLaunchVelocity = false;
     Vector2 launchVelocity;
+    Vector2 lastPosition;
+
+    private static int wallMask = -1;
+    private static int WallMask
+    {
+        get
+        {
+            if (wallMask < 0)
+                wallMask = LayerMask.GetMask("Ground", "Slidable");
+            return wallMask;
+        }
+    }
 
     private void Awake()
     {
@@ -32,7 +44,28 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         rb.linearVelocity = hasLaunchVelocity ? launchVelocity : new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
+        lastPosition = transform.position;
         Destroy(gameObject, maxLifetime);
+    }
+
+    // Đạn nhanh (mũi tên 15 u/s) có thể tunnel qua tường mỏng giữa hai physics
+    // step — linecast quãng vừa bay để chặn chắc chắn
+    private void FixedUpdate()
+    {
+        if (hasImpacted || piercesWalls)
+        {
+            lastPosition = transform.position;
+            return;
+        }
+
+        RaycastHit2D hit = Physics2D.Linecast(lastPosition, transform.position, WallMask);
+        if (hit.collider != null)
+        {
+            transform.position = hit.point;
+            Impact();
+        }
+
+        lastPosition = transform.position;
     }
 
     public void Launch(Vector2 velocity)
@@ -67,34 +100,26 @@ public class Projectile : MonoBehaviour
                 Impact();
             }
         }
-        else if (collision.GetComponentInParent<Ground>() != null)
+        else if (IsWall(collision))
         {
+            // Chạm tường/đất -> biến mất (Impact chơi sfx + anim nổ nếu có).
+            // Bản cũ ghim đạn vào tường nhưng GetComponent<BoxCollider2D> null
+            // với Arrow (CircleCollider) -> NRE giữa hàm, đạn thành "ma" bay
+            // xuyên mọi thứ.
             if (piercesWalls)
                 return;
 
-            hasImpacted = true;
-            PlayImpactSfx();
-
-            // Touch ground
-
-
-
-            BoxCollider2D bx = GetComponent<BoxCollider2D>();
-            bx.enabled = false;
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
-            Vector2 direction = Vector2.Normalize(rb.linearVelocity);
-            rb.bodyType = RigidbodyType2D.Kinematic;
-
-
-            Vector3 position = transform.position;
-            position.x += direction.x * fall;
-            position.y += direction.y * fall;
-
-            transform.position = position;
-
-            rb.linearVelocity = Vector2.zero;
+            Impact();
         }
+    }
+
+    // Tường = layer Ground/Slidable HOẶC có component Ground —
+    // tilemap nào thiếu script Ground vẫn chặn được đạn
+    private static bool IsWall(Collider2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & WallMask) != 0)
+            return true;
+        return collision.GetComponentInParent<Ground>() != null;
     }
 
     // Dừng đạn lại và chơi animation nổ; nếu không có Animator thì huỷ ngay (giữ hành vi cũ của Arrow)

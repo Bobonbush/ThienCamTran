@@ -478,7 +478,7 @@ Transform:
   m_GameObject: {fileID: 4500755718425174187}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.893, y: -0.175, z: 0}
+  m_LocalPosition: {x: 0.893, y: 0.075, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1261,6 +1261,7 @@ MonoBehaviour:
   maxCooldown: 1.5
   manaCost: 10
   overView: {fileID: 1381049019, guid: 0a47edda3e7341841840b320271967ff, type: 3}
+  unlimitedTest: 0
 --- !u!1 &6745596122748728017
 GameObject:
   m_ObjectHideFlags: 0

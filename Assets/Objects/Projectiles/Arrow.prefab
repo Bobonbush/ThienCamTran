@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1556373296, guid: 4152f43088afd2d409ff8f5ca57a1aa8, type: 3}
+  m_Sprite: {fileID: 1381049019, guid: 0a47edda3e7341841840b320271967ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,6 +109,12 @@ MonoBehaviour:
   damage: 10
   moveSpeed: {x: 15.22, y: 0}
   knockback: {x: 2, y: 0}
+  maxLifetime: 5
+  damagesPlayerOnly: 0
+  piercesWalls: 0
+  fall: 0
+  impactClips: []
+  impactVolume: 0.8
 --- !u!50 &5416156786535037951
 Rigidbody2D:
   serializedVersion: 5

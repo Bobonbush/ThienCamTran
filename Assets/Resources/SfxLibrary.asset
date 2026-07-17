@@ -351,10 +351,10 @@ MonoBehaviour:
   - id: ui.denied
     clips:
     - {fileID: 8300000, guid: 90e2c3573ef1bef42b54fa07f2005dd3, type: 3}
-    volume: 0.6
+    volume: 0.4
     minPitch: 1
     maxPitch: 1
-    cooldown: 0.15
+    cooldown: 0.4
   - id: ui.open
     clips:
     - {fileID: 8300000, guid: a3148a4e8cb71f549a084918fa670df4, type: 3}
