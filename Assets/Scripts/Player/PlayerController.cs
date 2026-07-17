@@ -723,6 +723,15 @@ public class PlayerController : MonoBehaviour
         Sfx.Play(SfxId.PlayerAttack, 1f, 0.95f);
     }
 
+    // Animation event của player_bow.anim (frame nhả cung) gọi hàm này —
+    // trước đây không có ai nhận event nên mũi tên không bao giờ bắn ra
+    public void FireProjectile()
+    {
+        ProjectileLauncher launcher = GetComponent<ProjectileLauncher>();
+        if (launcher != null)
+            launcher.FireProjectileForward();
+    }
+
 
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -1020,7 +1029,8 @@ public class PlayerController : MonoBehaviour
                 Item item = col.GetComponentInParent<Item>();
                 Transform itemTrasnform = col.gameObject.GetComponent<Transform>();
 
-                if (item != null && item.GetType() == IInteractable.Type.Non_needPickup && Mathf.Abs(itemTrasnform.position.y - transform.position.y) <= 0.85f && Mathf.Abs(itemTrasnform.position.x - transform.position.x) <= 0.65f)
+                // Chỉ item CÓ tick autoPickUp mới tự nhặt; không tick thì phải bấm E
+                if (item != null && item.autoPickUp && item.GetType() == IInteractable.Type.Non_needPickup && Mathf.Abs(itemTrasnform.position.y - transform.position.y) <= 0.85f && Mathf.Abs(itemTrasnform.position.x - transform.position.x) <= 0.65f)
                 {
                     InteractWithNearest(nearestItem);
                 }

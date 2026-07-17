@@ -56,6 +56,13 @@ public class PlayerStats : MonoBehaviour
         damagable = GetComponent<Damageable>();
         slot1 = GetComponent<ThrowTalisman>();
 
+        // Slot 2 = bắn cung; tự thêm component nếu prefab chưa gắn để chiêu
+        // dùng được ngay (gắn tay trong Inspector khi muốn chỉnh icon/mana)
+        BowAttack bow = GetComponent<BowAttack>();
+        if (bow == null)
+            bow = gameObject.AddComponent<BowAttack>();
+        slot2 = bow;
+
         SetSkillAvatar();
     }
 
