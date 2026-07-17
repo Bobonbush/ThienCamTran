@@ -821,12 +821,17 @@ public class PlayerController : MonoBehaviour
         ExitPuzzle();
         AnimationExitPuzzle();
 
-        playerEffect.BloodEffect(knockback.normalized);
-        playerEffect.Flash();
+        // Player trong một số scene (test) không có PlayerEffect/PlayerCamera —
+        // thiếu thì bỏ qua hiệu ứng, không được chết giữa hàm làm mất knockback
+        if (playerEffect != null)
+        {
+            playerEffect.BloodEffect(knockback.normalized);
+            playerEffect.Flash();
+        }
 
-
-
-        GetComponentInChildren<PlayerCamera>().Shake();
+        PlayerCamera playerCamera = GetComponentInChildren<PlayerCamera>();
+        if (playerCamera != null)
+            playerCamera.Shake();
 
         isAttacking = false;
         Climbing = false;
