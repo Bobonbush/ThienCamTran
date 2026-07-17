@@ -317,7 +317,8 @@ public class PlayerCamera : MonoBehaviour
 
         while (timer < duration)
         {
-            impulseSource.GenerateImpulse(UnityEngine.Random.insideUnitCircle * 0.8f);
+            if (impulseSource != null)
+                impulseSource.GenerateImpulse(UnityEngine.Random.insideUnitCircle * 0.8f);
 
             timer += 0.15f;
             yield return new WaitForSeconds(0.15f);
@@ -326,6 +327,8 @@ public class PlayerCamera : MonoBehaviour
 
     public void Shake()
     {
-        impulseSource.GenerateImpulse();
+        // Camera trong một số scene (test) chưa gắn CinemachineImpulseSource
+        if (impulseSource != null)
+            impulseSource.GenerateImpulse();
     }
 }

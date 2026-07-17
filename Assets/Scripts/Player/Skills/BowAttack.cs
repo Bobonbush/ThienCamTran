@@ -10,7 +10,7 @@ using UnityEngine;
 public class BowAttack : MonoBehaviour, SpecialSkill
 {
     [SerializeField] private float maxCooldown = 1.5f;
-    [SerializeField] private int manaCost = 20;
+    [SerializeField] private int manaCost = 10;
     [SerializeField] private Sprite overView;
 
     private float cooldown = 999f;

@@ -83,6 +83,19 @@ public class PlayerStats : MonoBehaviour
         return true;
     }
 
+    // Cùng pattern với CanConsume (stamina): kiểm tra đủ thì trừ luôn,
+    // thiếu thì kêu denied — mọi chiêu tốn mana đều đi qua đây
+    public bool ConsumeMana(int mana_value)
+    {
+        if (mana_value > Mana)
+        {
+            Sfx.Play(SfxId.UiDenied);
+            return false;
+        }
+        Mana -= mana_value;
+        return true;
+    }
+
     private void SetSkillAvatar()
     {
         if (skillSlot == null)
@@ -119,13 +132,8 @@ public class PlayerStats : MonoBehaviour
     {
         if (slot1 == null) return;
 
-        if(slot1.GetManaCost() > Mana)
-        {
-            Sfx.Play(SfxId.UiDenied);
+        if (!ConsumeMana(slot1.GetManaCost()))
             return;
-        }
-
-        Mana -= slot1.GetManaCost();
 
         if(slot1.Trigger())
         {
@@ -138,13 +146,8 @@ public class PlayerStats : MonoBehaviour
     {
         if (slot2 == null) return;
 
-        if (slot2.GetManaCost() > Mana)
-        {
-            Sfx.Play(SfxId.UiDenied);
+        if (!ConsumeMana(slot2.GetManaCost()))
             return;
-        }
-
-        Mana -= slot2.GetManaCost();
 
         if (slot2.Trigger())
         {
