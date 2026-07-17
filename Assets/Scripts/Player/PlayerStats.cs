@@ -54,14 +54,14 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         damagable = GetComponent<Damageable>();
-        slot1 = GetComponent<ThrowTalisman>();
 
-        // Slot 2 = bắn cung; tự thêm component nếu prefab chưa gắn để chiêu
-        // dùng được ngay (gắn tay trong Inspector khi muốn chỉnh icon/mana)
+        // Slot 1 (phím A) = bắn cung 10 mana theo thiết kế;
+        // slot 2 (phím D) = talisman. Tự thêm BowAttack nếu prefab chưa gắn.
         BowAttack bow = GetComponent<BowAttack>();
         if (bow == null)
             bow = gameObject.AddComponent<BowAttack>();
-        slot2 = bow;
+        slot1 = bow;
+        slot2 = GetComponent<ThrowTalisman>();
 
         SetSkillAvatar();
     }
@@ -138,7 +138,7 @@ public class PlayerStats : MonoBehaviour
         if(slot1.Trigger())
         {
             animator.SetTrigger(slot1.GetAnimationString());
-            Sfx.Play(SfxId.PlayerSkillCast);
+            Sfx.Play(slot1.GetCastSfxId());
         }
     }
 
@@ -152,7 +152,7 @@ public class PlayerStats : MonoBehaviour
         if (slot2.Trigger())
         {
             animator.SetTrigger(slot2.GetAnimationString());
-            Sfx.Play(SfxId.PlayerSkillCast);
+            Sfx.Play(slot2.GetCastSfxId());
         }
     }
 }

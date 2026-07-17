@@ -311,7 +311,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
+        UnstickComboLock();
+
         if(lockInputFor > 0.0f && setLock)
         {
             lockInput = true;
@@ -662,8 +663,24 @@ public class PlayerController : MonoBehaviour
                 if (stat.CanConsume(AttackStaminaCost[attackCNT])) {
                     animator.SetTrigger(AnimationStrings.attackTrigger);
                     StopCombo = false;
+                    comboLockedAt = Time.time;
                 }
             }
+        }
+    }
+
+    // StopCombo chỉ được mở lại bởi animation event ComboFrame — nếu animation
+    // attack bị cắt ngang trước event (chuyển state, rơi, dash...) thì kẹt
+    // false vĩnh viễn = không đánh được nữa. Failsafe: quá thời gian một đòn
+    // mà event chưa chạy thì tự mở khoá.
+    private float comboLockedAt = -999f;
+    private const float comboLockTimeout = 1.0f;
+
+    private void UnstickComboLock()
+    {
+        if (!StopCombo && Time.time > comboLockedAt + comboLockTimeout)
+        {
+            StopCombo = true;
         }
     }
 
@@ -729,7 +746,10 @@ public class PlayerController : MonoBehaviour
     {
         ProjectileLauncher launcher = GetComponent<ProjectileLauncher>();
         if (launcher != null)
+        {
             launcher.FireProjectileForward();
+            Sfx.Play(SfxId.PlayerBowShoot);
+        }
     }
 
 

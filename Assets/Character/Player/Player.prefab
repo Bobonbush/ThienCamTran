@@ -48,12 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
   cameraTarget: {fileID: 4255991255210269986}
   player: {fileID: 6588509061327645994}
+  cmCamera: {fileID: 0}
   confiner: {fileID: 0}
   globalBoundary: {fileID: 0}
   lookDistance: 4
   activationDelay: 0.5
   shiftSpeed: 8
+  fallVelocityThreshold: -12
+  fallOffset: -3
+  fallOffsetSpeed: 5
   offsetTransitionSpeed: 3
+  amplitude: 2
+  frequency: 8
+  duration: 0.15
+  CutSceneLock: 0
 --- !u!61 &3026170859482301904
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -589,8 +597,8 @@ GameObject:
   - component: {fileID: 4141065896443469664}
   - component: {fileID: 1729772958043053035}
   - component: {fileID: 4714182618040277945}
-  - component: {fileID: 5485316135201239680}
   - component: {fileID: 7391824650123987654}
+  - component: {fileID: 6117240778489634393}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -719,12 +727,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7194878b4451a4299c34e446ea620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  puzzleManager: {fileID: 0}
   atk1: {fileID: 8344676447379901827}
   atk2: {fileID: 1830480041583392127}
   atk3: {fileID: 8045176911920037472}
   air_atk: {fileID: 6745596122748728017}
   dashToAttack: 0.1
   maxComboTime: 0.3
+  AttackStaminaCost:
+  - 5
+  - 10
+  - 20
+  - 20
+  dashStaminaCost: 20
   walkSpeed: 6
   runSpeed: 7
   jumpImpulse: 11.5
@@ -739,10 +754,12 @@ MonoBehaviour:
     m_Bits: 4294967295
   lockInput: 0
   isAttacking: 0
+  CutSceneLock: 0
   _isMoving: 0
   _isRunning: 0
   _isDucking: 0
   _isFacingRight: 1
+  hurtKnockbackDecay: 40
 --- !u!114 &3129385825251170596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1108,6 +1125,8 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.5
+  minKnockbackLockTime: 0.25
+  knockbackResistance: 0
 --- !u!114 &5714843487244732538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,6 +1155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   skillSlot: {fileID: 0}
+  stamina: 100
 --- !u!114 &4141065896443469664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1209,7 +1229,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.65721893, y: 0.44106025}
   m_EdgeRadius: 0
---- !u!114 &5485316135201239680
+--- !u!114 &7391824650123987654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1218,9 +1238,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 5510386946914327363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9246576a43678774fbf76b53eb5d2165, type: 3}
+  m_Script: {fileID: 11500000, guid: e085ceb351a74fd78d4bfa071d052b05, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerEvent
+  m_EditorClassIdentifier: 
+  walkStepInterval: 0.42
+  runStepInterval: 0.28
+  climbStepInterval: 0.34
+  minLandFallSpeed: 4
+  hardLandFallSpeed: 14
+--- !u!114 &6117240778489634393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5510386946914327363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d8d5e0bd9af460ab6f5b6892bee872c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BowAttack
+  maxCooldown: 1.5
+  manaCost: 10
+  overView: {fileID: 1381049019, guid: 0a47edda3e7341841840b320271967ff, type: 3}
 --- !u!1 &6745596122748728017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,18 +1886,3 @@ PolygonCollider2D:
       - {x: 0.6811912, y: -0.03830509}
       - {x: 0.54988194, y: 0.20913574}
   m_UseDelaunayMesh: 1
---- !u!114 &7391824650123987654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510386946914327363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e085ceb351a74fd78d4bfa071d052b05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkStepInterval: 0.42
-  runStepInterval: 0.28
-  minLandFallSpeed: 4

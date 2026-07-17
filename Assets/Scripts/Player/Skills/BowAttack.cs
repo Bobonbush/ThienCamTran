@@ -46,6 +46,12 @@ public class BowAttack : MonoBehaviour, SpecialSkill
         return AnimationStrings.rangedAttackTrigger;
     }
 
+    public string GetCastSfxId()
+    {
+        // Tiếng kéo dây cung lúc giương; tiếng nhả phát ở PlayerController.FireProjectile
+        return SfxId.PlayerBowDraw;
+    }
+
     public int GetManaCost()
     {
         return manaCost;

@@ -200,6 +200,8 @@ public static class SfxId
     public const string PlayerPickup = "player.pickup";
     public const string PlayerRevive = "player.revive";
     public const string PlayerSkillCast = "player.skill.cast";
+    public const string PlayerBowDraw = "player.bow.draw";
+    public const string PlayerBowShoot = "player.bow.shoot";
 
     public const string CombatHit = "combat.hit";
     public const string CombatBlock = "combat.block";

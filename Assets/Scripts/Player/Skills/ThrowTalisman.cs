@@ -50,7 +50,12 @@ public class ThrowTalisman : MonoBehaviour, SpecialSkill
     public int GetManaCost()
     {
         return 15;
-    } 
+    }
+
+    public string GetCastSfxId()
+    {
+        return SfxId.PlayerSkillCast;
+    }
 
     public Sprite GetSprite()
     {

@@ -393,3 +393,19 @@ MonoBehaviour:
     layerClips:
     - {fileID: 8300000, guid: c441e5157bbdc8d4ab65b8479eabc350, type: 3}
     layerVolume: 0.3
+  - id: player.bow.draw
+    clips:
+    - {fileID: 8300000, guid: 4721dc1dcac6ac441bba3fde629cd3f6, type: 3}
+    - {fileID: 8300000, guid: 466ee6b094843e84db54b96d6c8d86c1, type: 3}
+    volume: 0.55
+    minPitch: 0.95
+    maxPitch: 1.05
+    cooldown: 0.1
+  - id: player.bow.shoot
+    clips:
+    - {fileID: 8300000, guid: c0307b8ae81a52649b7080818f665317, type: 3}
+    - {fileID: 8300000, guid: 2a664746de12bcc489b93b41ed28bbee, type: 3}
+    volume: 0.7
+    minPitch: 1.15
+    maxPitch: 1.3
+    cooldown: 0.1
