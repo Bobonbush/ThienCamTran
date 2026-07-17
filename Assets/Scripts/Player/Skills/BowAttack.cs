@@ -13,6 +13,9 @@ public class BowAttack : MonoBehaviour, SpecialSkill
     [SerializeField] private int manaCost = 10;
     [SerializeField] private Sprite overView;
 
+    [Tooltip("Bật để test: bắn không tốn mana, không cooldown. Nhớ TẮT trước khi build.")]
+    [SerializeField] private bool unlimitedTest = false;
+
     private float cooldown = 999f;
 
     private void Update()
@@ -23,6 +26,9 @@ public class BowAttack : MonoBehaviour, SpecialSkill
 
     public bool Trigger()
     {
+        if (unlimitedTest)
+            return true;
+
         if (cooldown >= maxCooldown)
         {
             cooldown = 0.0f;
@@ -54,7 +60,7 @@ public class BowAttack : MonoBehaviour, SpecialSkill
 
     public int GetManaCost()
     {
-        return manaCost;
+        return unlimitedTest ? 0 : manaCost;
     }
 
     public Sprite GetSprite()
