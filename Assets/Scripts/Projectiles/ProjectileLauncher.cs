@@ -17,8 +17,11 @@ public class ProjectileLauncher : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, LaunchPosition, projectilePrefab.transform.rotation);
         Vector3 origScale = projectile.transform.localScale;
 
+        // Giữ độ lớn scale của prefab, chỉ lật hướng — bản cũ ghi đè thành ±1
+        // nên prefab thu nhỏ sẽ bị méo lệch trục (giống FireProjectileInDirection)
+        float direction = transform.localScale.x > 0 ? 1 : -1;
         projectile.transform.localScale = new Vector3(
-            origScale.x * transform.localScale.x > 0 ? 1 : -1,
+            Mathf.Abs(origScale.x) * direction,
             origScale.y,
             origScale.z
             );
