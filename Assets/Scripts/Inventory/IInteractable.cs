@@ -7,7 +7,8 @@ public interface IInteractable
         Object,
         Door,
         Purifying,
-        Save
+        Save,
+        Dialog
         
     };
 
