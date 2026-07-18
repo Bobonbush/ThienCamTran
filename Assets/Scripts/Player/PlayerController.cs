@@ -295,9 +295,6 @@ public class PlayerController : MonoBehaviour
             puzzleManager.OnPuzzleFail += OnPuzzleFail;
         }
 
-        SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
-        sceneManager.OnSavingLock += LockInput;
-
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
@@ -311,6 +308,15 @@ public class PlayerController : MonoBehaviour
         
         if (inventoryUI == null)
             inventoryUI = gameObject.AddComponent<InventoryUI>();
+    }
+
+    private void Start()
+    {
+        SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
+        sceneManager.OnSavingLock += LockInput;
+
+        SaveManager saveManager = SaveManager.Instance;
+        saveManager.RestAtSaveZoneFunction += InteractWithNearestCheckPoint;
     }
 
     private void Update()
@@ -1462,5 +1468,10 @@ public class PlayerController : MonoBehaviour
         return rb.linearVelocity;
     }
 
+    public void InteractWithNearestCheckPoint()
+    {
+        UpdateInteractPrompts();
+        InteractWithNearest();
+    }
 
 }

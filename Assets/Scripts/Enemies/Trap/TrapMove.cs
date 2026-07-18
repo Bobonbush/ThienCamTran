@@ -44,19 +44,27 @@ public class TrapMove : MonoBehaviour
     private float invertDistance = 1.0f;
 
 
-    void Start()
+    private void Awake()
     {
         initialPosition = transform.position;
 
         float fullMoveDistance = Vector3.Distance(initialPosition, initialPosition + (moveDistance * moveDir));
         invertDistance /= fullMoveDistance;
-
         box = GetComponent<BoxCollider2D>();
 
-        if(turnOffColliderOnDeActive)
+        if (turnOffColliderOnDeActive)
             box.enabled = false;
 
         if (useBothDeAndActive && needActivator == false) reset = false;
+    }
+
+
+    void Start()
+    {
+        
+
+        
+
 
         if(ActivateOnStart)
         {

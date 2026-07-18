@@ -10,20 +10,28 @@ public class Breakable : MonoBehaviour
     [SerializeField]
     private GameObject attachedDeletation;
 
-    void Start()
-    {
-        animator = GetComponentInParent<Animator>();
-        dm = GetComponentInParent<Damageable>();
-        dm.Health = 1;  // 1 hits
+    string saveId;
 
-        // Đã vỡ trong save -> dọn luôn không animation/SFX khi vào lại scene
-        if (SaveManager.Instance.IsObjectBroken(SaveIdUtility.For(this)))
-        {
-            if (attachedDeletation != null)
-                Destroy(attachedDeletation.gameObject);
-            Destroy(transform.parent.gameObject);
-        }
+
+    private void Awake()
+    {
+        saveId = SaveIdUtility.For(this);
     }
+        void Start()
+        {
+
+            animator = GetComponentInParent<Animator>();
+            dm = GetComponentInParent<Damageable>();
+            dm.Health = 1;  // 1 hits
+
+            // Đã vỡ trong save -> dọn luôn không animation/SFX khi vào lại scene
+            if (SaveManager.Instance.IsObjectBroken(saveId))
+            {
+                if (attachedDeletation != null)
+                    Destroy(attachedDeletation.gameObject);
+                Destroy(transform.parent.gameObject);
+            }
+        }
 
     public void OnHit(int damage, Vector2 knockback)
     {
@@ -34,7 +42,8 @@ public class Breakable : MonoBehaviour
 
         if(!dm.IsAlive)
         {
-            SaveManager.Instance.MarkObjectBroken(SaveIdUtility.For(this));
+            Debug.Log("Saved for" + SaveIdUtility.For(this));
+            SaveManager.Instance.MarkObjectBroken(saveId);
             Sfx.PlayAt(SfxId.WorldBreak, transform.position);
             StartCoroutine(DieRoutine());
         }

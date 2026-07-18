@@ -37,14 +37,16 @@ public class ItemContainer : MonoBehaviour, IInteractable
     
 
     Animator anim;
+    private string saveID = string.Empty;
 
     private void Awake()
     {
         Collider2D col = GetComponent<Collider2D>();
         e_spawn = GetComponent<EnemySpawn>();
-        
+        saveID = SaveIdUtility.For(this);
 
         col.isTrigger = true;
+
 
         if (promptObject != null)
             promptObject.SetActive(false);
@@ -53,8 +55,10 @@ public class ItemContainer : MonoBehaviour, IInteractable
     private void Start()
     {
         // Rương đã mở trong save -> load lại scene vẫn mở và rỗng
-        if (openOnce && SaveManager.Instance.IsChestOpened(SaveIdUtility.For(this)))
+        if (openOnce && SaveManager.Instance.IsChestOpened(saveID))
+        {
             opened = true;
+        }
 
         anim = GetComponent<Animator>();
         anim.SetBool(AnimationStrings.openChest, opened);
@@ -74,7 +78,7 @@ public class ItemContainer : MonoBehaviour, IInteractable
 
         opened = true;
         if (openOnce)
-            SaveManager.Instance.MarkChestOpened(SaveIdUtility.For(this));
+            SaveManager.Instance.MarkChestOpened(saveID);
         anim.SetBool(AnimationStrings.openChest, opened);
         Sfx.PlayAt(SfxId.WorldChestOpen, transform.position);
 

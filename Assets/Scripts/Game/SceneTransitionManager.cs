@@ -20,6 +20,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     public event Action<float> OnSavingLock;
 
+    string currentScene = "null";
 
 
 
@@ -59,6 +60,7 @@ public class SceneTransitionManager : MonoBehaviour
         {
             return;
         }
+        currentScene = buildSceneIndex;
         coolDownTransition = maxcoolDownTransition;
 
         Sfx.Play(SfxId.WorldTransition);
@@ -70,25 +72,35 @@ public class SceneTransitionManager : MonoBehaviour
         StartCoroutine(LoadSceneRoutine(buildSceneIndex));
     }
 
-    public IEnumerator SaveFadeScreen(float timing)
+    public IEnumerator ReloadScene()
     {
-        OnSavingLock?.Invoke(timing);
-        yield return StartCoroutine(Fade(1));
+        
+        Sfx.Play(SfxId.WorldTransition);
 
-        yield return new WaitForSeconds(0.5f);
+        targetSpawnPointId = "null";
 
-        yield return StartCoroutine(Fade(0));
+        if(currentScene == "null")
+        {
+            currentScene = SceneManager.GetActiveScene().name;
+        }
+
+        yield return LoadSceneRoutine(currentScene, false);
     }
 
 
 
 
-    private IEnumerator LoadSceneRoutine(string sceneName)
+
+    private IEnumerator LoadSceneRoutine(string sceneName, bool Teleport = true)
     {
+
+        bool alreadyFade = (fadeScreen.alpha > 0.0f);
         // 1. Fade out screen
-        yield return StartCoroutine(Fade(1));
+        if(!alreadyFade)
+           yield return StartCoroutine(Fade(1));
 
         // 2. Load the scene asynchronously in the background
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         while (!asyncLoad.isDone)
         {
@@ -99,12 +111,14 @@ public class SceneTransitionManager : MonoBehaviour
         UpdateCameraBoundary();
 
         // 4. Move player to the correct spawn point in the new scene
-        PositionPlayerAtSpawnPoint();
+        if(Teleport)
+            PositionPlayerAtSpawnPoint();
 
         
 
         // 5. Fade back in
-        yield return StartCoroutine(Fade(0));
+        if(!alreadyFade)
+             yield return StartCoroutine(Fade(0));
     }
 
     private void PositionPlayerAtSpawnPoint()
@@ -129,7 +143,7 @@ public class SceneTransitionManager : MonoBehaviour
         Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
     }
 }
-    private IEnumerator Fade(float targetAlpha)
+    public IEnumerator Fade(float targetAlpha)
     {
         float speed = 1f / fadeDuration;
         while (!Mathf.Approximately(fadeScreen.alpha, targetAlpha))

@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -22,6 +24,8 @@ public class SaveManager : MonoBehaviour
 
     private static SaveManager instance;
 
+    bool noEnemyReloadNeeded = false;
+
     public static SaveManager Instance
     {
         get
@@ -33,6 +37,8 @@ public class SaveManager : MonoBehaviour
 
     public int CurrentSlot { get; private set; } = 1;
     public GameSaveData Data { get; private set; } = new GameSaveData();
+
+    public Action RestAtSaveZoneFunction;
 
     /// <summary>Scene của lần checkpoint gần nhất; null nếu save trống (game mới).</summary>
     public string SavedScene
@@ -154,9 +160,30 @@ public class SaveManager : MonoBehaviour
     /// </summary>
     public void RestAtSaveZone(string saveZoneId, PlayerController player)
     {
+        StartCoroutine(PerformRest(saveZoneId, player));
+    }
+
+    private IEnumerator PerformRest(string saveZoneId, PlayerController player)
+    {
+        yield return SceneTransitionManager.Instance.Fade(1.0f);
         Data.temporary.deadEnemies.Clear();
         Data.temporary.deathDrop = new DeathDropData();
         CheckpointSave(saveZoneId, player);
+
+        player.ExitSaving();
+        player.AnimationExitSaving();
+        player.LockCutScene();
+
+        noEnemyReloadNeeded = true;
+        yield return SceneTransitionManager.Instance.ReloadScene();
+        RestAtSaveZoneFunction?.Invoke();
+
+        
+        player.ReleaseLockCutScene();
+
+        yield return new WaitForSeconds(0.2f);
+
+        yield return SceneTransitionManager.Instance.Fade(0.0f);
     }
 
     private void StoreCheckpointPosition(Vector3 position)
@@ -280,7 +307,11 @@ public class SaveManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        
         AttachEnemyPersistence(scene);
+        
+        
+        noEnemyReloadNeeded = false;
 
         if (!pendingContinueRestore)
             return;
@@ -299,6 +330,8 @@ public class SaveManager : MonoBehaviour
             if (controller != null)
                 controller.Teleport(Data.checkpointPosition);
         }
+
+        WriteToDisk();
     }
 
     /// <summary>

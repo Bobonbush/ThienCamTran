@@ -33,7 +33,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     private EnemySpawn e_spawn;
     
 
-    
+    string saveID = string.Empty;
 
     public void Puzzle(PlayerController player)
     {
@@ -46,6 +46,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         activateTrap = GetComponentInParent<ActivateTrap>();
         cutTrigger = GetComponentInParent<CutTrigger>();
 
+        saveID = SaveIdUtility.For(this);
         dialogTrigger = GetComponent<DialogInteractable>();
     }
 
@@ -53,14 +54,16 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     {
         SetPromptVisible(false);
 
+
         // Puzzle đã giải trong save -> mở lại cổng ngay, không cutscene/không spawn quái
-        if (SaveManager.Instance.IsPuzzleSolved(SaveIdUtility.For(this)))
+        Debug.Log("Save ID :" + saveID);
+        if (SaveManager.Instance.IsPuzzleSolved(saveID))
         {
             _solve = true;
             if (activateTrap != null)
             {
                 activateTrap.TriggerAnimation();
-                activateTrap.ActivateTraps();
+                activateTrap.InstantActivateTraps();
             }
         }
     }
@@ -93,7 +96,7 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     public void Done(PlayerController playerController, PlayerCamera player)
     {
         _solve = true;
-        SaveManager.Instance.MarkPuzzleSolved(SaveIdUtility.For(this));
+        SaveManager.Instance.MarkPuzzleSolved(saveID);
         cutTrigger.Trigger(playerController, player);
         activateTrap.TriggerAnimation();
         activateTrap.ActivateTraps();

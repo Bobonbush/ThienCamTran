@@ -58,12 +58,43 @@ public class ActivateTrap : MonoBehaviour
     [SerializeField] Transform realTransform;
     private float invertDistance = 1.0f;
 
-    private void Start()
+    private void Awake()
     {
         initialPosition = realTransform.position;
         float fullMoveDistance = Vector3.Distance(initialPosition, initialPosition + (moveDistance * moveDir));
         invertDistance /= fullMoveDistance;
-       
+    }
+
+
+    public void InstantActivateTraps()
+    {
+        StartCoroutine(RunInstant());   
+    }
+
+    private IEnumerator RunInstant()
+    {
+        float longestDelay = 0.0f;
+        foreach (TrapData data in trapSequence)
+        {
+            TriggerTrap(data.trapObject);
+            if (data.activationDelay > longestDelay)
+                longestDelay = data.activationDelay;
+        }
+
+        if (type == Type.oneTimeTrigger)
+        {
+            yield return new WaitForSeconds(longestDelay);
+            if (oneTimeTriggerSave == false)
+                Destroy(this.gameObject);
+            else
+                this.enabled = false;
+
+        }
+        else if (type == Type.multipleTimeTrigger)
+        {
+            yield return new WaitForSeconds(longestDelay + delayRestore);
+            Restore();
+        }
     }
 
     public void ActivateTraps()
