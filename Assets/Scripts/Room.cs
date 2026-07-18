@@ -9,6 +9,8 @@ public class Room : MonoBehaviour
     [SerializeField]
     private string SpawnPointId = "Outskirt-1-Top";
 
+    public bool usedThisDoor = false;
+
     [SerializeField]
     // Add offset to move out of range.
     private Vector2 spawnOffset = new Vector2(0, 0);
@@ -17,7 +19,11 @@ public class Room : MonoBehaviour
 
     public bool Closed = false;
 
-
+    private void Start()
+    {
+        if(GetComponent<CutTrigger>() != null && usedThisDoor)
+            CutSceneManager.Instance.TriggerCutScene(GetComponent<CutTrigger>());
+    }
 
     public void EnterNextRoom()
     {

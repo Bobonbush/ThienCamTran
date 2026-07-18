@@ -731,8 +731,20 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if(context.performed)
-             puzzleManager.Purify(context.ReadValue<Vector2>());
+
+        Vector2 input = context.ReadValue<Vector2>();
+
+        if(Mathf.Abs(input.x) < 0.3f)
+        {
+            input.x = 0;
+        }
+        if(Mathf.Abs(input.y) < 0.3f)
+        {
+            input.y = 0;
+        }
+        
+        if(context.performed && input != Vector2.zero)
+             puzzleManager.Purify(input);
 
     }
 
@@ -743,6 +755,9 @@ public class PlayerController : MonoBehaviour
             ExitPuzzle();
             return;
         }
+
+
+      
 
         inActivePuzzle.Done(this, GetComponentInChildren<PlayerCamera>());
         ExitPuzzle();
@@ -913,7 +928,7 @@ public class PlayerController : MonoBehaviour
     {
         if (lockInput) return;
         if (Climbing) return;
-        if (context.started)
+        if (context.performed)
         {
             Debug.Log("First Slot pressed");
             stat.TriggerSlot1(animator);

@@ -49,6 +49,8 @@ public class PurifyGenerate : MonoBehaviour
 
     public void GeneratePurify(List<int> code)
     {
+        stillInAnimation = 0;
+        mutex = false;
         gen_code = code;
         cnt = 0;
         for(int i = 0; i < code.Count; i++)

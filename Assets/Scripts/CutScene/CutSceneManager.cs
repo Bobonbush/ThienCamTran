@@ -33,6 +33,8 @@ public class CutSceneManager : MonoBehaviour
 
     }
 
+    
+
     public void OnCutSceneStart(CutSceneInfo info)
     {
             
@@ -80,5 +82,11 @@ public class CutSceneManager : MonoBehaviour
             SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
             sceneManager.TransitionToScene(info.SceneID, info.SpawnID, info.SpawnOffset);
         }
+        
+    }
+
+    public void TriggerCutScene(CutTrigger trigger)
+    {
+        trigger.Trigger(playerController, playerCamera);
     }
 }

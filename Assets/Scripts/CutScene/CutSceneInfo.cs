@@ -93,7 +93,6 @@ public class CutSceneInfo : ScriptableObject
 
     public bool ComeBackCamera = true;
     public float timeCameraComeBack = 1.0f;
-    
 
 
 }

@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 public class PlayerEffect : MonoBehaviour
 {
     private ParticleSystem bloodPrefab;
@@ -63,4 +63,6 @@ public class PlayerEffect : MonoBehaviour
 
         flashRoute = null;
     }
+
+    
 }

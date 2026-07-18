@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 public class PlayerCamera : MonoBehaviour
 {
     [Header("Target Setup")]
@@ -315,6 +316,12 @@ public class PlayerCamera : MonoBehaviour
     {
         float timer = 0;
 
+        Vibrate(
+             0.7f, // low-frequency motor
+             1.0f, // high-frequency motor
+             duration * 2.0f // duration
+        );
+
         while (timer < duration)
         {
             if (impulseSource != null)
@@ -323,12 +330,48 @@ public class PlayerCamera : MonoBehaviour
             timer += 0.15f;
             yield return new WaitForSeconds(0.15f);
         }
+
+        
     }
 
     public void Shake()
     {
         // Camera trong một số scene (test) chưa gắn CinemachineImpulseSource
         if (impulseSource != null)
+        {
             impulseSource.GenerateImpulse();
+            Vibrate(
+                0.7f, // low-frequency motor
+                1.0f, // high-frequency motor
+                0.3f // duration
+                );
+        }
+    }
+
+    public void Vibrate(float lowFrequency, float highFrequency, float duration)
+    {
+        if (Gamepad.current == null)
+            return;
+
+        StartCoroutine(VibrationRoutine(
+            lowFrequency,
+            highFrequency,
+            duration
+        ));
+    }
+
+    private IEnumerator VibrationRoutine(
+        float lowFrequency,
+        float highFrequency,
+        float duration)
+    {
+        Gamepad.current.SetMotorSpeeds(
+            lowFrequency,
+            highFrequency
+        );
+
+        yield return new WaitForSeconds(duration);
+
+        Gamepad.current.SetMotorSpeeds(0, 0);
     }
 }

@@ -189,7 +189,7 @@ public class CutTrigger : MonoBehaviour
                 {
                     if (data.effectStays) 
                         yield return playerCamera.Earthquake(data.effectDuration);
-                    playerCamera.Earthquake(data.effectDuration);
+                    StartCoroutine(playerCamera.Earthquake(data.effectDuration));
                 }
             }
             yield return playerCamera.Wait(data.stayDuration);

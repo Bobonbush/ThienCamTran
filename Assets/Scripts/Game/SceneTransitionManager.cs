@@ -39,6 +39,8 @@ public class SceneTransitionManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            SceneManager.sceneLoaded += SetRoom;
+
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -70,6 +72,19 @@ public class SceneTransitionManager : MonoBehaviour
 
         playerController.RunForwardForXDistance(_offsetSpawn.x);
         StartCoroutine(LoadSceneRoutine(buildSceneIndex));
+    }
+
+    private void SetRoom(Scene scene, LoadSceneMode mode)
+    {
+        GameObject spawnPoint = GameObject.Find(targetSpawnPointId);
+        if (spawnPoint)
+        {
+            Room room = spawnPoint.GetComponent<Room>();
+            if (room != null)
+            {
+                room.usedThisDoor = true;
+            }
+        }
     }
 
     public IEnumerator ReloadScene()
@@ -114,35 +129,34 @@ public class SceneTransitionManager : MonoBehaviour
         if(Teleport)
             PositionPlayerAtSpawnPoint();
 
-        
-
         // 5. Fade back in
         if(!alreadyFade)
              yield return StartCoroutine(Fade(0));
     }
 
     private void PositionPlayerAtSpawnPoint()
-{
-    GameObject spawnPoint = GameObject.Find(targetSpawnPointId);
-    GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-    if (spawnPoint != null && player != null)
     {
-        Vector3 finalPlayerPos = spawnPoint.transform.position + new Vector3(offsetSpawn.x * 1.15f, 0, 0);
-        
-        virtualCamera.ForceCameraPosition(finalPlayerPos, virtualCamera.transform.rotation);
-        virtualCamera.PreviousStateIsValid = false;
-        
-        
+        GameObject spawnPoint = GameObject.Find(targetSpawnPointId);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        playerController.Teleport(spawnPoint.transform.position);
-        playerController.RunForwardForXDistance(offsetSpawn.x);
+        if (spawnPoint != null && player != null)
+        {
+            
+            Vector3 finalPlayerPos = spawnPoint.transform.position + new Vector3(offsetSpawn.x * 1.15f, 0, 0);
+           
+            virtualCamera.ForceCameraPosition(finalPlayerPos, virtualCamera.transform.rotation);
+            virtualCamera.PreviousStateIsValid = false;
+           
+           
+        
+            playerController.Teleport(spawnPoint.transform.position);
+            playerController.RunForwardForXDistance(offsetSpawn.x);
+        }
+        else
+        {
+           Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
+        }
     }
-    else
-    {
-        Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
-    }
-}
     public IEnumerator Fade(float targetAlpha)
     {
         float speed = 1f / fadeDuration;
