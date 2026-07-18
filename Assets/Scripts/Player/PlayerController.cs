@@ -287,8 +287,15 @@ public class PlayerController : MonoBehaviour
 
     private bool notFallYet = false;
 
+    private static PlayerController instance;
     private void Awake()
     {
+        if(instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        instance = this;
         if (puzzleManager != null)
         {
             puzzleManager.gameObject.SetActive(false);
@@ -313,6 +320,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+       
         SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
         sceneManager.OnSavingLock += LockInput;
 
@@ -1588,6 +1596,7 @@ public class PlayerController : MonoBehaviour
 
     public void InteractWithNearestCheckPoint()
     {
+        Debug.Log("Called");
         UpdateInteractPrompts();
         InteractWithNearest();
     }

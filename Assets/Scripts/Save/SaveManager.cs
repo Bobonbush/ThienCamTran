@@ -172,10 +172,14 @@ public class SaveManager : MonoBehaviour
 
         player.ExitSaving();
         player.AnimationExitSaving();
+
         player.LockCutScene();
 
         noEnemyReloadNeeded = true;
         yield return SceneTransitionManager.Instance.ReloadScene();
+
+        yield return new WaitForSeconds(0.2f);
+       
         RestAtSaveZoneFunction?.Invoke();
 
         

@@ -97,15 +97,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Skill 2",
-                    "type": "Button",
-                    "id": "e704845d-4859-4a83-bab5-4ea56fdae872",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Dash",
                     "type": "Button",
                     "id": "fc685c11-fd7d-49ae-92ca-e52283c4da94",
@@ -609,17 +600,6 @@
                 },
                 {
                     "name": "",
-                    "id": "440fde81-1e20-427b-bbb0-cfe2d1981c0b",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Skill 2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f5b7ca92-7f80-4243-bbd3-78878f628ec7",
                     "path": "<Keyboard>/c",
                     "interactions": "",
@@ -679,7 +659,7 @@
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": ";Gamepad",
                     "action": "Heal",
                     "isComposite": false,
                     "isPartOfComposite": false
