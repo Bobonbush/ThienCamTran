@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,7 @@ using UnityEngine.InputSystem;
 //
 // Detection is a DISTANCE check (not a trigger collider), so it keeps working no matter how the
 // object's physics are set up — e.g. an enemy that has gravity but lets the player walk through it.
-public class DialogInteractable : MonoBehaviour
+public class DialogInteractable : MonoBehaviour, IInteractable
 {
     [Header("Dialog")]
     public List<DialogNode> dialogNodes = new List<DialogNode>();
@@ -55,39 +56,30 @@ public class DialogInteractable : MonoBehaviour
         }
     }
 
+    public bool CanInteract
+    {
+        get {
+            return dialogNodes != null &&
+            dialogNodes.Count > 0 &&
+            DialogManager.Instance != null &&
+            !DialogManager.Instance.IsActive; }
+    }
+
     private void Update()
     {
         if (OutSideTrigger)
         {
             return;
         }
-        bool inRange =
-            player != null &&
-            Vector2.Distance(transform.position, player.position) <= interactRange;
 
-        bool hasDialog =
-            dialogNodes != null &&
-            dialogNodes.Count > 0;
+        
+    }
 
-        bool canInteract =
-            inRange &&
-            hasDialog &&
-            DialogManager.Instance != null &&
-            !DialogManager.Instance.IsActive;
-
-        if (promptObject != null && promptObject.activeSelf != canInteract && !OutSideTrigger)
-            if (promptObject != null &&
-                promptObject.activeSelf != canInteract)
-            {
-                promptObject.SetActive(canInteract);
-            }
-
-        if (canInteract &&
-            Keyboard.current != null &&
-            Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            Interact();
-        }
+    public void SetPromptVisible(bool visible)
+    {
+        bool canShow = visible && CanInteract;
+        if (promptObject != null && promptObject.activeSelf != canShow)
+            promptObject.SetActive(canShow);
     }
 
     public void TriggerInteract()
@@ -97,6 +89,39 @@ public class DialogInteractable : MonoBehaviour
             return;
         }
         Interact();
+    }
+
+    public IInteractable.Type GetType()
+    {
+        return IInteractable.Type.Dialog;
+    }
+
+    public void Interact(PlayerController controller)
+    {
+        if (promptObject != null)
+            promptObject.SetActive(false);
+
+
+        // Get the current dialogue
+        DialogNode node = dialogNodes[currentDialogIndex];
+
+        Transform target =
+            bubbleTarget != null
+            ? bubbleTarget
+            : transform;
+
+        DialogManager.Instance.StartDialog(node, style, target);
+
+        // Move to the next dialogue
+        if (currentDialogIndex < dialogNodes.Count - 1)
+        {
+            currentDialogIndex++;
+        }
+
+        if (triggerOnce)
+        {
+            this.enabled = false;
+        }
     }
 
     private void Interact()

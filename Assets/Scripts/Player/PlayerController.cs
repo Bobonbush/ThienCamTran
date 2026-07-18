@@ -281,6 +281,7 @@ public class PlayerController : MonoBehaviour
     ItemContainer promptedContainer;
     InteractiveRoom promptedRoom;
     SealedPuzzle promptedSealedPuzzle;
+    DialogInteractable promptedDialog;
 
     private bool Climbing = false;
 
@@ -361,11 +362,6 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateInteractPrompts();
-
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame && DialogLock == false && CutSceneLock == false)
-        {
-            InteractWithNearest();
-        }
 
         if(isHoldingJump)
         {
@@ -497,6 +493,15 @@ public class PlayerController : MonoBehaviour
         if (lockInput) return;
         lookInput = context.ReadValue<Vector2>();
 
+        lookInput = new Vector2(0.0f, lookInput.y);
+
+        if (Mathf.Abs(lookInput.y) < 0.6f)
+        {
+            lookInput = Vector2.zero;
+        }
+
+        lookInput = NormalizeVectorToOneDirection(lookInput);
+        
         if (lookInput != Vector2.zero)
         {
 
@@ -523,12 +528,96 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private Vector2 NormalizeVectorToOneDirection(Vector2 input)
+    {
+        if(input ==  Vector2.zero) return Vector2.zero;
+
+        if (input.x == input.y) return NormalizeVectorToOneDirection(new Vector2(input.x + 1, input.y));
+        if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+        {
+            if (input.x < 0)
+            {
+                input = new Vector2(-1.0f, 0.0f);
+            }
+            else
+            {
+                input = new Vector2(1.0f, 0.0f);
+            }
+        }
+        else if (Mathf.Abs(input.y) > Mathf.Abs(input.x))
+        {
+            if (input.y < 0)
+            {
+                input = new Vector2(0.0f, -1.0f);
+            }
+            else
+            {
+                input = new Vector2(0.0f, 1.0f);
+            }
+        }
+        return input;
+    }
+
+    private Vector2 NormalizeVectorToAllDirection(Vector2 input)
+    {
+        if (input == Vector2.zero) return Vector2.zero;
+
+        if (Mathf.Abs(input.x) > 0.0f)
+        {
+            if (input.x < 0)
+            {
+                input.x = -1;
+            }
+            else
+            {
+                input.x = 1;
+            }
+        }
+        if (Mathf.Abs(input.y) > 0.0f)
+        {
+            if (input.y < 0)
+            {
+                input.y = -1; 
+            }
+            else
+            {
+                input.y = 1; 
+            }
+        }
+        return input;
+    }
+
+    private Vector2 NormalizeVectorToXdirection(Vector2 input)
+    {
+        if (input.x < 0)
+        {
+            return new Vector2(-1.0f, input.y);
+        }
+        else return new Vector2(1.0f, input.y);
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
+        
         if (lockInput) return;
         if (CutSceneLock) return;
+
         moveInput = context.ReadValue<Vector2>();
 
+        if(Mathf.Abs(moveInput.x) < 0.3)
+        {
+            moveInput.x = 0.0f;
+        }
+
+        if(Mathf.Abs(moveInput.y) < 1.6)
+        {
+            moveInput.y = 0.0f;
+        }
+
+        moveInput = NormalizeVectorToAllDirection(moveInput);
+        
+
+        
         if (IsAlive)
         {
             IsMoving = moveInput != Vector2.zero;
@@ -766,19 +855,27 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
+
+        
         if (CutSceneLock == true && lockInput == true)
         {
             skipDialogButtonPress = true;
         }
 
-        if(lockInput)
+        if (DialogLock || CutSceneLock)
+        {
+            return;
+        }
+
+
+
+        if (lockInput)
         {
             return;
         }
 
         if (context.started || context.performed)
         {
-            
             InteractWithNearest();
         }
     }
@@ -1004,6 +1101,7 @@ public class PlayerController : MonoBehaviour
         ItemContainer nearestContainer = null;
         InteractiveRoom nearestRoom = null;
         SealedPuzzle nearestSealedPuzzle = null;
+        DialogInteractable nearestInspect = null;
         float bestDistance = float.MaxValue;
 
         foreach (Collider2D col in colliders)
@@ -1012,6 +1110,7 @@ public class PlayerController : MonoBehaviour
             ItemContainer container = col.GetComponentInParent<ItemContainer>();
             InteractiveRoom room = col.GetComponentInParent<InteractiveRoom>();
             SealedPuzzle sealedPuzzle = col.GetComponentInParent<SealedPuzzle>();
+            DialogInteractable InteractableDialog = col.GetComponent<DialogInteractable>();
 
             if (item != null)
             {
@@ -1051,8 +1150,18 @@ public class PlayerController : MonoBehaviour
                 if (distance < bestDistance)
                 {
                     bestDistance = distance;
-                    nearestItem = null;
                     nearestSealedPuzzle = sealedPuzzle;
+                }
+            }
+
+            if(InteractableDialog != null)
+            {
+                float distance = Vector2.Distance(transform.position, InteractableDialog.transform.position);
+                if(distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    nearestInspect = InteractableDialog;
+                    
                 }
             }
         }
@@ -1086,6 +1195,12 @@ public class PlayerController : MonoBehaviour
                 {
                     sealedPuzzle.SetPromptVisible(sealedPuzzle == nearestSealedPuzzle && sealedPuzzle.CanInteract);
                 }
+
+                DialogInteractable dialogInteractable = col.GetComponent<DialogInteractable>();
+                if(dialogInteractable)
+                {
+                    dialogInteractable.SetPromptVisible(dialogInteractable == nearestInspect && dialogInteractable.CanInteract);
+                }
             }
         }
 
@@ -1100,12 +1215,15 @@ public class PlayerController : MonoBehaviour
             promptedRoom.SetPromptVisible(false);
         if (promptedSealedPuzzle != null && promptedSealedPuzzle != nearestSealedPuzzle)
             promptedSealedPuzzle.SetPromptVisible(false);
+        if (promptedDialog != null && promptedDialog != nearestInspect)
+            promptedDialog.SetPromptVisible(false);
 
 
         promptedItem = nearestItem;
         promptedContainer = nearestContainer;
         promptedRoom = nearestRoom;
         promptedSealedPuzzle = nearestSealedPuzzle;
+        promptedDialog = nearestInspect;
     }
 
     private IInteractable FindNearestInteractable()
