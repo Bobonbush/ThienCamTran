@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour
         get
         {
             if (wallMask < 0)
-                wallMask = LayerMask.GetMask("Ground", "Slidable");
+                wallMask = LayerMask.GetMask("Ground");
             return wallMask;
         }
     }

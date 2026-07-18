@@ -38,7 +38,7 @@ public class EnemyDeathReporter : MonoBehaviour
         SaveManager.Instance.MarkEnemyDead(sceneName, enemyId);
     }
 
-    /// <summary>SaveZone gọi khi hồi sinh quái lúc nghỉ, để lần chết sau vẫn được ghi.</summary>
+
     public void ResetReport()
     {
         reported = false;

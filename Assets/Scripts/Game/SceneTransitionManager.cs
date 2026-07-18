@@ -18,7 +18,10 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private PlayerController playerController;
 
 
-    
+    public event Action<float> OnSavingLock;
+
+
+
 
 
     private Vector3 offsetSpawn = Vector3.zero;
@@ -65,8 +68,20 @@ public class SceneTransitionManager : MonoBehaviour
 
         playerController.RunForwardForXDistance(_offsetSpawn.x);
         StartCoroutine(LoadSceneRoutine(buildSceneIndex));
-        
     }
+
+    public IEnumerator SaveFadeScreen(float timing)
+    {
+        OnSavingLock?.Invoke(timing);
+        yield return StartCoroutine(Fade(1));
+
+        yield return new WaitForSeconds(0.5f);
+
+        yield return StartCoroutine(Fade(0));
+    }
+
+
+
 
     private IEnumerator LoadSceneRoutine(string sceneName)
     {

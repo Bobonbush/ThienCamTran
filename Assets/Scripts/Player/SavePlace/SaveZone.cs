@@ -51,7 +51,6 @@ public class SaveZone : MonoBehaviour, IInteractable
             return;
 
         checkpointUI.Open(this, player);
-        SaveCheckpoint(player);
         checkpointUI.NotifySaveCompleted();
     }
 
@@ -63,8 +62,12 @@ public class SaveZone : MonoBehaviour, IInteractable
         RestorePlayer(player);
         RespawnRegularEnemies();
         // Nghỉ = xoá dữ liệu tạm (quái chết các scene, death drop) + save vĩnh viễn
+
+        StartCoroutine(SceneTransitionManager.Instance.SaveFadeScreen(1.0f));
+        SaveCheckpoint(player);
         SaveManager.Instance.RestAtSaveZone(SaveIdUtility.For(this), player);
-        CloseMenu(false);
+        
+        //CloseMenu(false);
     }
 
     public void StatusFromUI()

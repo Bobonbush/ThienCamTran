@@ -83,8 +83,6 @@ public class PlayerStats : MonoBehaviour
         return true;
     }
 
-    // Cùng pattern với CanConsume (stamina): kiểm tra đủ thì trừ luôn,
-    // thiếu thì kêu denied — mọi chiêu tốn mana đều đi qua đây
     public bool ConsumeMana(int mana_value)
     {
         if (mana_value > Mana)

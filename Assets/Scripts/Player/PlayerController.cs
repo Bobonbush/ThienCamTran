@@ -295,6 +295,9 @@ public class PlayerController : MonoBehaviour
             puzzleManager.OnPuzzleFail += OnPuzzleFail;
         }
 
+        SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
+        sceneManager.OnSavingLock += LockInput;
+
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirections = GetComponent<TouchingDirections>();
@@ -305,6 +308,7 @@ public class PlayerController : MonoBehaviour
         inventory = GetComponent<Inventory>();
         inventoryUI = GetComponent<InventoryUI>();
         playerEffect = GetComponent<PlayerEffect>();
+        
         if (inventoryUI == null)
             inventoryUI = gameObject.AddComponent<InventoryUI>();
     }
