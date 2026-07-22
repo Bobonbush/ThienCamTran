@@ -178,6 +178,17 @@ MonoBehaviour:
   itemName: Coin
   itemPrefab: {fileID: 0}
   amount: 1
+  category: 4
+  healthRestore: 0
+  manaRestore: 0
+  staminaRestore: 0
+  maxHealthMultiplier: 1
+  maxManaMultiplier: 1
+  maxStaminaMultiplier: 1
+  staminaRegenMultiplier: 1
+  staminaCostMultiplier: 1
+  manaGainMultiplier: 1
+  healingMultiplier: 1
   type: 1
   autoPickUp: 0
   promptObject: {fileID: 0}

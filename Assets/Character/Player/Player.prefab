@@ -1161,7 +1161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab3d34050b243acb793cfcf41751e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  maxSlots: 24
+  maxSlots: 48
   items: []
 --- !u!61 &4714182618040277945
 BoxCollider2D:

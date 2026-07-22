@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 // Put this on a prefab (NPC, chest, sign...). When the Player is within range it shows an "E"
 // prompt above the object; pressing E starts the dialog.
 //
 // Detection is a DISTANCE check (not a trigger collider), so it keeps working no matter how the
 // object's physics are set up — e.g. an enemy that has gravity but lets the player walk through it.
-public class DialogInteractable : MonoBehaviour
+public class DialogInteractable : MonoBehaviour, IInteractable
 {
     [Header("Dialog")]
     public List<DialogNode> dialogNodes = new List<DialogNode>();
@@ -30,15 +29,24 @@ public class DialogInteractable : MonoBehaviour
     // Which dialogue should be played next
     private int currentDialogIndex = 0;
 
+    public bool CanInteract
+    {
+        get
+        {
+            ResolvePlayer();
+            return isActiveAndEnabled && !OutSideTrigger && player != null &&
+                   Vector2.Distance(transform.position, player.position) <= interactRange &&
+                   dialogNodes != null && dialogNodes.Count > 0 &&
+                   DialogManager.Instance != null && !DialogManager.Instance.IsActive;
+        }
+    }
+
     private void Awake()
     {
         if (promptObject != null)
             promptObject.SetActive(false);
 
-        GameObject p = GameObject.FindGameObjectWithTag("Player");
-
-        if (p != null)
-            player = p.transform;
+        ResolvePlayer();
 
         if (playerPassesThrough && player != null)
         {
@@ -61,33 +69,10 @@ public class DialogInteractable : MonoBehaviour
         {
             return;
         }
-        bool inRange =
-            player != null &&
-            Vector2.Distance(transform.position, player.position) <= interactRange;
+        bool canInteract = CanInteract;
 
-        bool hasDialog =
-            dialogNodes != null &&
-            dialogNodes.Count > 0;
-
-        bool canInteract =
-            inRange &&
-            hasDialog &&
-            DialogManager.Instance != null &&
-            !DialogManager.Instance.IsActive;
-
-        if (promptObject != null && promptObject.activeSelf != canInteract && !OutSideTrigger)
-            if (promptObject != null &&
-                promptObject.activeSelf != canInteract)
-            {
-                promptObject.SetActive(canInteract);
-            }
-
-        if (canInteract &&
-            Keyboard.current != null &&
-            Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            Interact();
-        }
+        if (promptObject != null && promptObject.activeSelf != canInteract)
+            promptObject.SetActive(canInteract);
     }
 
     public void TriggerInteract()
@@ -96,10 +81,25 @@ public class DialogInteractable : MonoBehaviour
         {
             return;
         }
-        Interact();
+        StartInteraction();
     }
 
-    private void Interact()
+    public void Interact(PlayerController activePlayer)
+    {
+        if (CanInteract) StartInteraction();
+    }
+
+    public new IInteractable.Type GetType() => IInteractable.Type.Dialog;
+
+    private void ResolvePlayer()
+    {
+        if (player != null) return;
+
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null) player = playerObject.transform;
+    }
+
+    private void StartInteraction()
     {
         if (promptObject != null)
             promptObject.SetActive(false);

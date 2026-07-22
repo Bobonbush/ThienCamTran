@@ -274,6 +274,17 @@ MonoBehaviour:
   itemName: "M\u1EADt Ong C\u1ED5"
   itemPrefab: {fileID: 3393830918241770400}
   amount: 1
+  category: 1
+  healthRestore: 0
+  manaRestore: 50
+  staminaRestore: 50
+  maxHealthMultiplier: 1
+  maxManaMultiplier: 1
+  maxStaminaMultiplier: 1
+  staminaRegenMultiplier: 1
+  staminaCostMultiplier: 1
+  manaGainMultiplier: 1
+  healingMultiplier: 1
   type: 0
   autoPickUp: 0
   promptObject: {fileID: 3731421186867671071}

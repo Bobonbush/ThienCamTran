@@ -1,38 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Compatibility adapter for old scenes. New UI is owned by IngameStat.
 public class ManaUI : MonoBehaviour
-    {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField]
-    private PlayerStats stats;
-
-    [SerializeField]
-    public Image liquidImage;
-
-    public static ManaUI Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-
-    public void SetVisualSoul(float currentMana, float maxMana)
-    {
-        liquidImage.fillAmount = (float)currentMana / maxMana;
-    }
-
+{
+    [SerializeField] private Image liquidImage;
+    [SerializeField] private PlayerStats playerStats;
     private void Update()
     {
-        SetVisualSoul(stats.Mana, stats.MaxMana);
+        if (liquidImage != null && playerStats != null)
+            liquidImage.fillAmount = Mathf.Clamp01((float)playerStats.Mana / playerStats.MaxMana);
     }
 }

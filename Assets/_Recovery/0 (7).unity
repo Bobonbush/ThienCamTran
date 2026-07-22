@@ -1040,7 +1040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 581307193291352856, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 23.11
+      value: 28.32
       objectReference: {fileID: 0}
     - target: {fileID: 840833847579317464, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1060,7 +1060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1012995587278953505, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -8.255737
+      value: -7.694458
       objectReference: {fileID: 0}
     - target: {fileID: 1187529726081821043, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1248,7 +1248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1971136280060278885, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.1633622
+      value: 0.39799058
       objectReference: {fileID: 0}
     - target: {fileID: 2250158524653396652, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1772,7 +1772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7444060796104403617, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 23.11
+      value: 28.32
       objectReference: {fileID: 0}
     - target: {fileID: 7477844502271633069, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2202,7 +2202,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5.625
+  orthographic size: 7.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2492,7 +2492,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508083605}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
@@ -3828,6 +3828,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4739058863252061793, guid: f447783ad3c2d89409e8935dc384031b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7806659004474499655, guid: 5a94a27e03b52fc449405d39095e51f7, type: 2}
     - target: {fileID: 5069498418249020142, guid: f447783ad3c2d89409e8935dc384031b, type: 3}
       propertyPath: m_Size.x
       value: 3.824419
@@ -22593,6 +22597,8 @@ MonoBehaviour:
   menuOverlayPrefab: {fileID: 2948944753034699769, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
   ingameStatPrefab: {fileID: 20585231910510873, guid: 857e65b17f8deb949b8b80e97ae5cb18, type: 3}
   itemObtainedPrefab: {fileID: 6495935617828738502, guid: e26ace9df7c077c468b81841bd555142, type: 3}
+  restFadeScreen: {fileID: 0}
+  restFadeDuration: 0.45
 --- !u!4 &1116474008
 Transform:
   m_ObjectHideFlags: 0
