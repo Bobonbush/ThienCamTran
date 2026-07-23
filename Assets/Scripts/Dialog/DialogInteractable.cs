@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Unity.AppUI.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 // Put this on a prefab (NPC, chest, sign...). When the Player is within range it shows an "E"
 // prompt above the object; pressing E starts the dialog.
@@ -31,15 +30,12 @@ public class DialogInteractable : MonoBehaviour, IInteractable
     // Which dialogue should be played next
     private int currentDialogIndex = 0;
 
+
     private void Awake()
     {
         if (promptObject != null)
             promptObject.SetActive(false);
 
-        GameObject p = GameObject.FindGameObjectWithTag("Player");
-
-        if (p != null)
-            player = p.transform;
 
         if (playerPassesThrough && player != null)
         {

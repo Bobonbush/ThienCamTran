@@ -23,6 +23,7 @@ namespace Game.UI
         MonoBehaviour,
         IPointerEnterHandler,
         IPointerExitHandler,
+        IPointerClickHandler,
         ISelectHandler,
         IDeselectHandler
     {
@@ -41,6 +42,7 @@ namespace Game.UI
         private bool isHovered;
         private bool isRevealed;
         private bool inputEnabled;
+        private int lastClickFrame = -1;
 
         private int idleStateHash;
         private int openStateHash;
@@ -133,7 +135,18 @@ namespace Game.UI
             if (!inputEnabled || !isRevealed)
                 return;
 
+            // Button.onClick and IPointerClick can both arrive for the same mouse release.
+            // Keep the direct pointer path as a fallback without switching twice.
+            if (lastClickFrame == Time.frameCount) return;
+            lastClickFrame = Time.frameCount;
+
             clickCallback?.Invoke();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+                HandleClick();
         }
 
         public void SetInputEnabled(bool enabled)

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3454445062891558360}
   - component: {fileID: 4346502687473185360}
   - component: {fileID: 8430471969784363205}
+  - component: {fileID: 9100000000000000001}
   m_Layer: 0
   m_Name: Ingame_Stat
   m_TagString: Untagged
@@ -18,6 +19,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &9100000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20585231910510873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1111111111111111111111111111111, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  healthFill: {fileID: 0}
+  manaFill: {fileID: 0}
+  staminaFill: {fileID: 0}
+  scoreText: {fileID: 0}
 --- !u!224 &3454445062891558360
 RectTransform:
   m_ObjectHideFlags: 0

@@ -1492,6 +1492,9 @@ MonoBehaviour:
   mainCamera: {fileID: 637340121}
   virtualCamera: {fileID: 1958888227}
   playerController: {fileID: 637340116}
+  menuOverlayPrefab: {fileID: 2948944753034699769, guid: 24d893e05934fa149880fb0bfa6b2480, type: 3}
+  ingameStatPrefab: {fileID: 20585231910510873, guid: 857e65b17f8deb949b8b80e97ae5cb18, type: 3}
+  itemObtainedPrefab: {fileID: 6495935617828738502, guid: e26ace9df7c077c468b81841bd555142, type: 3}
 --- !u!4 &598994271
 Transform:
   m_ObjectHideFlags: 0

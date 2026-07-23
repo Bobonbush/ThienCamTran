@@ -95,7 +95,6 @@ public class PlayerController : MonoBehaviour
     TouchingDirections touchingDirections;
     Damageable damageable;
     Inventory inventory;
-    InventoryUI inventoryUI;
 
     Vector3 SafeGround = Vector3.zero;
     float LastOnGroundY = 0;
@@ -311,11 +310,7 @@ public class PlayerController : MonoBehaviour
         col = GetComponent<CapsuleCollider2D>();
         gravityScale = rb.gravityScale;
         inventory = GetComponent<Inventory>();
-        inventoryUI = GetComponent<InventoryUI>();
         playerEffect = GetComponent<PlayerEffect>();
-        
-        if (inventoryUI == null)
-            inventoryUI = gameObject.AddComponent<InventoryUI>();
     }
 
     private void Start()
@@ -498,6 +493,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnLook(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (lockInput) return;
         lookInput = context.ReadValue<Vector2>();
 
@@ -642,6 +638,7 @@ public class PlayerController : MonoBehaviour
     
     public void OnRun(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (lockInput) return;
 
         if (context.started)
@@ -676,6 +673,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         // TODO Check if alive as well
         if(context.started && CutSceneLock == true)
         {
@@ -722,6 +720,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnPurify(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (puzzleManager == null)
         {
             return;
@@ -770,6 +769,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (DialogLock && context.performed)
         {
             skipDialogButtonPress = true;
@@ -905,6 +905,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (lockInput) return;
         Climbing = false;
         rb.gravityScale = gravityScale;
@@ -926,6 +927,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnSlot1(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (lockInput) return;
         if (Climbing) return;
         if (context.performed)
@@ -937,6 +939,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnSlot2(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (lockInput) return;
         if (Climbing) return;
 
@@ -999,6 +1002,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnHeal(InputAction.CallbackContext context)
     {
+        if (Time.timeScale <= 0f) return;
         if (lockInput) return;
         if (Climbing) return;
         if(touchingDirections.IsGrounded)
@@ -1272,6 +1276,21 @@ public class PlayerController : MonoBehaviour
             {
                 bestDistance = distance;
                 nearest = interactable;
+            }
+        }
+
+        // DialogInteractable intentionally does not read E on its own. Include distance-based
+        // NPCs in the same arbitration pass so one key press selects exactly one target.
+        DialogInteractable[] dialogs = Object.FindObjectsByType<DialogInteractable>(
+            FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        foreach (DialogInteractable dialog in dialogs)
+        {
+            if (dialog == null || !dialog.CanInteract) continue;
+            float distance = Vector2.Distance(transform.position, dialog.transform.position);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                nearest = dialog;
             }
         }
 

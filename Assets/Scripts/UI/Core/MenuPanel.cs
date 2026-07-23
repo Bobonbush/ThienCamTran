@@ -29,6 +29,12 @@ namespace Game.UI
         /// <summary>Forwarded "use / confirm" press (E) while this panel is active.</summary>
         public virtual void OnSubmit() { }
 
+        /// <summary>Secondary action used by panels (Space by default).</summary>
+        public virtual void OnAlternate() { }
+
+        /// <summary>Mouse-wheel input forwarded by the overlay while this panel is active.</summary>
+        public virtual void OnScroll(float delta, Vector2 screenPosition) { }
+
         /// <summary>
         /// Show/hide the panel root. Default toggles the GameObject; override if a panel needs
         /// to keep running while hidden.

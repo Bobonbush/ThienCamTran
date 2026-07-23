@@ -30,7 +30,7 @@ public class TriggerAttack : MonoBehaviour
         {
             Debug.Log("Sucess Attack");
             PlayerStats stats = GetComponentInParent<PlayerStats>();
-            stats.Mana += 10;
+            stats.GainManaFromHit(10);
         }
         successAttack = true;
     }

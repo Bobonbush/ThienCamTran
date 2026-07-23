@@ -7,33 +7,59 @@ public class Inventory : MonoBehaviour
     [Serializable]
     public class ItemStack
     {
+        // Retained for compatibility with existing saves/Inspector data. Runtime UI uses the
+        // snapshot because a scene Item component becomes null after its pickup object is destroyed.
         public Item itemPrefab;
         public string itemName;
         public int amount;
+        [SerializeField] private ItemData data;
+
+        public ItemData Data
+        {
+            get
+            {
+                if (data == null && itemPrefab != null)
+                    data = ItemData.From(itemPrefab);
+                return data;
+            }
+            set => data = value;
+        }
     }
 
-    public int maxSlots = 24;
+    public event Action Changed;
+
+    public int maxSlots = 48;
     public List<ItemStack> items = new List<ItemStack>();
+    [SerializeField] private ItemData[] equippedBuffs = new ItemData[2];
+    [SerializeField] private int score;
+
+    public IReadOnlyList<ItemData> EquippedBuffs
+    {
+        get { EnsureEquipmentSlots(); return equippedBuffs; }
+    }
+    public int Score => score;
 
     public bool AddItem(Item item, int amount = 1)
     {
-        if (item == null || amount <= 0)
-            return false;
+        if (item == null || amount <= 0) return false;
 
-        Item prefab = item.InventoryPrefab;
+        Item source = item.InventoryPrefab;
+        ItemData collected = ItemData.From(source != null ? source : item);
+        if (collected == null) return false;
+
+        if (collected.category == Item.Category.Currency)
+        {
+            score += amount;
+            Changed?.Invoke();
+            return true;
+        }
+
         foreach (ItemStack stack in items)
         {
-            // Stack khôi phục từ save chỉ có tên (prefab null) — gộp theo tên
-            // và gắn lại prefab ở lần nhặt đầu tiên sau khi load
-            bool samePrefab = stack.itemPrefab == prefab;
-            bool sameRestoredName = stack.itemPrefab == null && stack.itemName == item.ItemName;
-            if (samePrefab || sameRestoredName)
-            {
-                stack.amount += amount;
-                if (stack.itemPrefab == null)
-                    stack.itemPrefab = prefab;
-                return true;
-            }
+            if (stack?.Data == null || stack.Data.id != collected.id) continue;
+            stack.amount += amount;
+            Changed?.Invoke();
+            return true;
         }
 
         if (items.Count >= maxSlots)
@@ -44,14 +70,58 @@ public class Inventory : MonoBehaviour
 
         items.Add(new ItemStack
         {
-            itemPrefab = prefab,
-            itemName = item.ItemName,
-            amount = amount
+            itemPrefab = source,
+            itemName = collected.itemName,
+            amount = amount,
+            Data = collected
         });
-
-        // Lần đầu loại vật phẩm này vào túi -> popup giới thiệu
-        NewItemDialog.Show(item);
-
+        Changed?.Invoke();
+        ItemObtained.Show(collected);
         return true;
+    }
+
+    public List<ItemStack> GetItems(Item.Category category)
+    {
+        return items.FindAll(stack => stack?.Data != null && stack.Data.category == category);
+    }
+
+    public bool Consume(ItemData item, PlayerStats stats)
+    {
+        if (item == null || stats == null || item.category != Item.Category.Food) return false;
+        ItemStack stack = items.Find(entry => entry?.Data != null && entry.Data.id == item.id);
+        if (stack == null || stack.amount <= 0 || !stats.ConsumeFood(item)) return false;
+        stack.amount--;
+        if (stack.amount <= 0) items.Remove(stack);
+        Changed?.Invoke();
+        return true;
+    }
+
+    public bool ToggleBuff(ItemData item, int slot, PlayerStats stats)
+    {
+        if (item == null || stats == null || item.category != Item.Category.Buff) return false;
+        EnsureEquipmentSlots();
+        slot = Mathf.Clamp(slot, 0, equippedBuffs.Length - 1);
+        int equippedIndex = Array.FindIndex(equippedBuffs, equipped => equipped != null && equipped.id == item.id);
+        if (equippedIndex >= 0) equippedBuffs[equippedIndex] = null;
+        else equippedBuffs[slot] = item;
+        stats.ApplyEquipment(equippedBuffs);
+        Changed?.Invoke();
+        return true;
+    }
+
+    public bool IsEquipped(ItemData item)
+    {
+        EnsureEquipmentSlots();
+        return item != null && Array.Exists(equippedBuffs,
+            equipped => equipped != null && equipped.id == item.id);
+    }
+
+    private void EnsureEquipmentSlots()
+    {
+        if (equippedBuffs != null && equippedBuffs.Length == 2) return;
+        ItemData[] restored = new ItemData[2];
+        if (equippedBuffs != null)
+            Array.Copy(equippedBuffs, restored, Mathf.Min(equippedBuffs.Length, restored.Length));
+        equippedBuffs = restored;
     }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Game.UI
 {
@@ -61,6 +63,7 @@ namespace Game.UI
         private bool isTransitioning;
         private bool initialized;
         private Coroutine transitionRoutine;
+        private TMP_Text navigationGuide;
 
         private static readonly int OpenHash =
             Animator.StringToHash("Book_Cover_Open");
@@ -107,6 +110,7 @@ namespace Game.UI
 
             defaultTabIndex = GetValidDefaultIndex();
 
+            CreateNavigationGuide();
             HideAllPanels();
         }
 
@@ -140,6 +144,9 @@ namespace Game.UI
             if (keyboard == null)
                 return;
 
+            if (ItemObtained.IsShowing && !IsOpen)
+                return;
+
             if (keyboard.iKey.wasPressedThisFrame)
             {
                 if (IsOpen)
@@ -169,6 +176,10 @@ namespace Game.UI
             {
                 Step(1);
             }
+            else if (keyboard.tabKey.wasPressedThisFrame)
+            {
+                Step(keyboard.shiftKey.isPressed ? -1 : 1);
+            }
 
             Vector2 navigation = ReadNavigation(keyboard);
 
@@ -177,6 +188,34 @@ namespace Game.UI
 
             if (keyboard.eKey.wasPressedThisFrame)
                 ActivePanel?.OnSubmit();
+
+            if (keyboard.spaceKey.wasPressedThisFrame)
+                ActivePanel?.OnAlternate();
+
+            Mouse mouse = Mouse.current;
+            if (mouse != null)
+            {
+                if (mouse.leftButton.wasPressedThisFrame)
+                    TrySelectTabAt(mouse.position.ReadValue());
+
+                float wheel = mouse.scroll.ReadValue().y;
+                if (!Mathf.Approximately(wheel, 0f))
+                    ActivePanel?.OnScroll(wheel, mouse.position.ReadValue());
+            }
+        }
+
+        private void TrySelectTabAt(Vector2 screenPosition)
+        {
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                TabButton tabButton = tabButtons[i];
+                RectTransform rect = tabButton != null ? tabButton.transform as RectTransform : null;
+                if (rect == null || !RectTransformUtility.RectangleContainsScreenPoint(rect, screenPosition))
+                    continue;
+
+                OnTabClicked(i);
+                return;
+            }
         }
 
         private void InitializeTabButtons()
@@ -497,6 +536,47 @@ namespace Game.UI
             }
 
             UpdateSelectedTabs();
+        }
+
+        private void CreateNavigationGuide()
+        {
+            Transform existing = transform.Find("Runtime_NavigationGuide");
+            if (existing != null)
+            {
+                navigationGuide = existing.GetComponentInChildren<TMP_Text>(true);
+                return;
+            }
+
+            TMP_FontAsset font = GetComponentInChildren<TMP_Text>(true)?.font;
+            GameObject panel = new GameObject("Runtime_NavigationGuide", typeof(RectTransform), typeof(Image));
+            panel.transform.SetParent(transform, false);
+            RectTransform panelRect = (RectTransform)panel.transform;
+            panelRect.anchorMin = new Vector2(0.16f, 0.015f);
+            panelRect.anchorMax = new Vector2(0.84f, 0.065f);
+            panelRect.offsetMin = Vector2.zero;
+            panelRect.offsetMax = Vector2.zero;
+            Image background = panel.GetComponent<Image>();
+            background.color = new Color(0.04f, 0.025f, 0.02f, 0.82f);
+            background.raycastTarget = false;
+
+            GameObject label = new GameObject("Guide", typeof(RectTransform), typeof(TextMeshProUGUI));
+            label.transform.SetParent(panel.transform, false);
+            RectTransform labelRect = (RectTransform)label.transform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = new Vector2(10f, 2f);
+            labelRect.offsetMax = new Vector2(-10f, -2f);
+            navigationGuide = label.GetComponent<TMP_Text>();
+            navigationGuide.font = font;
+            navigationGuide.text = "Click tabs / items  •  Tab or [ ]: page  •  WASD / Arrows: select  •  E: use / equip  •  Space: ring slot  •  Wheel: scroll  •  I / Q: close";
+            navigationGuide.alignment = TextAlignmentOptions.Center;
+            navigationGuide.enableAutoSizing = true;
+            navigationGuide.fontSizeMin = 10f;
+            navigationGuide.fontSizeMax = 18f;
+            navigationGuide.textWrappingMode = TextWrappingModes.NoWrap;
+            navigationGuide.overflowMode = TextOverflowModes.Ellipsis;
+            navigationGuide.raycastTarget = false;
+            panel.transform.SetAsLastSibling();
         }
 
         private void UpdateSelectedTabs()

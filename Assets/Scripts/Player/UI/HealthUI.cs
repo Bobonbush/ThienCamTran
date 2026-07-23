@@ -1,39 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+
+// Compatibility adapter for old scenes. New UI is owned by IngameStat.
 public class HealthUI : MonoBehaviour
 {
-
-    [SerializeField] 
-    public Image liquidImage;
-
-    [SerializeField]
-    PlayerStats playerStats;
-
-    public static HealthUI Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-
-    public void SetVisualSoul(float currentSoul, float maxSoul)
-    {
-        // This sets the fill between 0.0 and 1.0 safely
-        liquidImage.fillAmount = currentSoul / maxSoul;
-    }
-
+    [SerializeField] private Image liquidImage;
+    [SerializeField] private PlayerStats playerStats;
     private void Update()
     {
-        SetVisualSoul(playerStats.Health, playerStats.MaxHealth);
+        if (liquidImage != null && playerStats != null)
+            liquidImage.fillAmount = Mathf.Clamp01((float)playerStats.Health / playerStats.MaxHealth);
     }
-
 }

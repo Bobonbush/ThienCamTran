@@ -1,4 +1,3 @@
-using Game.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -8,7 +7,6 @@ public class SaveZone : MonoBehaviour, IInteractable
     [SerializeField] private Transform left;
     [SerializeField] private Transform right;
     [SerializeField] private CheckpointWorldUI checkpointUI;
-    [SerializeField] private MenuTabController menuOverlayPrefab;
 
     // Kept serialized for compatibility with existing prefab/scene data.
     public int inUsed;
@@ -16,7 +14,6 @@ public class SaveZone : MonoBehaviour, IInteractable
     private int collisionCnt;
     private PlayerController activePlayer;
     private bool openStatusAfterExit;
-    private MenuTabController menuOverlayInstance;
 
     public bool CanInteract => collisionCnt > 0 && activePlayer == null;
     public bool IsMenuOpen => checkpointUI != null && checkpointUI.IsOpen;
@@ -52,6 +49,7 @@ public class SaveZone : MonoBehaviour, IInteractable
             return;
         SaveCheckpoint(player);
         checkpointUI.Open(this, player);
+        // TODO(GLOBAL_SAVE): trigger the global-save implementation here.
         checkpointUI.NotifySaveCompleted();
     }
 
@@ -91,32 +89,10 @@ public class SaveZone : MonoBehaviour, IInteractable
             return;
 
         openStatusAfterExit = false;
-        MenuTabController overlay = GetOrCreateMenuOverlay();
-        if (overlay != null)
-            overlay.OpenOverlayAtTab("Status");
+        if (SceneTransitionManager.Instance != null)
+            SceneTransitionManager.Instance.OpenMenu("Status");
         else
-            Debug.LogError("Checkpoint has no MenuOverlay prefab assigned, so Status cannot open.", this);
-    }
-
-    private MenuTabController GetOrCreateMenuOverlay()
-    {
-        if (menuOverlayInstance != null)
-            return menuOverlayInstance;
-
-        menuOverlayInstance = Object.FindFirstObjectByType<MenuTabController>(
-            FindObjectsInactive.Include
-        );
-
-        if (menuOverlayInstance == null && menuOverlayPrefab != null)
-        {
-            menuOverlayInstance = Instantiate(menuOverlayPrefab);
-            menuOverlayInstance.name = "MenuOverlay";
-        }
-
-        if (menuOverlayInstance != null && !menuOverlayInstance.gameObject.activeSelf)
-            menuOverlayInstance.gameObject.SetActive(true);
-
-        return menuOverlayInstance;
+            Debug.LogError("SceneTransitionManager is unavailable, so Status cannot open.", this);
     }
 
     private void CloseMenu(bool openStatus)
