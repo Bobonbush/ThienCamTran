@@ -15,7 +15,7 @@ public class BossTrigger : MonoBehaviour
     private ActivateTrap activeTrap; // use for close the door
 
     private BoxCollider2D box;
-
+    bool Released = false;
     private void Awake()
     {
         box = GetComponent<BoxCollider2D>();
@@ -29,10 +29,10 @@ public class BossTrigger : MonoBehaviour
         if(duration > 0)
         {
             duration -= Time.deltaTime;
-        }else
+        }else if(Released == false)
         {
             boss.Release();
-           
+            Released = true;
         }
     }
 

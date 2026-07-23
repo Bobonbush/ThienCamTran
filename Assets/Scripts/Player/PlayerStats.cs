@@ -11,7 +11,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxMana = 100;
     [SerializeField] private float stamina = 100f;
     [SerializeField] private float maxStamina = 100f;
-    [SerializeField] private int healValue = 10;
+    private int healValue = 40;
 
     private SpecialSkill slot1;
     private SpecialSkill slot2;

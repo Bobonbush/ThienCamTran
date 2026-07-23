@@ -59,6 +59,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arc1/Bossroom.unity
     guid: dba8ce7b2fced0349b786b72a02d376b
+  - enabled: 1
+    path: Assets/Scenes/Arc1/Bossroom-fight.unity
+    guid: 3b288848e5aebcf478dfc13ae7ef0f11
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

@@ -10,6 +10,8 @@ public class Attack : MonoBehaviour
     public int attackDamage = 10;
     public Vector2 knockback = Vector2.zero;
 
+    public bool turnOffOnAttack = false;
+    public bool KnockbackRelativePosition = false;
 
 
 
@@ -27,11 +29,26 @@ private void OnTriggerEnter2D(Collider2D collision)
             Mathf.Abs(knockback.x) * knockbackScaleX * pushDirection,
             knockback.y * knockbackScaleY);
 
+        if(KnockbackRelativePosition)
+        {
+            attackerPosition = transform.root.position;
+            float sign = collision.transform.position.x - attackerPosition.x;
+            if(sign < 0.0f)
+            {
+                deliveredKnockback = new Vector2(Mathf.Abs(knockback.x) * knockbackScaleX * -1, knockback.y * knockbackScaleY);
+            }else
+            {
+                deliveredKnockback = new Vector2(Mathf.Abs(knockback.x) * knockbackScaleX, knockback.y * knockbackScaleY);
+
+            }
+        }
         bool handled = damageable.Hit(
             attackDamage,
             deliveredKnockback,
             transform.root.position);
 
+
+        
         if (!handled)
             return;
 
@@ -46,5 +63,12 @@ private void OnTriggerEnter2D(Collider2D collision)
             Sfx.PlayAt(SfxId.CombatHit, collision.bounds.center);
             Debug.Log(collision.name + " hit for " + attackDamage + " damage!");
         }
+
+        if(turnOffOnAttack)
+        {
+            PolygonCollider2D poly = GetComponent<PolygonCollider2D>();
+            poly.enabled = false;
+        }
+        
     }
 }

@@ -14,6 +14,8 @@ public class Damageable : MonoBehaviour
     [SerializeField]
     private int _maxHealth = 100;
 
+
+    
     [SerializeField]
     private bool canRevive = false;
 
@@ -29,6 +31,14 @@ public class Damageable : MonoBehaviour
         }
     }
 
+    float reverseMaxHealth = 1.0f;
+
+    public float hpPercentage  {
+        get
+        {
+            return _health * reverseMaxHealth;
+        }
+    } 
     [SerializeField]
     private int _health = 100;
 
@@ -107,6 +117,7 @@ public class Damageable : MonoBehaviour
 
      public void Awake()
     {
+        reverseMaxHealth = 1.0f / MaxHealth;
         animator = GetComponent<Animator>();
         if(animator == null)
         {

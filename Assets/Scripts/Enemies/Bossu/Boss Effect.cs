@@ -107,4 +107,60 @@ public class BossEffect : MonoBehaviour
         boss.AnimationFlip();
         flip = true;
     }
+
+    public void SpawnImpactAnimation()
+    {
+        boss.SpawnGroundImpact();
+    }
+
+    // Dash further to the right
+
+    public void GroundStabDash()
+    {
+        boss.GroundStabDash();
+    }
+
+    public void SpawnGroundImpactOnBoth()
+    {
+        boss.SpawnGroundImpactOnBoth();
+    }
+
+
+    public void GroundStabEnd()
+    {
+        boss.GroundStabEnd();
+    }
+
+    // Dash to surprise the player
+    public void StabDash()
+    {
+        boss.StabDash();
+    }
+
+    public void ReadyForStab()
+    {
+        boss.ReadyForStab();
+    }
+
+    public void ListenStabEnd()
+    {
+        boss.ListenStabEnd();
+    }
+
+
+
+    public void StabEnd()
+    {
+        boss.StabEnd();
+    }
+
+    public void DoneFalling()
+    {
+        boss.DoneFalling();
+    }
+
+    public void SpecialUpAbility()
+    {
+        boss.SpecialUpAbility();
+    }
 }
