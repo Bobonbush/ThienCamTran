@@ -108,6 +108,10 @@ public class Damageable : MonoBehaviour
      public void Awake()
     {
         animator = GetComponent<Animator>();
+        if(animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
         animator.SetBool(AnimationStrings.isAlive, _isAlive);
 
         MonoBehaviour[] behaviours = GetComponents<MonoBehaviour>();
@@ -199,11 +203,14 @@ public class Damageable : MonoBehaviour
         isInvincible = true;
 
         // Poise: giảm lực knockback ngay tại nguồn, mọi listener nhận giá trị đã trừ kháng
-        if (knockbackResistance > 0f)
+        if (knockbackResistance > 0f && knockbackResistance < 1.0f)
             knockback *= 1f - knockbackResistance;
 
-        animator.SetTrigger(AnimationStrings.hitTrigger);
-        LockVelocity = true;
+        if (knockbackResistance < 1.0f)
+        {
+            animator.SetTrigger(AnimationStrings.hitTrigger);
+            LockVelocity = true;
+        }
         damageableHit?.Invoke(damage, knockback);
         CharacterEvents.characterDamaged?.Invoke(gameObject, damage);
 

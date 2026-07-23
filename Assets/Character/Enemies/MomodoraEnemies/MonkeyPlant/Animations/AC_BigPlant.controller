@@ -354,6 +354,25 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
+--- !u!114 &7788990011223304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c052ebbcc65d564fa48de8840b745d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetFloatBehaviour
+  floatName: attackCooldown
+  updateOnStateEnter: 0
+  updateOnStateExit: 1
+  updateOnStateMachineEnter: 0
+  updateOnStateMachineExit: 0
+  valueOnEnter: 0
+  valueOnExit: 0.1
 --- !u!1107 &1714747045147975645
 AnimatorStateMachine:
   serializedVersion: 6
@@ -365,16 +384,16 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4079311359592855913}
-    m_Position: {x: 200, y: 0, z: 0}
+    m_Position: {x: 420, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7901474748876603920}
-    m_Position: {x: 235, y: 65, z: 0}
+    m_Position: {x: 490, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4532602690727384227}
-    m_Position: {x: 270, y: 130, z: 0}
+    m_Position: {x: 100, y: -230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7127821378331283265}
-    m_Position: {x: 305, y: 195, z: 0}
+    m_Position: {x: 310, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4394728651748162373}
     m_Position: {x: 340, y: 260, z: 0}
@@ -488,22 +507,3 @@ MonoBehaviour:
   updateOnStateMachine: 0
   valueOnEnter: 0
   valueOnExit: 1
---- !u!114 &7788990011223304
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c052ebbcc65d564fa48de8840b745d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetFloatBehaviour
-  floatName: attackCooldown
-  updateOnStateEnter: 0
-  updateOnStateExit: 1
-  updateOnStateMachineEnter: 0
-  updateOnStateMachineExit: 0
-  valueOnEnter: 0
-  valueOnExit: 0.1

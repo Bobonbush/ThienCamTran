@@ -153,9 +153,9 @@ public class EnemySpawn : MonoBehaviour
         yield return new WaitForSeconds(trapList[trapCounter].delayTime);
 
         currentTrapList.Clear();
-        for (int i = 0; i < trapList[round].trapInfos.Count; i++)
+        for (int i = 0; i < trapList[trapCounter].trapInfos.Count; i++)
         {
-            TrapInfo info = trapList[round].trapInfos[i];
+            TrapInfo info = trapList[trapCounter].trapInfos[i];
             info.traps.ActivateTrap();
         }
         trapCounter++;

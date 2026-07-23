@@ -14,6 +14,16 @@ public class CutSceneManager : MonoBehaviour
     [NonSerialized]
     public PlayerCamera playerCamera;
 
+    [NonSerialized]
+    public Transform playerTransform;
+
+
+    bool inCutScene = false;
+
+    public bool IsInCutScene
+    {
+        get { return inCutScene; }
+    }
     private void Awake()
     {
         // Ensure only one instance of this manager ever exists (Singleton)
@@ -22,6 +32,8 @@ public class CutSceneManager : MonoBehaviour
             Instance = this;
 
             GameObject player = gameplayObject = GameObject.Find("Player");
+            playerTransform = player.transform;
+
             playerController = player.GetComponent<PlayerController>();
             playerCamera = player.GetComponentInChildren<PlayerCamera>();
             DontDestroyOnLoad(gameObject);
@@ -37,9 +49,10 @@ public class CutSceneManager : MonoBehaviour
 
     public void OnCutSceneStart(CutSceneInfo info)
     {
-            
+
         // Turn off Hub
 
+        inCutScene = true;
         if(gameplayObject == null)
         {
             gameplayObject = GameObject.Find("Gameplay");
@@ -82,7 +95,8 @@ public class CutSceneManager : MonoBehaviour
             SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
             sceneManager.TransitionToScene(info.SceneID, info.SpawnID, info.SpawnOffset);
         }
-        
+
+        inCutScene = false;
     }
 
     public void TriggerCutScene(CutTrigger trigger)

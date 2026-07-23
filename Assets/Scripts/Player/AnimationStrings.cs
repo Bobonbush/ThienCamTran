@@ -38,4 +38,5 @@ internal class AnimationStrings
     internal static string openChest = "Isopen";
     internal static string isSaving = "IsSaving";
     internal static string isPuzzling = "IsPuzzling";
+    internal static string isSwapDir = "SwapDir";
 }

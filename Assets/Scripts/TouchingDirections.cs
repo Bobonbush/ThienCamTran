@@ -103,8 +103,12 @@ public class TouchingDirections : MonoBehaviour
     private void Awake()
     {
         touchingCol = GetComponent<CapsuleCollider2D>();
+        
         animator = GetComponent<Animator>();
-
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
         boxCol = GetComponent<BoxCollider2D>();
 
         slidableLayer = LayerMask.NameToLayer("Slidable");
