@@ -26,7 +26,7 @@ MonoBehaviour:
   UsedCamera: 1
   EnableObjects: []
   ForceCameraMovement:
-  - position: {x: -19.31, y: 1.6, z: 0}
+  - position: {x: -19.31, y: 5, z: 0}
     delaybeforeMove: 0
     moveDuration: 0
     stayDuration: 0
@@ -47,6 +47,14 @@ MonoBehaviour:
     moveDuration: 1
     stayDuration: 4
     effect: 2
+    effectDuration: 2
+    lensImplitude: 0
+    effectStays: 0
+  - position: {x: -17.81, y: 5.4, z: 0}
+    delaybeforeMove: 0
+    moveDuration: 1
+    stayDuration: 0
+    effect: 0
     effectDuration: 3
     lensImplitude: 0
     effectStays: 0
@@ -57,5 +65,5 @@ MonoBehaviour:
     stayDuration: 10
     useTrigger: 0
     triggerName: 
-  ComeBackCamera: 1
+  ComeBackCamera: 0
   timeCameraComeBack: 1

@@ -163,4 +163,11 @@ public class BossEffect : MonoBehaviour
     {
         boss.SpecialUpAbility();
     }
+
+    
+
+    public void AnimationDeadBoss()
+    {
+        boss.AnimationDeadBoss();
+    }
 }

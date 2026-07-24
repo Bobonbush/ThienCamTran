@@ -104,6 +104,11 @@ public class Bossu : MonoBehaviour
 
     void Flip(Vector3 dirX)
     {
+        // Flip too fast
+        if(playerTransform.position.y > transform.position.y - 1f)
+        {
+            return;
+        }
         if(dirX.x > 0 && walkDiretionVector.x < 0 )
         {
             _walkDiretionVector *= -1;
@@ -142,6 +147,11 @@ public class Bossu : MonoBehaviour
     private void Crawl()
     {
         ChasingTime += Time.deltaTime;
+        
+        if (playerTransform.position.y > transform.position.y - 1f)
+        {
+            return;
+        }
 
         float constantValue = 1.0f;
 
@@ -150,6 +160,11 @@ public class Bossu : MonoBehaviour
             constantValue = 0.8f;
         }
         if (damageable.hpPercentage < 0.5f)
+        {
+            constantValue = 0.65f;
+        }
+
+        if(damageable.hpPercentage < 0.35f)
         {
             constantValue = 0.5f;
         }
@@ -238,6 +253,10 @@ public class Bossu : MonoBehaviour
         {
             numberOfStab = Random.Range(2, 5);
         }
+        if(damageable.hpPercentage < 0.35)
+        {
+            numberOfStab = Random.Range(3, 5);
+        }
         stabTiming = 0.0f;
     }
 
@@ -254,13 +273,15 @@ public class Bossu : MonoBehaviour
 
         if (damageable.hpPercentage < 0.75)
         {
-            constantTime *= Random.Range(0.6f, 0.75f);
+            constantTime = Random.Range(0.75f, 0.8f);
         }
 
-        if(damageable.hpPercentage < 0.5)
+        if(damageable.hpPercentage < 0.45)
         {
-            constantTime *= Random.Range(0.4f, 0.5f);
+            constantTime = Random.Range(0.7f, 0.75f);
         }
+
+        
         if (stabTiming > stabmaxTime * constantTime && stabbed == false)
         {
             stabbed = true;
@@ -283,8 +304,6 @@ public class Bossu : MonoBehaviour
     }
     public void StabEnd()
     {
-        
-        
         SetIdle(1.0f); 
     }
 
@@ -316,16 +335,15 @@ public class Bossu : MonoBehaviour
         OnSpellCast = true;
         anim.SetTrigger("SpecialAttack");
         SpecialUpDown = false;
-
-        
     }
 
     public void SpecialUpAbility()
     {
 
         rb.gravityScale = -2;
-        if (damageable.hpPercentage < 0.75) rb.gravityScale = -3;
-        if (damageable.hpPercentage < 0.5) rb.gravityScale = -4;
+        if (damageable.hpPercentage < 0.75) rb.gravityScale = -4;
+        if (damageable.hpPercentage < 0.5) rb.gravityScale = -6;
+
         rb.AddForce(new Vector2(0.0f, 5.0f));
 
         if(state == BossState.DisapearSpawn && SpecialType.Frenzy == specialType)
@@ -338,12 +356,17 @@ public class Bossu : MonoBehaviour
         if(specialType == SpecialType.Frenzy)
         {
             endSpecialTime = 1.5f;
+            maximalRock = Random.Range(1, 3);
             timePerRockThrow = 0.5f;
+            timePerRockThrow = endSpecialTime / (maximalRock + 1.0f);
         }
         else
         {
-            endSpecialTime = 6.0f;
-            timePerRockThrow = 2.0f;
+            endSpecialTime = Random.Range(2.5f, 3.5f);
+            
+            timePerRockThrow = 1.0f;
+            maximalRock = Random.Range(1, 3);
+            timePerRockThrow = endSpecialTime / (maximalRock + 1.0f);
         }
 
         startSpecialTime = 0.0f;
@@ -357,15 +380,16 @@ public class Bossu : MonoBehaviour
     private bool SpecialUpDown = false;
 
     private float startSpecialTime = 0.0f;
-    private float endSpecialTime = 6.0f;
+    private float endSpecialTime = 4.0f;
 
-    private float timePerRockThrow = 2.0f;
+    private float timePerRockThrow = 2.0f * 2/3f;
     private float timeRock = 0.0f;
     private int totalRock = 0;
+    private int maximalRock = 2;
 
     private float frenzyTime = 3.0f;
     
-    float range = 24.0f;
+    float range = 32.0f;
     enum SpecialType {
         EarthWake,
         Frenzy
@@ -379,7 +403,7 @@ public class Bossu : MonoBehaviour
     private void SpawnRock()
     {
         timeRock += Time.deltaTime;
-        if(timeRock < timePerRockThrow || totalRock > 2)
+        if(timeRock < timePerRockThrow || totalRock > maximalRock)
         {
             
             return;
@@ -387,16 +411,23 @@ public class Bossu : MonoBehaviour
         totalRock++;
         timeRock = 0.0f;
 
-        int rockCount = Random.Range(5, 18);
 
-        float left = Mathf.Max(playerTransform.position.x - range, boundX.x);
-        float right = Mathf.Min(playerTransform.position.x + range, boundX.y);
-        
+        float scalePercentage = damageable.hpPercentage;
+
+        scalePercentage = Mathf.Clamp(scalePercentage, 0.1f, 1.0f);
+
+        int rockCount = Random.Range((int)(5 * (0.5f / scalePercentage)), (int) (8 * (0.35f/ scalePercentage)));
+
+        float left = Mathf.Max(playerTransform.position.x - range * 0.5f / scalePercentage, boundX.x);
+        float right = Mathf.Min(playerTransform.position.x + range * 0.5f / scalePercentage, boundX.y);
+
+        float width = right - left;
+        float sectionWidth = width / rockCount;
+
         for (int i = 0; i < rockCount; i++)
         {
-            float x = Random.Range(
-                playerTransform.position.x - range,
-                playerTransform.position.x + range);
+            float x = left + i * sectionWidth +
+              Random.Range(0f, sectionWidth);
 
             Vector3 spawnPos = new Vector3(x, Random.Range(16.0f, 32.0f), 0);
 
@@ -409,13 +440,15 @@ public class Bossu : MonoBehaviour
   
     public void SpecialUpUpdate()
     {
-        
-        if(transform.position.y > 15.96 && SpecialUpDown == false )
+
+        float limitheight = 15.96f;
+        if (transform.position.y > limitheight && SpecialUpDown == false )
         {
             rb.gravityScale = 0;
             rb.linearVelocityY = 0;
             SpecialUpDown = true;
             frenzyTime = 0.25f;
+            transform.position = new Vector3(transform.position.x, limitheight + 1.0f, transform.position.z);
         }
 
         
@@ -436,7 +469,7 @@ public class Bossu : MonoBehaviour
             return;
         }
 
-        if (transform.position.y <= 15.96)
+        if (transform.position.y <= limitheight)
         {
             return;
         }
@@ -469,7 +502,10 @@ public class Bossu : MonoBehaviour
         rb.gravityScale = 3;
         if (damageable.hpPercentage < 0.75) rb.gravityScale = 4.0f;
         if (damageable.hpPercentage < 0.5) rb.gravityScale = 5.0f;
-        transform.position = new Vector3(playerTransform.position.x, transform.position.y, transform.position.z);
+
+        float xPos = playerTransform.position.x;
+        xPos = Mathf.Clamp(xPos, boundX.x + 0.5f, boundX.y - 0.5f);
+        transform.position = new Vector3(xPos, transform.position.y, transform.position.z);
     }
 
 
@@ -484,13 +520,13 @@ public class Bossu : MonoBehaviour
 
         GroundImpact impact = Instantiate(
             groundImpactPrefab,
-            new Vector3(transform.root.position.x, -1.5f, transform.root.position.z),
+            new Vector3(transform.root.position.x, -1.05f, transform.root.position.z),
             Quaternion.identity);
 
 
         GroundImpact _impact = Instantiate(
             groundImpactPrefab,
-            new Vector3(transform.root.position.x, -1.5f, transform.root.position.z),
+            new Vector3(transform.root.position.x, -1.05f, transform.root.position.z),
             Quaternion.identity);
         _impact.Initialize(-direction);
         impact.Initialize(direction);
@@ -523,6 +559,10 @@ public class Bossu : MonoBehaviour
     {
         OnSpellCast = true;
         anim.SetTrigger("StabOnGround");
+        if(damageable.hpPercentage < 0.75)
+            anim.SetFloat("GroundStabSpeed", 1.5f);
+        if (damageable.hpPercentage < 0.5)
+            anim.SetFloat("GroundStabSpeed", 2.0f);
     }
 
     public void SpawnGroundImpact()
@@ -542,15 +582,27 @@ public class Bossu : MonoBehaviour
     public void GroundStabDash()
     {
         float dashImplitude = playerTransform.position.x - transform.position.x;
-        if (Mathf.Abs(dashImplitude) <= offsetX)
+
+        
+         float X = transform.position.x + Mathf.Sign(dashImplitude) * -1 * offsetX * 0.3f;
+         X = Mathf.Clamp(X, boundX.x, boundX.y);
+         transform.position = new Vector3(X, transform.position.y, transform.position.z);
+        
+
+        if(damageable.hpPercentage < 0.50)
         {
-            transform.position = new Vector3(transform.position.x + Mathf.Sign(dashImplitude) * -1 * offsetX * 0.3f, transform.position.y, transform.position.z);
+
+            X = transform.position.x + Mathf.Sign(dashImplitude) * -1 * offsetX * 0.2f;
+            X = Mathf.Clamp(X, boundX.x, boundX.y); 
+            transform.position = new Vector3(X, transform.position.y, transform.position.z);
         }
     }
 
 
     public void GroundStabEnd()
     {
+        
+        anim.SetFloat("GroundStabSpeed", 1.0f);
         SetIdle(1.0f);
     }
 
@@ -580,8 +632,7 @@ public class Bossu : MonoBehaviour
         {
             idleMaxTime *= 0.8f;
         }
-
-        if (damageable.hpPercentage <= 0.5)
+        else if (damageable.hpPercentage <= 0.5)
         {
             idleMaxTime *= 0.6f;
         }
@@ -614,11 +665,23 @@ public class Bossu : MonoBehaviour
         {
             return 30 + (int)stabBonus;
         }
+
+        if(damageable.hpPercentage < 0.75)
+        {
+            return 30 + (int)stabBonus; // lower priority
+        }
+
         return 50 + (int)stabBonus;
     }
 
+    public void Died()
+    {
+        Destroy(this.gameObject);
+    }
     private int WeightGroundStab(float distance)
     {
+
+        
         if(distance > offsetX * 1.5)
         {
             return 50 + (int)groundstabBonus ;
@@ -629,10 +692,14 @@ public class Bossu : MonoBehaviour
             return 30 + (int)groundstabBonus;
         }
 
+        
+
         return 30 + (int)groundstabBonus;
     }
 
     private bool firstTimeAttackNormal = false;
+
+
     private int WeightSpecialAttackNormal(float distance)
     {
         if (damageable.hpPercentage > 0.9)
@@ -647,11 +714,6 @@ public class Bossu : MonoBehaviour
         }
         if (distance > offsetX * 1.5)
         {
-            return 20 + (int)SpecialAttackBonus;
-        }
-
-        if(distance > offsetX * 1.25)
-        {
             return 10 + (int)SpecialAttackBonus;
         }
 
@@ -659,18 +721,24 @@ public class Bossu : MonoBehaviour
     }
 
     private bool firstTime = false;
+    private bool frenzyOccur = false;
     private int WeightSpecialAttackFrenzy(float distance)
     {
         if(damageable.hpPercentage > 0.5)
         {
             return INF;
         }
-        
+       
 
         if (firstTime == false)
         {
             firstTime = true;
             return INF - 1; // surely commit
+        }
+        if(frenzyOccur == true)
+        {
+            frenzyOccur = false;
+            return INF;
         }
         // rare
         return 5 + (int)SummonAttackBonus;
@@ -784,8 +852,9 @@ public class Bossu : MonoBehaviour
             stabBonus += bonusForNotUse;
             groundstabBonus += bonusForNotUse;
             SpecialAttackBonus = bonusForNotUse;
-            SummonAttackBonus += 0;
+            SummonAttackBonus = 0;
             specialType = SpecialType.Frenzy;
+            frenzyOccur = true;
             StartSpecialAbility();
         }
 
@@ -826,8 +895,6 @@ public class Bossu : MonoBehaviour
         effect.BloodEffect(hitKnockback.normalized);
         effect.Flash();
 
-        Debug.Log("Current HP Percentage: " + damageable.hpPercentage);
-
     }
 
     public void Release()
@@ -838,9 +905,17 @@ public class Bossu : MonoBehaviour
         rb.gravityScale = gravityScale;
     }
 
+
+    private bool animationDead = false;
+
     public bool isAlive()
     {
-        return damageable.IsAlive;
+        return damageable.IsAlive || (animationDead == false);
+    }
+
+    public void AnimationDeadBoss()
+    {
+        animationDead = true;
     }
 
     public void AnimationFlip()
@@ -865,6 +940,6 @@ public class Bossu : MonoBehaviour
             return;
         }
 
-        SetIdle(2.0f);
+        SetIdle(1.5f);
     }
 }

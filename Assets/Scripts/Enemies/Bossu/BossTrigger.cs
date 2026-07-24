@@ -67,8 +67,10 @@ public class BossTrigger : MonoBehaviour
     private void Done()
     {
         ActivateTrap(false);
+        boss.Died();
         this.enabled = false;
     }
+
     bool isDone()
     {
         return !boss.isAlive();

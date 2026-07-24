@@ -36,7 +36,7 @@ public class Damageable : MonoBehaviour
     public float hpPercentage  {
         get
         {
-            return _health * reverseMaxHealth;
+            return  _health * reverseMaxHealth;
         }
     } 
     [SerializeField]
