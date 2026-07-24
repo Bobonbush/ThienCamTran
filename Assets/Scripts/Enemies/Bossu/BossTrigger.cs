@@ -34,6 +34,11 @@ public class BossTrigger : MonoBehaviour
             boss.Release();
             Released = true;
         }
+
+        if(isDone())
+        {
+            Done();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -42,11 +47,28 @@ public class BossTrigger : MonoBehaviour
         {
             Triggered = true;
             GetComponent<CutTrigger>().Trigger(collision.GetComponent<PlayerController>(), collision.GetComponentInChildren<PlayerCamera>());
-            activeTrap.ActivateTraps();
+            ActivateTrap(true);
             box.enabled = false;
         }
     }
 
+    private void ActivateTrap(bool active)
+    {
+        if (activeTrap != null)
+        {
+            if (active)
+                activeTrap.ActivateTraps();
+            else
+                activeTrap.DeActiveTraps();
+        }
+    }
+
+
+    private void Done()
+    {
+        ActivateTrap(false);
+        this.enabled = false;
+    }
     bool isDone()
     {
         return !boss.isAlive();

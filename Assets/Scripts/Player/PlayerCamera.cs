@@ -278,6 +278,9 @@ public class PlayerCamera : MonoBehaviour
         if(saveLocalBounds != null)
         {
             UpdateLocalCameraBoundary(saveLocalBounds);
+        }else
+        {
+            UpdateGlobalCameraBoundary();
         }
     }
 

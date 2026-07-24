@@ -98,7 +98,7 @@ public class Damageable : MonoBehaviour
             animator.SetBool(AnimationStrings.isAlive, value);
         }
     }
-    // 
+    
     public bool LockVelocity
     {
         get

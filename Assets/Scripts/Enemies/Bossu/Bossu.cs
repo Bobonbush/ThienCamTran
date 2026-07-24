@@ -224,6 +224,8 @@ public class Bossu : MonoBehaviour
         }
     }
 
+    private bool firstStab = false;
+
 
     private void StartStab()
     {
@@ -231,6 +233,7 @@ public class Bossu : MonoBehaviour
         stabbed = false;
         anim.SetTrigger("SimpleAttack");
         numberOfStab = 1;
+        firstStab = false;
         if(damageable.hpPercentage < 0.75)
         {
             numberOfStab = Random.Range(2, 5);
@@ -289,6 +292,11 @@ public class Bossu : MonoBehaviour
 
     public void StabDash()
     {
+        if(firstStab)
+        {
+            return;
+        }
+        firstStab = true;
         float dashImplitude = playerTransform.position.x - transform.position.x;
         
         if(Mathf.Abs(dashImplitude) <= offsetX * 1.25f)
@@ -297,6 +305,7 @@ public class Bossu : MonoBehaviour
         }
         float aspect = (offsetX * 1.25f) / Mathf.Abs(dashImplitude);
 
+        
         transform.position = new Vector3(transform.position.x + dashImplitude * aspect * 0.25f, transform.position.y, transform.position.z);
     }
 
