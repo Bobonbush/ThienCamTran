@@ -14,8 +14,8 @@ public class Damageable : MonoBehaviour
     [SerializeField]
     private int _maxHealth = 100;
 
+    public event Action<Damageable> OnInvincibleEnded;
 
-    
     [SerializeField]
     private bool canRevive = false;
 
@@ -144,6 +144,8 @@ public class Damageable : MonoBehaviour
             if (timeSinceHit > invicibilityTimer)
             {
                 isInvincible = false;
+                if(!(canRevive && deathByTrap))
+                    OnInvincibleEnded?.Invoke(this);
                 timeSinceHit = 0;
                 if (canRevive && deathByTrap)
                 {
@@ -156,7 +158,7 @@ public class Damageable : MonoBehaviour
             if(timeInvisibleFrame > maxTimeInvisibleFrame)
             {
                 isInvincible = false;
-                
+
                 if (canRevive && deathByTrap)
                 {
                     deathByTrap = false;
@@ -228,6 +230,10 @@ public class Damageable : MonoBehaviour
         return true;
     }
 
+    public bool CheckingInvincible()
+    {
+        return isInvincible;
+    }
     public bool HitTrap()
     {
         // Falling to a trap need to reset the position and minus a constant health
@@ -265,4 +271,6 @@ public class Damageable : MonoBehaviour
         }
         return false;
     }
+
+    
 }

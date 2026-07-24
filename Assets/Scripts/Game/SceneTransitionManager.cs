@@ -382,9 +382,6 @@ public class SceneTransitionManager : MonoBehaviour
 
             virtualCamera.ForceCameraPosition(finalPlayerPos, virtualCamera.transform.rotation);
             virtualCamera.PreviousStateIsValid = false;
-
-
-
             playerController.Teleport(spawnPosition);
         }
         else
