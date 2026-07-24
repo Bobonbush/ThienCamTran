@@ -211,6 +211,10 @@ public class Bossu : MonoBehaviour
         {
             if (CrawlCurrentStateTime < CrawlEndStateTime)
             {
+                // One heavy body-drag thud per crawl lurch
+                if (CrawlCurrentStateTime == 0f)
+                    Sfx.PlayAt(SfxId.BossStep, transform.position);
+
                 rb.linearVelocityX = speed * transform.localScale.x;
                 CrawlCurrentStateTime += Time.deltaTime;
                 if (CrawlCurrentStateTime >= CrawlEndStateTime)
@@ -286,6 +290,7 @@ public class Bossu : MonoBehaviour
         {
             stabbed = true;
             anim.SetTrigger("Stab");
+            Sfx.PlayAt(SfxId.BossSwing, transform.position);
         }
     }
    
@@ -300,6 +305,7 @@ public class Bossu : MonoBehaviour
         if (numberOfStab > 0)
         {
             anim.SetTrigger("Stab");
+            Sfx.PlayAt(SfxId.BossSwing, transform.position);
         }
     }
     public void StabEnd()
@@ -324,8 +330,9 @@ public class Bossu : MonoBehaviour
         }
         float aspect = (offsetX * 1.25f) / Mathf.Abs(dashImplitude);
 
-        
+
         transform.position = new Vector3(transform.position.x + dashImplitude * aspect * 0.25f, transform.position.y, transform.position.z);
+        Sfx.PlayAt(SfxId.BossDash, transform.position);
     }
 
 
@@ -335,10 +342,15 @@ public class Bossu : MonoBehaviour
         OnSpellCast = true;
         anim.SetTrigger("SpecialAttack");
         SpecialUpDown = false;
+
+        // Roar telegraph so the player knows the big one is coming
+        Sfx.Play(SfxId.BossRoar);
     }
 
     public void SpecialUpAbility()
     {
+        // Wind whoosh as the boss launches into the air
+        Sfx.Play(SfxId.BossLaunch);
 
         rb.gravityScale = -2;
         if (damageable.hpPercentage < 0.75) rb.gravityScale = -4;
@@ -414,6 +426,9 @@ public class Bossu : MonoBehaviour
         }
         totalRock++;
         timeRock = 0.0f;
+
+        // Boss is offscreen up high, so play the throw whoosh non-positional
+        Sfx.Play(SfxId.BossRockThrow);
 
 
         float scalePercentage = damageable.hpPercentage;
@@ -501,7 +516,9 @@ public class Bossu : MonoBehaviour
 
     private void EndSpecialAttack()
     {
-       
+        // Pitched-down whoosh for the dive back to the arena
+        Sfx.Play(SfxId.BossLaunch, 0.8f, 0.85f);
+
         anim.SetTrigger("GoDown");
         rb.gravityScale = 3;
         if (damageable.hpPercentage < 0.75) rb.gravityScale = 4.0f;
@@ -563,6 +580,9 @@ public class Bossu : MonoBehaviour
     {
         OnSpellCast = true;
         anim.SetTrigger("StabOnGround");
+
+        // Quieter grunt telegraph before the shockwave stab
+        Sfx.PlayAt(SfxId.BossRoar, transform.position, 0.5f);
         if(damageable.hpPercentage < 0.75)
             anim.SetFloat("GroundStabSpeed", 1.5f);
         if (damageable.hpPercentage < 0.5)
@@ -581,6 +601,7 @@ public class Bossu : MonoBehaviour
             Quaternion.identity);
 
         impact.Initialize(direction);
+        Sfx.PlayAt(SfxId.BossGroundHit, stabPoint.position);
     }
 
     public void GroundStabDash()
@@ -899,6 +920,17 @@ public class Bossu : MonoBehaviour
         effect.BloodEffect(hitKnockback.normalized);
         effect.Flash();
 
+        if (damageable.IsAlive)
+        {
+            Sfx.PlayAt(SfxId.BossHurt, transform.position);
+        }
+        else
+        {
+            // Killing blow: death cry and let the theme fade out
+            Sfx.PlayAt(SfxId.BossDeath, transform.position);
+            if (BossMusic.Instance != null)
+                BossMusic.Instance.StopTheme();
+        }
     }
 
     public void Release()
@@ -907,6 +939,11 @@ public class Bossu : MonoBehaviour
         anim.SetBool("Released", true);
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = gravityScale;
+
+        // Non-positional: the camera is panning around during the intro cutscene
+        Sfx.Play(SfxId.BossRoar);
+        if (BossMusic.Instance != null)
+            BossMusic.Instance.StartTheme();
     }
 
 

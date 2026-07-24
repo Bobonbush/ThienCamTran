@@ -330,6 +330,10 @@ public class PlayerCamera : MonoBehaviour
             if (impulseSource != null)
                 impulseSource.GenerateImpulse(UnityEngine.Random.insideUnitCircle * 0.8f);
 
+            // Low rumble under the shake; the cue cooldown keeps repeated
+            // ticks (and overlapping quakes) from stacking into noise
+            Sfx.Play(SfxId.WorldEarthquake);
+
             timer += 0.15f;
             yield return new WaitForSeconds(0.15f);
         }

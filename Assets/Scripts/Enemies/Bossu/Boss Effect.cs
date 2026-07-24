@@ -93,11 +93,15 @@ public class BossEffect : MonoBehaviour
 
     public void EarthWakeOnDown()
     {
+        // Heavy slam when the boss body hits the arena floor
+        Sfx.PlayAt(SfxId.BossSlam, transform.position);
         EarthWake(0.3f);
     }
 
     public void EarthWakeOnJump()
     {
+        // Lighter thump for the push-off
+        Sfx.PlayAt(SfxId.BossSlam, transform.position, 0.6f);
         EarthWake(0.3f);
     }
 

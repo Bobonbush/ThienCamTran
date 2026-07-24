@@ -187,9 +187,11 @@ public class CutTrigger : MonoBehaviour
 
                 if(data.effect == CutSceneInfo.CameraForceData.Effect.EarthWake)
                 {
-                    if (data.effectStays) 
+                    // else-branch: fire-and-forget, otherwise the quake ran twice
+                    if (data.effectStays)
                         yield return playerCamera.Earthquake(data.effectDuration);
-                    StartCoroutine(playerCamera.Earthquake(data.effectDuration));
+                    else
+                        StartCoroutine(playerCamera.Earthquake(data.effectDuration));
                 }
             }
             yield return playerCamera.Wait(data.stayDuration);
