@@ -989,6 +989,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         Climbing = false;
         StopCombo = true;
+        
 
         // Đòn attack đang chờ trong queue sẽ kéo animator ra khỏi player_hit
         // ngay lập tức làm mất knockback — huỷ nó khi trúng đòn

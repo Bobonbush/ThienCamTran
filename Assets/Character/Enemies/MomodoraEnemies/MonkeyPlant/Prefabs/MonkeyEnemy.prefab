@@ -99,6 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Attack
   attackDamage: 7
   knockback: {x: 0.7, y: 0.5}
+  turnOffOnAttack: 0
+  KnockbackRelativePosition: 0
 --- !u!1 &3718492227554580312
 GameObject:
   m_ObjectHideFlags: 0
