@@ -356,7 +356,7 @@ public class Bossu : MonoBehaviour
         if(specialType == SpecialType.Frenzy)
         {
             endSpecialTime = 1.5f;
-            maximalRock = Random.Range(1, 3);
+            maximalRock = Random.Range(2, 4);
             timePerRockThrow = 0.5f;
             timePerRockThrow = endSpecialTime / (maximalRock + 1.0f);
         }
@@ -366,6 +366,10 @@ public class Bossu : MonoBehaviour
             
             timePerRockThrow = 1.0f;
             maximalRock = Random.Range(1, 3);
+            if(damageable.hpPercentage <= 0.5)
+            {
+                maximalRock = Random.Range(2, 3);
+            }
             timePerRockThrow = endSpecialTime / (maximalRock + 1.0f);
         }
 
@@ -414,7 +418,7 @@ public class Bossu : MonoBehaviour
 
         float scalePercentage = damageable.hpPercentage;
 
-        scalePercentage = Mathf.Clamp(scalePercentage, 0.1f, 1.0f);
+        scalePercentage = Mathf.Clamp(scalePercentage, 0.1f, 0.5f);
 
         int rockCount = Random.Range((int)(5 * (0.5f / scalePercentage)), (int) (8 * (0.35f/ scalePercentage)));
 
