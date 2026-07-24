@@ -1432,6 +1432,8 @@ public class PlayerController : MonoBehaviour
     {
         lockInput = false;
         saveLock = false;
+        IsMoving = false;
+        IsRunning = false;
         SaveZone completedSaveZone = activeSaveZone;
         activeSaveZone = null;
         completedSaveZone?.OnSavingAnimationExited(this);
@@ -1440,6 +1442,8 @@ public class PlayerController : MonoBehaviour
     public void AnimationEnableSave()
     {
         CanExitForcementState = true;
+        IsMoving = false;
+        IsRunning = false;
         Sfx.PlayAt(SfxId.WorldCheckpoint, transform.position);
         activeSaveZone?.ShowMenu(this);
     }
@@ -1583,6 +1587,8 @@ public class PlayerController : MonoBehaviour
     {
         CutSceneLock = false;
         lockInput = false;
+        IsMoving = false;
+        IsRunning = false;
     }
 
     public void LockDiaLog()
@@ -1601,6 +1607,36 @@ public class PlayerController : MonoBehaviour
     {
         DialogLock = false;
         lockInput = false;
+        IsMoving = false;
+        IsRunning = false;
+    }
+
+    public void OnDie()
+    {
+        IsMoving = false;
+        IsRunning = false;
+        SaveManager.Instance.Die(this);
+    }
+
+    public void ResetFromDeath()
+    {
+        Damageable damageable = GetComponent<Damageable>();
+        if (damageable != null)
+        {
+            int restored = Mathf.Max(0, damageable.MaxHealth - damageable.Health);
+            damageable.Health = damageable.MaxHealth;
+            if (restored > 0)
+                CharacterEvents.characterHealed?.Invoke(gameObject, restored);
+            damageable.IsAlive = true;
+        }
+        
+        if (stat != null)
+        {
+            //stat.Mana = stat.MaxMana;
+            
+        }
+
+        SetSafeGround(transform.position);
     }
 
     public bool isSkipDialog()

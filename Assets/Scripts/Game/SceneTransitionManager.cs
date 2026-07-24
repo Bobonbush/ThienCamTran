@@ -265,6 +265,7 @@ public class SceneTransitionManager : MonoBehaviour
         {
             return;
         }
+        usePostition = false;
         currentScene = buildSceneIndex;
         coolDownTransition = maxcoolDownTransition;
 
@@ -276,6 +277,26 @@ public class SceneTransitionManager : MonoBehaviour
         playerController.RunForwardForXDistance(_offsetSpawn.x);
         StartCoroutine(LoadSceneRoutine(buildSceneIndex));
     }
+
+
+    private Vector3 spawnPosition = Vector3.zero;
+    private bool usePostition = false;
+    public IEnumerator TransitionToScene(string buildSceneIndex, Vector3 pos)
+    {
+        if (coolDownTransition > 0)
+        {
+            yield break;
+        }
+        usePostition = true;
+        spawnPosition = pos;
+        currentScene = buildSceneIndex;
+        coolDownTransition = maxcoolDownTransition;
+
+        Sfx.Play(SfxId.WorldTransition);
+
+        yield return LoadSceneRoutine(buildSceneIndex);
+    }
+
 
     private void SetRoom(Scene scene, LoadSceneMode mode)
     {
@@ -342,7 +363,7 @@ public class SceneTransitionManager : MonoBehaviour
         GameObject spawnPoint = GameObject.Find(targetSpawnPointId);
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        if (spawnPoint != null && player != null)
+        if (spawnPoint != null && player != null && usePostition == false)
         {
             
             Vector3 finalPlayerPos = spawnPoint.transform.position + new Vector3(offsetSpawn.x * 1.15f, 0, 0);
@@ -355,9 +376,20 @@ public class SceneTransitionManager : MonoBehaviour
             playerController.Teleport(spawnPoint.transform.position);
             playerController.RunForwardForXDistance(offsetSpawn.x);
         }
+        else if(usePostition == true)
+        {
+            Vector3 finalPlayerPos = spawnPosition;
+
+            virtualCamera.ForceCameraPosition(finalPlayerPos, virtualCamera.transform.rotation);
+            virtualCamera.PreviousStateIsValid = false;
+
+
+
+            playerController.Teleport(spawnPosition);
+        }
         else
         {
-           Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
+            Debug.Log("Wtf" + (player != null ? "Player" : "") + (spawnPoint != null ? "Point" : ""));
         }
     }
     public IEnumerator Fade(float targetAlpha)

@@ -163,6 +163,9 @@ public class SaveManager : MonoBehaviour
         StartCoroutine(PerformRest(saveZoneId, player));
     }
 
+
+    
+
     private IEnumerator PerformRest(string saveZoneId, PlayerController player)
     {
         yield return SceneTransitionManager.Instance.Fade(1.0f);
@@ -189,6 +192,43 @@ public class SaveManager : MonoBehaviour
 
         yield return SceneTransitionManager.Instance.Fade(0.0f);
     }
+
+    public void Die(PlayerController player)
+    {
+        StartCoroutine(PerformDie(player));
+    }
+
+
+    private IEnumerator PerformDie(PlayerController player)
+    {
+        yield return SceneTransitionManager.Instance.Fade(1.0f);
+
+        Data.temporary.deadEnemies.Clear();
+        Data.temporary.deathDrop = new DeathDropData();
+
+        player.LockCutScene();
+
+        yield return SceneTransitionManager.Instance.TransitionToScene(Data.currentScene, Data.checkpointPosition);
+
+
+        player.ResetFromDeath();
+
+        yield return new WaitForSeconds(0.3f);
+
+        
+
+
+        RestAtSaveZoneFunction?.Invoke();
+        
+        player.ReleaseLockCutScene();
+
+        yield return new WaitForSeconds(0.2f);
+
+        yield return SceneTransitionManager.Instance.Fade(0.0f);
+
+        
+    }
+
 
     private void StoreCheckpointPosition(Vector3 position)
     {
