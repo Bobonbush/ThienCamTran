@@ -2400,20 +2400,28 @@ PrefabInstance:
       value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_ActionId
+      propertyPath: m_ActionEvents.Array.data[21].m_ActionId
       value: 79800f24-01b8-4eb9-860e-f7a0cd065a37
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: m_ActionEvents.Array.data[23].m_ActionId
+      propertyPath: m_ActionEvents.Array.data[22].m_ActionId
       value: 84be45e5-cbfe-4827-998a-ba3fbb83512c
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_ActionName
+      propertyPath: m_ActionEvents.Array.data[23].m_ActionId
+      value: 15ca7453-aa9b-44fc-a73c-0d4462281a69
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: m_ActionEvents.Array.data[21].m_ActionName
       value: 'Player/DiscardForceStatement[/Keyboard/escape]'
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: m_ActionEvents.Array.data[23].m_ActionName
+      propertyPath: m_ActionEvents.Array.data[22].m_ActionName
       value: 'Player/Purify[/Keyboard/leftArrow,/Keyboard/rightArrow]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_ActionName
+      value: 'Player/PlayDead[/Keyboard/s]'
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.size
@@ -2468,12 +2476,16 @@ PrefabInstance:
       value: OnInteract
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_ActionEvents.Array.data[21].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnCancelForcingState
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
-      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnPurify
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPlayDead
       objectReference: {fileID: 0}
     - target: {fileID: 3129385825251170596, guid: 2e0182b57e7f5d74786a0de388f68828, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

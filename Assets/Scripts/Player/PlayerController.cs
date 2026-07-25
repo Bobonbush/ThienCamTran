@@ -371,6 +371,11 @@ public class PlayerController : MonoBehaviour
         {
             Jumptiming += Time.deltaTime;
         }
+
+        if(SHold)
+        {
+            STiming += Time.deltaTime;
+        }
     }
 
     [Tooltip("Tốc độ suy giảm lực đẩy ngang khi trúng đòn (unit/s^2)")]
@@ -1092,13 +1097,13 @@ public class PlayerController : MonoBehaviour
     private float lastInteractAt = -999f;
     private const float interactDebounce = 0.25f;
 
-    private void InteractWithNearest()
+    private void InteractWithNearest(bool prioritySaveZone = false)
     {
         if (Time.unscaledTime < lastInteractAt + interactDebounce)
             return;
         lastInteractAt = Time.unscaledTime;
 
-        IInteractable interactable = FindNearestInteractable();
+        IInteractable interactable = FindNearestInteractable(prioritySaveZone);
         if (interactable != null && interactable.CanInteract)
         {
             if (interactable.GetType() == IInteractable.Type.Item && IsDucking == false)
@@ -1256,7 +1261,7 @@ public class PlayerController : MonoBehaviour
         promptedDialog = nearestInspect;
     }
 
-    private IInteractable FindNearestInteractable()
+    private IInteractable FindNearestInteractable(bool prioritySaveZone = false)
     {
       
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
@@ -1275,6 +1280,11 @@ public class PlayerController : MonoBehaviour
                 continue;
 
             float distance = Vector2.Distance(transform.position, col.transform.position);
+            if(interactable.GetType() == IInteractable.Type.Save && prioritySaveZone)
+            {
+                nearest = interactable;
+                break;
+            }
             if (distance < bestDistance)
             {
                 bestDistance = distance;
@@ -1685,7 +1695,37 @@ public class PlayerController : MonoBehaviour
     {
         
         UpdateInteractPrompts();
-        InteractWithNearest();
+        InteractWithNearest(true);
+    }
+
+    // If bug
+    private bool SHold = false;
+    float STiming = 2.0f;
+
+    public void OnPlayDead(InputAction.CallbackContext context)
+    {
+
+        // Gurantee safe
+        if (saveLock) return;
+        if (CutSceneLock) return;
+       
+        if (context.started)
+        {
+            SHold = true;
+            STiming = 0.0f;
+        }
+
+        if (context.canceled)
+        {
+            SHold = false;
+            if(STiming > 3.0f)
+            {
+                damageable.Health -= damageable.Health;
+                damageable.IsAlive = false;
+            }
+        }
+
+        
     }
 
 }
