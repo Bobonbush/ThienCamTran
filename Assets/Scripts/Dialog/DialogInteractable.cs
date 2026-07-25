@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
 
 // Put this on a prefab (NPC, chest, sign...). When the Player is within range it shows an "E"

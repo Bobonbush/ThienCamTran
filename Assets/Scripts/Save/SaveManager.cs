@@ -88,7 +88,7 @@ public class SaveManager : MonoBehaviour
     private void Start()
     {
 
-        
+        Debug.Log("CutScene Call for what");
         CutSceneManager.Instance.ForceHideGamePlay();
         
 

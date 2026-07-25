@@ -694,7 +694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1677482131723768294, guid: 6dd47e6e07498a846993996346f7d45c, type: 3}
       propertyPath: spawnOffset.x
-      value: 0
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 2247237932414620059, guid: 6dd47e6e07498a846993996346f7d45c, type: 3}
       propertyPath: m_Name

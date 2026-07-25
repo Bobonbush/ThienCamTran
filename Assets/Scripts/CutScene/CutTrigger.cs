@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using MCPForUnity.Editor.Tools;
 using NUnit.Framework;
 using System.Collections.Generic;
 public class CutTrigger : MonoBehaviour

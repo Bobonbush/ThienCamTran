@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Arc1/CutScene/StartGame.unity
+    guid: 3e082900e0edf074b90fab1ec66fba45
+  - enabled: 1
     path: Assets/Scenes/Arc1/CutScene/Opening.unity
     guid: c98ec0afa4574864b93e071b59d8d050
   - enabled: 0
