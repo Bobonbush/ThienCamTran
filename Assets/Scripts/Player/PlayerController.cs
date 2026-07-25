@@ -358,9 +358,10 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        if(touchingDirections.IsGrounded)
+
+        if (touchingDirections.IsGrounded)
         {
-            LastOnGroundY = transform.position.y;
+            
             canAirDash = true;
         }
 
@@ -466,6 +467,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
 
         oldTransformPosition = transform.position;
+        LastOnGroundY = transform.position.y;
     }
 
     private void LockInput(float timing)
@@ -1282,6 +1284,7 @@ public class PlayerController : MonoBehaviour
 
         // DialogInteractable intentionally does not read E on its own. Include distance-based
         // NPCs in the same arbitration pass so one key press selects exactly one target.
+        /*
         DialogInteractable[] dialogs = Object.FindObjectsByType<DialogInteractable>(
             FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         foreach (DialogInteractable dialog in dialogs)
@@ -1294,6 +1297,7 @@ public class PlayerController : MonoBehaviour
                 nearest = dialog;
             }
         }
+        */
 
         return nearest;
     }
@@ -1325,6 +1329,7 @@ public class PlayerController : MonoBehaviour
 
             if (hit)
             {
+
                 transform.position = hit.point + Vector2.up * (col.bounds.extents.y * 5.0f);
                 oldTransformPosition = transform.position;
             }
@@ -1445,6 +1450,7 @@ public class PlayerController : MonoBehaviour
         CanExitForcementState = true;
         IsMoving = false;
         IsRunning = false;
+
         Sfx.PlayAt(SfxId.WorldCheckpoint, transform.position);
         activeSaveZone?.ShowMenu(this);
     }
@@ -1577,6 +1583,8 @@ public class PlayerController : MonoBehaviour
 
     public void LockCutScene()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         CutSceneLock = true;
         IsRunning = false;
         lockInput = true;
@@ -1586,6 +1594,8 @@ public class PlayerController : MonoBehaviour
 
     public void ReleaseLockCutScene()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         CutSceneLock = false;
         lockInput = false;
         IsMoving = false;
@@ -1594,6 +1604,8 @@ public class PlayerController : MonoBehaviour
 
     public void LockDiaLog()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         IsMoving = false;
         IsRunning = false;
         DialogLock = true;
@@ -1606,6 +1618,8 @@ public class PlayerController : MonoBehaviour
 
     public void ReleaseLockDialog()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         DialogLock = false;
         lockInput = false;
         IsMoving = false;
@@ -1614,6 +1628,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnDie()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         IsMoving = false;
         IsRunning = false;
         SaveManager.Instance.Die(this);
@@ -1667,7 +1683,7 @@ public class PlayerController : MonoBehaviour
 
     public void InteractWithNearestCheckPoint()
     {
-        Debug.Log("Called");
+        
         UpdateInteractPrompts();
         InteractWithNearest();
     }

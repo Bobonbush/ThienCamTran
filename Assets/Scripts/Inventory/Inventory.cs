@@ -14,6 +14,8 @@ public class Inventory : MonoBehaviour
         public int amount;
         [SerializeField] private ItemData data;
 
+        public bool isEquipped = false;
+
         public ItemData Data
         {
             get
@@ -35,9 +37,13 @@ public class Inventory : MonoBehaviour
 
     public IReadOnlyList<ItemData> EquippedBuffs
     {
-        get { EnsureEquipmentSlots(); return equippedBuffs; }
+        get { 
+            EnsureEquipmentSlots(); 
+            return equippedBuffs; 
+        }
     }
     public int Score => score;
+
 
     public bool AddItem(Item item, int amount = 1)
     {
@@ -101,9 +107,34 @@ public class Inventory : MonoBehaviour
         if (item == null || stats == null || item.category != Item.Category.Buff) return false;
         EnsureEquipmentSlots();
         slot = Mathf.Clamp(slot, 0, equippedBuffs.Length - 1);
+
+        ItemStack targetStack = items.Find(entry => entry?.Data != null && entry.Data.id == item.id);
+        if (targetStack == null) return false;
+
         int equippedIndex = Array.FindIndex(equippedBuffs, equipped => equipped != null && equipped.id == item.id);
-        if (equippedIndex >= 0) equippedBuffs[equippedIndex] = null;
-        else equippedBuffs[slot] = item;
+        
+        if (equippedIndex >= 0)
+        {
+            equippedBuffs[equippedIndex] = null;
+            targetStack.isEquipped = false;
+
+        }
+        else
+        {
+            ItemData existingInSlot = equippedBuffs[slot];
+            if (existingInSlot != null)
+            {
+                ItemStack existingStack = items.Find(entry => entry?.Data != null && entry.Data.id == existingInSlot.id);
+                if (existingStack != null)
+                {
+                    existingStack.isEquipped = false;
+                }
+            }
+
+            // Assign to slot and mark stack as equipped
+            equippedBuffs[slot] = item;
+            targetStack.isEquipped = true;
+        }
         stats.ApplyEquipment(equippedBuffs);
         Changed?.Invoke();
         return true;
@@ -123,5 +154,34 @@ public class Inventory : MonoBehaviour
         if (equippedBuffs != null)
             Array.Copy(equippedBuffs, restored, Mathf.Min(equippedBuffs.Length, restored.Length));
         equippedBuffs = restored;
+    }
+
+    public void RestoreEquippedBuffs()
+    {
+        EnsureEquipmentSlots();
+
+        // Clear array first
+        Array.Clear(equippedBuffs, 0, equippedBuffs.Length);
+
+        int slotIndex = 0;
+        foreach (ItemStack stack in items)
+        {
+            if (stack.isEquipped && stack.Data != null && stack.Data.category == Item.Category.Buff)
+            {
+                if (slotIndex < equippedBuffs.Length)
+                {
+                    equippedBuffs[slotIndex] = stack.Data;
+                    slotIndex++;
+
+                }
+                else
+                {
+                    stack.isEquipped = false;
+                }
+            }
+        }
+
+        gameObject.GetComponent<PlayerStats>().ApplyEquipment(equippedBuffs);
+        Changed?.Invoke();
     }
 }

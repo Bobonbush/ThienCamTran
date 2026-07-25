@@ -128,10 +128,13 @@ public class Item : MonoBehaviour, IInteractable
     public string ItemId => gameObject.name.Replace("(Clone)", string.Empty).Trim();
 
     public Category ItemCategory => category;
+    private string saveID = string.Empty;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        saveID = SaveIdUtility.For(this);
+        Debug.Log("Item with ID : " + saveID);
         if (promptObject != null)
             promptObject.SetActive(false);
 
@@ -140,6 +143,15 @@ public class Item : MonoBehaviour, IInteractable
 
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+
+        if (ItemCategory == Category.Lore && SaveManager.Instance.IsItemObtained(saveID))
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnEnable()
@@ -175,6 +187,7 @@ public class Item : MonoBehaviour, IInteractable
             picked = true;
             isRuntimeDrop = false;
             rb.gravityScale = -1.0f;
+            SaveManager.Instance.MarkItemObtained(saveID);
             Sfx.PlayAt(SfxId.PlayerPickup, transform.position);
 
             if (anim != null)

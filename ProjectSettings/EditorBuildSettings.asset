@@ -62,6 +62,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arc1/Bossroom-fight.unity
     guid: 3b288848e5aebcf478dfc13ae7ef0f11
+  - enabled: 1
+    path: Assets/Scenes/Arc1/CutScene/Falling.unity
+    guid: a0f8012d6d41f8641b3297552db3958c
+  - enabled: 1
+    path: Assets/Scenes/Arc1/CutScene/End.unity
+    guid: 3d7dde3418367884b8725c932c14387e
+  - enabled: 1
+    path: Assets/Scenes/Arc1/CutScene/hard.unity
+    guid: be23800aba9e93d4c86e09d6699b03bf
+  - enabled: 1
+    path: Assets/Scenes/Arc1/CutScene/Warning.unity
+    guid: 336ec8225dc71f345a6268a6f3746d72
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

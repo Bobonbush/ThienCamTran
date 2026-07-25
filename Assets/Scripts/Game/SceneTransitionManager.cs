@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using static UnityEngine.Splines.SplineInstantiate;
 using Unity.Cinemachine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class SceneTransitionManager : MonoBehaviour
 {
@@ -278,15 +279,26 @@ public class SceneTransitionManager : MonoBehaviour
         StartCoroutine(LoadSceneRoutine(buildSceneIndex));
     }
 
+    // Ignore Cooldown
+    public void ForceTransitionToScene(string buildSceneIndex, string spawnPointId, Vector3 _offsetSpawn)
+    {
+        usePostition = false;
+        currentScene = buildSceneIndex;
+        coolDownTransition = maxcoolDownTransition;
+
+        Sfx.Play(SfxId.WorldTransition);
+
+        targetSpawnPointId = spawnPointId;
+        offsetSpawn = _offsetSpawn;
+
+        playerController.RunForwardForXDistance(_offsetSpawn.x);
+        StartCoroutine(LoadSceneRoutine(buildSceneIndex));
+    }
 
     private Vector3 spawnPosition = Vector3.zero;
     private bool usePostition = false;
     public IEnumerator TransitionToScene(string buildSceneIndex, Vector3 pos)
     {
-        if (coolDownTransition > 0)
-        {
-            yield break;
-        }
         usePostition = true;
         spawnPosition = pos;
         currentScene = buildSceneIndex;
@@ -296,6 +308,8 @@ public class SceneTransitionManager : MonoBehaviour
 
         yield return LoadSceneRoutine(buildSceneIndex);
     }
+
+
 
 
     private void SetRoom(Scene scene, LoadSceneMode mode)
@@ -383,6 +397,9 @@ public class SceneTransitionManager : MonoBehaviour
             virtualCamera.ForceCameraPosition(finalPlayerPos, virtualCamera.transform.rotation);
             virtualCamera.PreviousStateIsValid = false;
             playerController.Teleport(spawnPosition);
+        }else if(targetSpawnPointId == "" || targetSpawnPointId == String.Empty) // meaning no need for teleport thing
+        {
+            // Just go ?
         }
         else
         {

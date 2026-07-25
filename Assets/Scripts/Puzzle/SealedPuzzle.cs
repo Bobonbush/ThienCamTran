@@ -35,6 +35,10 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
 
     string saveID = string.Empty;
 
+    [SerializeField] private string secretID = string.Empty;
+
+    private bool useSecretID = false;
+
     public void Puzzle(PlayerController player)
     {
          player.EnterPuzzle(left.position, right.position, this);
@@ -47,6 +51,8 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         cutTrigger = GetComponentInParent<CutTrigger>();
 
         saveID = SaveIdUtility.For(this);
+        useSecretID = (secretID != string.Empty && secretID != "");
+        Debug.Log("Save ID for puzzle : " + saveID);
         dialogTrigger = GetComponent<DialogInteractable>();
     }
 
@@ -55,15 +61,17 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
         SetPromptVisible(false);
 
 
-        // Puzzle đã giải trong save -> mở lại cổng ngay, không cutscene/không spawn quái
-        Debug.Log("Save ID :" + saveID);
-        if (SaveManager.Instance.IsPuzzleSolved(saveID))
+        if (SaveManager.Instance.IsPuzzleSolved(saveID) || (SaveManager.Instance.IsPuzzleSolved(secretID) && useSecretID))
         {
             _solve = true;
             if (activateTrap != null)
             {
                 activateTrap.TriggerAnimation();
                 activateTrap.InstantActivateTraps();
+                if(e_spawn != null)
+                {
+                    e_spawn.ActiveAllTrap();
+                }
             }
         }
     }
@@ -96,8 +104,15 @@ public class SealedPuzzle : MonoBehaviour, IInteractable
     public void Done(PlayerController playerController, PlayerCamera player)
     {
         _solve = true;
-        SaveManager.Instance.MarkPuzzleSolved(saveID);
-        cutTrigger.Trigger(playerController, player);
+        if (!useSecretID)
+        {
+            SaveManager.Instance.MarkPuzzleSolved(saveID);
+        }else
+        {
+            SaveManager.Instance.MarkPuzzleSolved(secretID);
+        }
+        if (cutTrigger != null)
+            cutTrigger.Trigger(playerController, player);
         activateTrap.TriggerAnimation();
         activateTrap.ActivateTraps();
 

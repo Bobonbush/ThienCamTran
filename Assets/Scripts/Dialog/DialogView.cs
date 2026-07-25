@@ -117,12 +117,15 @@ public class DialogView : MonoBehaviour
     public void SetText(string speaker, string body)
     {
         listenTypeRountineCnt = 0;
-        if (speakNameLastRender)
+        if (speakNameLastRender && useTypewriter)
         {
             maxTypeRountineCnt = 2; // body first then speaker
-        } else
+        } else if(useTypewriter)
         {
             maxTypeRountineCnt = 1; // only body
+        }else
+        {
+            maxTypeRountineCnt = 0;
         }
         if (speakerNameText != null)
         {

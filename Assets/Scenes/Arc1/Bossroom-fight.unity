@@ -524,11 +524,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1677482131723768294, guid: 6dd47e6e07498a846993996346f7d45c, type: 3}
       propertyPath: LinkedRoom
-      value: Bossroom
+      value: End
       objectReference: {fileID: 0}
     - target: {fileID: 1677482131723768294, guid: 6dd47e6e07498a846993996346f7d45c, type: 3}
       propertyPath: SpawnPointId
-      value: Bossroom-up
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1677482131723768294, guid: 6dd47e6e07498a846993996346f7d45c, type: 3}
+      propertyPath: usedThisDoor
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1677482131723768294, guid: 6dd47e6e07498a846993996346f7d45c, type: 3}
       propertyPath: spawnOffset.x
@@ -23539,7 +23543,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5.625
+  orthographic size: 6.046875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 // The brain of the dialog: handles the branching logic (pick A go this way, pick B go that way).
 // All display is delegated to DialogView, so every style shares this same logic.
@@ -26,23 +27,44 @@ public class CutSceneDialogManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(Instance.gameObject);
+        }
         Instance = this;
         if (boxView != null) boxView.Close();
         if (bubbleView != null) bubbleView.Close();
+
+        if (controller == null) controller = CutSceneManager.Instance.playerController;
     }
 
+    bool IsAnyGamepadButtonPressed()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad == null) return false;
 
+        // Loop through all controls on the gamepad (buttons, triggers, bumpers, stick presses)
+        foreach (var control in gamepad.allControls)
+        {
+            if (control is ButtonControl button && button.wasPressedThisFrame)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private bool JustStarted = false;
     private void Update()
     {
         if (active == null)
             return;
 
-        if(!controller.isSkipDialog())
+        if (JustStarted || !(Keyboard.current.anyKey.wasPressedThisFrame || (Gamepad.current == null && IsAnyGamepadButtonPressed())))
         {
+            JustStarted = false;
             return;
         }
-
         // First press -> reveal instantly
         if (!active.AnimationDone)
         {
@@ -50,8 +72,7 @@ public class CutSceneDialogManager : MonoBehaviour
             return;
         }
 
-        // Second press -> advance automatically
-        Debug.Log("Stop Here");
+
         if (currentNode == null)
             return;
         
@@ -78,6 +99,7 @@ public class CutSceneDialogManager : MonoBehaviour
             Debug.LogError($"DialogManager: chưa gán {style} View trong Inspector!", this);
             return;
         }
+        JustStarted = true;
         if (style == DialogStyle.Bubble) active.SetTarget(target);
 
         active.Open();
@@ -114,6 +136,7 @@ public class CutSceneDialogManager : MonoBehaviour
 
     public bool AnimationDone()
     {
+        
         if (active == null) return true;
 
         return active.AnimationDone;

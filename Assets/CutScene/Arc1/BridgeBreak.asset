@@ -19,8 +19,8 @@ MonoBehaviour:
   showTime: 10
   fadingTime: 0
   newScene: 1
-  SceneID: Underground-1
-  SpawnID: Underground-wakeup
+  SceneID: Falling
+  SpawnID: 
   SpawnOffset: {x: 0, y: 0, z: 0}
   RealTimeAnimation: 1
   UsedCamera: 1

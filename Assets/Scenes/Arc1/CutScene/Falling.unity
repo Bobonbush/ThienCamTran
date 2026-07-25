@@ -514,7 +514,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 294, y: -315}
+  m_AnchoredPosition: {x: 367, y: -130}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &458717945
@@ -537,7 +537,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: ...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 285c715054d151641983c725547774d4, type: 2}
   m_sharedMaterial: {fileID: -4756301598457123581, guid: 285c715054d151641983c725547774d4, type: 2}
@@ -904,9 +904,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdbdd6bf8ac26d43ba959ec0134cbc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CutTrigger
-  info: {fileID: 11400000, guid: 6597858104c0a8041854acd1d132b9e2, type: 2}
+  info: {fileID: 11400000, guid: e60a339edf6d7994d9abe41a4fc66c6c, type: 2}
   type: 0
-  startNode: {fileID: 11400000, guid: e6a0af22dbdf1bd469c9e7db57f994ed, type: 2}
+  startNode: {fileID: 11400000, guid: 367949de3d0f8254e8394b111d739b71, type: 2}
   style: 0
   bubbleTarget: {fileID: 0}
 --- !u!1 &1324716687
@@ -1036,7 +1036,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 51}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2112498985
@@ -1059,14 +1059,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "V\u1EC7 An khu\u1EA5t n\u1EBBo m\xE2y ng\xE0n,\r\nThi\xEAn C\u1EA9m phong
-    k\xEDn mu\xF4n v\xE0n n\u0103m x\u01B0a.\r\nV\u1EADt thi\xEAng th\u1EA5t l\u1EA1c
-    trong m\u01B0a, \r\nTh\u1EA7n nh\xE2n b\xE1o m\u1ED9ng tr\u01B0\u1EDBc m\xE0n
-    m\u01B0a thu. \r\nQu\xE2n \u0111i khu\u1EA5t b\xF3ng s\u01B0\u01A1ng m\xF9, \r\nH\u01A1i
-    t\xE0 ph\u1EE7 k\xEDn d\u1EB7m d\xE0i non cao.\r\nS\u1EAFc vua g\u1ECDi k\u1EBB
-    b\u01B0\u1EDBc v\xE0o,\r\nPh\xF9 kh\xE2m sai l\u1EA1nh trao v\xE0o t\u1EADn tay.\r\nK\u1EBB
-    th\xF4ng \xE2m gi\u1EDBi qu\u1EF3 ngay,\r\nC\u1EE9u d\xE2n tr\u1EEB h\u1ECDa,
-    th\xE2n n\xE0y t\u1EED sinh.\u201D\r\n"
+  m_text: "Ch\u1EB3ng c\xF2n n\u01A1i n\xE0o \u0111\u1EC3 v\u1EC1\nNgay c\u1EA3 \u0111\u1ECBa
+    ng\u1EE5c hay thi\xEAn \u0111\xE0ng c\u0169ng t\u1EEB ch\u1ED1i\nS\u1EE9 m\u1EC7nh
+    ng\u01B0\u01A1i ch\u1EC9 c\xF3 th\u1EC3 b\u01B0\u1EDBc ti\u1EBFp\n\u0110i ti\u1EBFp,
+    \u0111\u1EC3 c\u1EE9u r\u1ED7i nh\u1EEFng linh h\u1ED3n \u0111ang b\u1ECB \u0111\u1ECDa
+    \u0111\u1EA7y.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 285c715054d151641983c725547774d4, type: 2}
   m_sharedMaterial: {fileID: -4756301598457123581, guid: 285c715054d151641983c725547774d4, type: 2}

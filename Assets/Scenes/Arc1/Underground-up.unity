@@ -3934,7 +3934,7 @@ MonoBehaviour:
   moveDuration: 0.5
   moveDistance: 4.7
   resetDelay: 3
-  ActivateOnStart: 0
+  ActivateOnStart: 1
   ActiveAndDeActive: 0
   DestroyOnActivate: 0
   reset: 0
@@ -53536,6 +53536,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1890113325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1890113326}
+  m_Layer: 0
+  m_Name: Spawn 1 (9)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1890113326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890113325}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 28.5, y: -1.89, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1890151636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53804,11 +53835,20 @@ MonoBehaviour:
       spawnOffset: {x: 0, y: 0, z: 0}
   - delayTime: 4
     enemies:
-    - enemiesPrefab: {fileID: 7371759413876972813, guid: 0a1773882de6be4429b1a9735d1757ae, type: 3}
+    - enemiesPrefab: {fileID: 7371759413876972813, guid: 57550f1d621944b43a212fa3dc39e388, type: 3}
       spawnPrefab: {fileID: 692241891}
       spawnOffset: {x: 0, y: 0, z: 0}
-    - enemiesPrefab: {fileID: 7371759413876972813, guid: 0a1773882de6be4429b1a9735d1757ae, type: 3}
+    - enemiesPrefab: {fileID: 7371759413876972813, guid: 57550f1d621944b43a212fa3dc39e388, type: 3}
       spawnPrefab: {fileID: 660238719}
+      spawnOffset: {x: 0, y: 0, z: 0}
+    - enemiesPrefab: {fileID: 8363796119466156177, guid: a5a5a5a5a5a5a5a5a5a5a5a5a5a5000e, type: 3}
+      spawnPrefab: {fileID: 1731639500}
+      spawnOffset: {x: 0, y: 0, z: 0}
+    - enemiesPrefab: {fileID: 8363796119466156177, guid: a5a5a5a5a5a5a5a5a5a5a5a5a5a5000e, type: 3}
+      spawnPrefab: {fileID: 2002012992}
+      spawnOffset: {x: 0, y: 0, z: 0}
+    - enemiesPrefab: {fileID: 4632481799677671888, guid: cd62e27245bb1274bb0c9b9a0f9d12b8, type: 3}
+      spawnPrefab: {fileID: 1890113325}
       spawnOffset: {x: 0, y: 0, z: 0}
   trapList:
   - round: 3
@@ -53925,3 +53965,4 @@ SceneRoots:
   - {fileID: 506219278}
   - {fileID: 173656081}
   - {fileID: 1731639501}
+  - {fileID: 1890113326}

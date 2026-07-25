@@ -380,8 +380,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8363796119466156177, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 190955304}
   m_SourcePrefab: {fileID: 100100000, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
+--- !u!1 &190955303 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8363796119466156177, guid: b22220b8b6fe7734b8ee658c2122c0f0, type: 3}
+  m_PrefabInstance: {fileID: 190955302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &190955304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190955303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3e0fb073901cc44a47c2bfd3ba3f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDrops
+  drops:
+  - itemPrefab: {fileID: 3393830918241770400, guid: 192914da74ce6ab4784463a2c1f5737d, type: 3}
+    count: 1
+    chance: 0
+  - itemPrefab: {fileID: 3393830918241770400, guid: 9c236929795def34ebe0e9e795ac8dc8, type: 3}
+    count: 2
+    chance: 0.515
+  - itemPrefab: {fileID: 3393830918241770400, guid: bb735a29e0fc7c6438593715dc6341a9, type: 3}
+    count: 1
+    chance: 0
+  dropPoint: {fileID: 0}
+  burstForce: 4
+  upwardForce: 3
+  spreadX: 0.6
+  spreadY: 0.3
 --- !u!1 &221436453
 GameObject:
   m_ObjectHideFlags: 0
@@ -10341,46 +10376,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: ImpKnifeEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8339272433373028854, guid: bda44f4d7b4344d4b834b1521b8fba00, type: 3}
+      propertyPath: drops.Array.data[2].chance
+      value: 0.075
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6500935742284505753, guid: bda44f4d7b4344d4b834b1521b8fba00, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1468316992}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bda44f4d7b4344d4b834b1521b8fba00, type: 3}
---- !u!1 &1468316981 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6500935742284505753, guid: bda44f4d7b4344d4b834b1521b8fba00, type: 3}
-  m_PrefabInstance: {fileID: 1332808627}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1468316992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468316981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3e0fb073901cc44a47c2bfd3ba3f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyDrops
-  drops:
-  - itemPrefab: {fileID: 3393830918241770400, guid: 192914da74ce6ab4784463a2c1f5737d, type: 3}
-    count: 1
-    chance: 1
-  - itemPrefab: {fileID: 3393830918241770400, guid: 9c236929795def34ebe0e9e795ac8dc8, type: 3}
-    count: 2
-    chance: 1
-  - itemPrefab: {fileID: 3393830918241770400, guid: bb735a29e0fc7c6438593715dc6341a9, type: 3}
-    count: 1
-    chance: 0.5
-  dropPoint: {fileID: 0}
-  burstForce: 4
-  upwardForce: 3
-  spreadX: 0.6
-  spreadY: 0.3
 --- !u!1001 &1484788917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10827,8 +10831,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7371759413876972813, guid: 0a1773882de6be4429b1a9735d1757ae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1607226403}
   m_SourcePrefab: {fileID: 100100000, guid: 0a1773882de6be4429b1a9735d1757ae, type: 3}
+--- !u!1 &1607226402 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7371759413876972813, guid: 0a1773882de6be4429b1a9735d1757ae, type: 3}
+  m_PrefabInstance: {fileID: 1607226401}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1607226403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607226402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3e0fb073901cc44a47c2bfd3ba3f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDrops
+  drops:
+  - itemPrefab: {fileID: 3393830918241770400, guid: 192914da74ce6ab4784463a2c1f5737d, type: 3}
+    count: 1
+    chance: 0.351
+  - itemPrefab: {fileID: 3393830918241770400, guid: 9c236929795def34ebe0e9e795ac8dc8, type: 3}
+    count: 2
+    chance: 0.776
+  - itemPrefab: {fileID: 3393830918241770400, guid: bb735a29e0fc7c6438593715dc6341a9, type: 3}
+    count: 1
+    chance: 0.34
+  dropPoint: {fileID: 0}
+  burstForce: 4
+  upwardForce: 3
+  spreadX: 0.6
+  spreadY: 0.3
 --- !u!1001 &1654143832
 PrefabInstance:
   m_ObjectHideFlags: 0

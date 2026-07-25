@@ -98,6 +98,8 @@ public class DatabasePanel : MenuPanel
         inventory = player != null ? player.GetComponent<Inventory>() : null;
         if (inventory != null) inventory.Changed += Refresh;
         Refresh();
+
+        Debug.Log("Refresh called");
     }
 
     private void Refresh()

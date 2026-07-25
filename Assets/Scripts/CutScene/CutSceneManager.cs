@@ -46,6 +46,29 @@ public class CutSceneManager : MonoBehaviour
     }
 
     
+    public void ForceHideGamePlay(bool settings = false)
+    {
+        if (gameplayObject == null)
+        {
+            gameplayObject = GameObject.Find("Gameplay");
+        }
+        if (gameplayObject != null)
+        {
+
+
+                gameplayObject.SetActive(settings);
+            
+        }
+        else
+        {
+            Debug.LogError("[CutScene] gameplayObject is MISSING/NULL in the inspector!");
+        }
+
+        if (UIObject != null)
+        {
+            UIObject.SetActive(settings);
+        }
+    }
 
     public void OnCutSceneStart(CutSceneInfo info)
     {
@@ -80,12 +103,12 @@ public class CutSceneManager : MonoBehaviour
     {
 
         // Turn on Hub Again
-        if (info.useBigDialog)
+        if (info.useBigDialog && info.StillHideUI == false)
         {
             gameplayObject.SetActive(true);
         }
 
-        if (UIObject != null)
+        if (UIObject != null && info.StillHideUI == false)
         {
             UIObject.SetActive(true);
         }
@@ -93,7 +116,7 @@ public class CutSceneManager : MonoBehaviour
         if (info.newScene && info.HideUI)
         {
             SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
-            sceneManager.TransitionToScene(info.SceneID, info.SpawnID, info.SpawnOffset);
+            sceneManager.ForceTransitionToScene(info.SceneID, info.SpawnID, info.SpawnOffset);
         }
 
         inCutScene = false;
