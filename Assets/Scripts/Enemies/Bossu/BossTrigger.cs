@@ -15,7 +15,7 @@ public class BossTrigger : MonoBehaviour
     private ActivateTrap activeTrap; // use for close the door
 
     private BoxCollider2D box;
-
+    bool Released = false;
     private void Awake()
     {
         box = GetComponent<BoxCollider2D>();
@@ -29,10 +29,15 @@ public class BossTrigger : MonoBehaviour
         if(duration > 0)
         {
             duration -= Time.deltaTime;
-        }else
+        }else if(Released == false)
         {
             boss.Release();
-           
+            Released = true;
+        }
+
+        if(isDone())
+        {
+            Done();
         }
     }
 
@@ -42,9 +47,28 @@ public class BossTrigger : MonoBehaviour
         {
             Triggered = true;
             GetComponent<CutTrigger>().Trigger(collision.GetComponent<PlayerController>(), collision.GetComponentInChildren<PlayerCamera>());
-            activeTrap.ActivateTraps();
+            ActivateTrap(true);
             box.enabled = false;
         }
+    }
+
+    private void ActivateTrap(bool active)
+    {
+        if (activeTrap != null)
+        {
+            if (active)
+                activeTrap.ActivateTraps();
+            else
+                activeTrap.DeActiveTraps();
+        }
+    }
+
+
+    private void Done()
+    {
+        ActivateTrap(false);
+        boss.Died();
+        this.enabled = false;
     }
 
     bool isDone()

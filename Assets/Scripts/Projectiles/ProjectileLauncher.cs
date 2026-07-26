@@ -6,6 +6,7 @@ public class ProjectileLauncher : MonoBehaviour
     public GameObject projectilePrefab;
     public float projectileSpeedOverride = 0f;
 
+    public bool useRootTransform = false;
     public Vector2 LaunchPosition
     {
         get { return launchPoint != null ? launchPoint.position : transform.position; }
@@ -20,6 +21,10 @@ public class ProjectileLauncher : MonoBehaviour
         // Giữ độ lớn scale của prefab, chỉ lật hướng — bản cũ ghi đè thành ±1
         // nên prefab thu nhỏ sẽ bị méo lệch trục (giống FireProjectileInDirection)
         float direction = transform.localScale.x > 0 ? 1 : -1;
+        if(useRootTransform)
+        {
+            direction = transform.root.localScale.x > 0 ? 1 : -1;
+        }
         projectile.transform.localScale = new Vector3(
             Mathf.Abs(origScale.x) * direction,
             origScale.y,

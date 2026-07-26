@@ -170,7 +170,6 @@ public class PlayerCamera : MonoBehaviour
             confiner.BoundingShape2D = targetCollider;
 
             globalBoundary = targetCollider;
-            saveLocalBounds = null;
 
             confiner.InvalidateBoundingShapeCache();
         }
@@ -186,7 +185,10 @@ public class PlayerCamera : MonoBehaviour
         
         confiner.BoundingShape2D = localBounds;
 
-        saveLocalBounds = localBounds;
+        if (CutSceneLock == false)
+        {
+            saveLocalBounds = localBounds;
+        }
         confiner.InvalidateBoundingShapeCache();
     }
 
@@ -210,6 +212,7 @@ public class PlayerCamera : MonoBehaviour
 
             if (customSetting.customBoundaries)
             {
+
                 UpdateLocalCameraBoundary(customSetting.Boundaries);
             }
         }
@@ -228,7 +231,7 @@ public class PlayerCamera : MonoBehaviour
         {
             offsetLocalPosition = Vector3.zero;
             confiner.BoundingShape2D = globalBoundary;
-
+            saveLocalBounds = null;
             confiner.InvalidateBoundingShapeCache();
         }
     }
@@ -278,6 +281,9 @@ public class PlayerCamera : MonoBehaviour
         if(saveLocalBounds != null)
         {
             UpdateLocalCameraBoundary(saveLocalBounds);
+        }else
+        {
+            UpdateGlobalCameraBoundary();
         }
     }
 
@@ -326,6 +332,10 @@ public class PlayerCamera : MonoBehaviour
         {
             if (impulseSource != null)
                 impulseSource.GenerateImpulse(UnityEngine.Random.insideUnitCircle * 0.8f);
+
+            // Low rumble under the shake; the cue cooldown keeps repeated
+            // ticks (and overlapping quakes) from stacking into noise
+            Sfx.Play(SfxId.WorldEarthquake);
 
             timer += 0.15f;
             yield return new WaitForSeconds(0.15f);

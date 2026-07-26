@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 998697276343819739}
   - component: {fileID: 5599755478738669015}
   - component: {fileID: 948189536084078934}
+  - component: {fileID: 8339272433373028854}
   m_Layer: 8
   m_Name: ImpKnifeEnemy
   m_TagString: Untagged
@@ -444,6 +445,33 @@ MonoBehaviour:
   lockedMove: 1
   shouldMove: 1
   goingBack: 0
+--- !u!114 &8339272433373028854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6500935742284505753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3e0fb073901cc44a47c2bfd3ba3f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDrops
+  drops:
+  - itemPrefab: {fileID: 3393830918241770400, guid: 192914da74ce6ab4784463a2c1f5737d, type: 3}
+    count: 1
+    chance: 0.209
+  - itemPrefab: {fileID: 3393830918241770400, guid: 9c236929795def34ebe0e9e795ac8dc8, type: 3}
+    count: 2
+    chance: 0.464
+  - itemPrefab: {fileID: 3393830918241770400, guid: bb735a29e0fc7c6438593715dc6341a9, type: 3}
+    count: 1
+    chance: 0.1
+  dropPoint: {fileID: 0}
+  burstForce: 4
+  upwardForce: 3
+  spreadX: 0.6
+  spreadY: 0.3
 --- !u!1 &8186764514049098984
 GameObject:
   m_ObjectHideFlags: 0

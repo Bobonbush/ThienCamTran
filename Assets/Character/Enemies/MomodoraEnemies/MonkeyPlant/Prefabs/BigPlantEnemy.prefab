@@ -79,11 +79,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 5.455454, y: 1.4818134}
-      - {x: 3.110877, y: 1.087661}
-      - {x: 2.3044763, y: 0.3551637}
-      - {x: 4.3168006, y: -0.08140445}
-      - {x: 5.5292826, y: 0.28487587}
+    - - {x: 3.5186462, y: 3.2249155}
+      - {x: 1.9831982, y: 1.6578388}
+      - {x: 0.7332239, y: 3.326616}
+      - {x: -0.13548565, y: 1.1025705}
+      - {x: -0.6195626, y: 0.07251847}
+      - {x: 5.426374, y: 0.03747773}
+      - {x: 4.961692, y: 3.7099652}
   m_UseDelaunayMesh: 1
 --- !u!114 &8105547420893571250
 MonoBehaviour:
@@ -99,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Attack
   attackDamage: 35
   knockback: {x: 2.3, y: 1.7}
+  turnOffOnAttack: 0
+  KnockbackRelativePosition: 0
 --- !u!1 &7371759413876972813
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,9 +271,9 @@ MonoBehaviour:
   damageableHit:
     m_PersistentCalls:
       m_Calls: []
-  _maxHealth: 300
+  _maxHealth: 200
   canRevive: 0
-  _health: 300
+  _health: 200
   _isAlive: 1
   isInvincible: 0
   invicibilityTimer: 0.5

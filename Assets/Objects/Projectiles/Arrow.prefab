@@ -106,10 +106,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dca9ad30c1d425488db63acaa2f2cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  damage: 15
+  damage: 5
   moveSpeed: {x: 45, y: 0}
   knockback: {x: 2, y: 0}
-  maxLifetime: 5
+  maxLifetime: 7
   damagesPlayerOnly: 0
   piercesWalls: 0
   fall: 0

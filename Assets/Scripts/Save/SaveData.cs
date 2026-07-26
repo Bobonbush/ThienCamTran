@@ -37,6 +37,7 @@ public class SavedItemStack
 {
     public string itemName;
     public int amount;
+    public bool isEquipped;
 }
 
 [Serializable]
@@ -46,6 +47,8 @@ public class WorldData
     public List<string> defeatedBosses = new List<string>();
     public List<string> openedChests = new List<string>();
     public List<string> solvedPuzzles = new List<string>();
+    public List<string> gotLored = new List<string>();
+    public bool isSteelMode = false;
 }
 
 [Serializable]

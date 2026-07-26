@@ -9,7 +9,11 @@ public class ActivateTrap : MonoBehaviour
     [SerializeField] private float moveDistance = 0.25f;
     [SerializeField] private float delayRestore = 3.0f;
     [SerializeField] private Vector3 moveDir = new Vector3(0, -1, 0);
+    [SerializeField] private bool UseLocalPosition = false;
 
+
+    [SerializeField] private bool ActivateOnStart = false;
+    [SerializeField] private bool needRestoreTrap = true;
 
     private BoxCollider2D box;
 
@@ -61,8 +65,20 @@ public class ActivateTrap : MonoBehaviour
     private void Awake()
     {
         initialPosition = realTransform.position;
+        if(UseLocalPosition) {
+            initialPosition = realTransform.localPosition;
+        }
         float fullMoveDistance = Vector3.Distance(initialPosition, initialPosition + (moveDistance * moveDir));
         invertDistance /= fullMoveDistance;
+    }
+
+    private void Start()
+    {
+        if(ActivateOnStart)
+        {
+            TriggerAnimation();
+            ActivateTraps();
+        }
     }
 
 
@@ -194,6 +210,10 @@ public class ActivateTrap : MonoBehaviour
         if (type == Type.continuousTrigger)
         {
             duration = Vector3.Distance(initialPosition, transform.position) * invertDistance * moveDuration;
+            if(UseLocalPosition)
+            {
+                duration = Vector3.Distance(initialPosition, transform.localPosition) * invertDistance * moveDuration;
+            }
             duration = moveDuration - duration;
         }
 
@@ -215,14 +235,17 @@ public class ActivateTrap : MonoBehaviour
             yield return null;
         }
 
-        foreach (TrapData data in trapSequence)
+        if (needRestoreTrap)
         {
-            TrapMove trap = data.trapObject.GetComponent<TrapMove>();
-            if (trap != null)
+            foreach (TrapData data in trapSequence)
             {
-                if (trap.ReliedOnActivator)
+                TrapMove trap = data.trapObject.GetComponent<TrapMove>();
+                if (trap != null)
                 {
-                    trap.StopTrap();
+                    if (trap.ReliedOnActivator)
+                    {
+                        trap.StopTrap();
+                    }
                 }
             }
         }
@@ -230,7 +253,18 @@ public class ActivateTrap : MonoBehaviour
         float duration = moveDuration;
         if (type == Type.continuousTrigger)
         {
-            duration = Vector3.Distance(initialPosition, transform.position) * invertDistance * moveDuration;
+            if (UseLocalPosition)
+            {
+                duration = Vector3.Distance(initialPosition, realTransform.localPosition);
+            }
+            else
+            {
+                duration = Vector3.Distance(initialPosition, realTransform.position);
+            }
+
+            duration *= invertDistance * moveDuration;
+
+            duration = moveDuration - duration;
             duration = moveDuration - duration;
         }
 
@@ -248,6 +282,10 @@ public class ActivateTrap : MonoBehaviour
     private IEnumerator SmoothMove(Vector3 targetPosition, float duration)
     {
         Vector3 startPosition = realTransform.position;
+        if (UseLocalPosition)
+        {
+            startPosition = realTransform.localPosition;
+        }
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)
@@ -258,14 +296,30 @@ public class ActivateTrap : MonoBehaviour
             t = Mathf.SmoothStep(0f, 1f, t);
 
 
-            realTransform.position = Vector3.Lerp(startPosition, targetPosition, t);
 
+            
+            if (UseLocalPosition)
+            {
+                realTransform.localPosition = Vector3.Lerp(startPosition, targetPosition, t);
+            }
+            else
+            {
+                realTransform.position = Vector3.Lerp(startPosition, targetPosition, t);
+
+            }
             timeElapsed += Time.deltaTime;
             yield return null;
         }
 
 
-        realTransform.position = targetPosition;
+        if (UseLocalPosition)
+        {
+            realTransform.localPosition = targetPosition;
+        }
+        else
+        {
+            realTransform.position = targetPosition;
+        }
         movementRoutine = null;
     }
 

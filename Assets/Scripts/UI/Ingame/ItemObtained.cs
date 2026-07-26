@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 public class ItemObtained : MonoBehaviour
@@ -53,25 +54,70 @@ public class ItemObtained : MonoBehaviour
         group = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
         SetVisible(false);
     }
+    bool IsAnyGamepadButtonPressed()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad == null) return false;
+
+        // Loop through all controls on the gamepad (buttons, triggers, bumpers, stick presses)
+        foreach (var control in gamepad.allControls)
+        {
+            if (control is ButtonControl button && button.wasPressedThisFrame)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void Start() => DisplayNext();
+    private bool JustStarted = false;
 
     private void Update()
     {
         if (!visible || Time.unscaledTime < acceptInputAt) return;
         Keyboard keyboard = Keyboard.current;
-        if (keyboard != null && keyboard.eKey.wasPressedThisFrame) Confirm();
+
+        bool receiveValidInput = false;
         if (loreScroll != null)
         {
             float delta = 0f;
             Mouse mouse = Mouse.current;
-            if (mouse != null) delta += mouse.scroll.ReadValue().y * 0.0015f;
-            if (keyboard != null && keyboard.upArrowKey.wasPressedThisFrame) delta += 0.12f;
-            if (keyboard != null && keyboard.downArrowKey.wasPressedThisFrame) delta -= 0.12f;
+            float scroll = mouse.scroll.ReadValue().y;
+
+            if (!Mathf.Approximately(scroll, 0f))
+            {
+                delta += scroll * 0.0015f;
+                receiveValidInput = true;
+            }
+            if (InputManager.Instance.UpPress && !receiveValidInput)
+            {
+                receiveValidInput = true;
+                delta += 0.12f;
+            }
+            if (InputManager.Instance.DownPress && !receiveValidInput)
+            {
+                receiveValidInput = true;
+                delta -= 0.12f;
+            }
+
+
             if (!Mathf.Approximately(delta, 0f))
                 loreScroll.verticalNormalizedPosition = Mathf.Clamp01(
                     loreScroll.verticalNormalizedPosition + delta);
         }
+
+        if (keyboard != null && Keyboard.current.anyKey.wasPressedThisFrame && JustStarted == false && !receiveValidInput)
+        {
+            receiveValidInput = true;
+            Confirm();
+        }
+        if (Gamepad.current != null && IsAnyGamepadButtonPressed() && JustStarted == false && !receiveValidInput)
+        {
+            receiveValidInput = true;
+            Confirm();
+        }
+        JustStarted = false;
     }
 
     public void DisplayNext()
@@ -96,6 +142,7 @@ public class ItemObtained : MonoBehaviour
         if (scroll == null && loreRoot != null) scroll = loreRoot.GetComponentInChildren<ScrollRect>(true);
         if (scroll == null || scroll.content == null) return;
         loreScroll = scroll;
+        JustStarted = true;
 
         UIRuntime.ConfigureTextScroll(scroll, lore, 20f);
     }

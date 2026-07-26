@@ -182,8 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74922437d36340544a4132ab8ffdd501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attack
-  attackDamage: 12
+  attackDamage: 25
   knockback: {x: 1.2, y: 1}
+  turnOffOnAttack: 0
+  KnockbackRelativePosition: 0
 --- !u!1 &3718492227554580312
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,7 +711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AssassinEnemy
   attackZone: {fileID: 1199187561944735712}
   teleportZone: {fileID: 7711000000000004}
-  teleportCooldown: 6
+  teleportCooldown: 3
   vanishAnimTime: 0.25
   hiddenTime: 0.2
   appearTelegraph: 0.15

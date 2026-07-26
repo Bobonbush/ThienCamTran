@@ -207,6 +207,17 @@ public static class SfxId
     public const string CombatBlock = "combat.block";
     public const string EnemySpawn = "enemy.spawn";
 
+    public const string BossRoar = "boss.roar";
+    public const string BossStep = "boss.step";
+    public const string BossSwing = "boss.swing";
+    public const string BossDash = "boss.dash";
+    public const string BossGroundHit = "boss.ground.hit";
+    public const string BossLaunch = "boss.launch";
+    public const string BossRockThrow = "boss.rock.throw";
+    public const string BossSlam = "boss.slam";
+    public const string BossHurt = "boss.hurt";
+    public const string BossDeath = "boss.death";
+
     public const string WorldChestOpen = "world.chest.open";
     public const string WorldBreak = "world.break";
     public const string WorldTrapMove = "world.trap.move";
@@ -215,6 +226,7 @@ public static class SfxId
     public const string WorldHiddenReveal = "world.hidden.reveal";
     public const string WorldCheckpoint = "world.checkpoint";
     public const string WorldTransition = "world.transition";
+    public const string WorldEarthquake = "world.earthquake";
 
     public const string PuzzleInput = "puzzle.input";
     public const string PuzzleWrong = "puzzle.wrong";

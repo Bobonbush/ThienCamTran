@@ -59,6 +59,7 @@ public class EnemyDrops : MonoBehaviour
     private void DropAll()
     {
         Vector3 origin = dropPoint != null ? dropPoint.position : transform.position;
+        origin.y += 0.5f;
 
         foreach (DropInfo info in drops)
         {

@@ -358,9 +358,10 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        if(touchingDirections.IsGrounded)
+
+        if (touchingDirections.IsGrounded)
         {
-            LastOnGroundY = transform.position.y;
+            
             canAirDash = true;
         }
 
@@ -369,6 +370,11 @@ public class PlayerController : MonoBehaviour
         if(isHoldingJump)
         {
             Jumptiming += Time.deltaTime;
+        }
+
+        if(SHold)
+        {
+            STiming += Time.deltaTime;
         }
     }
 
@@ -466,6 +472,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
 
         oldTransformPosition = transform.position;
+        LastOnGroundY = transform.position.y;
     }
 
     private void LockInput(float timing)
@@ -613,7 +620,7 @@ public class PlayerController : MonoBehaviour
             moveInput.x = 0.0f;
         }
 
-        if(Mathf.Abs(moveInput.y) < 1.6)
+        if(Mathf.Abs(moveInput.y) < 0.6)
         {
             moveInput.y = 0.0f;
         }
@@ -989,6 +996,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         Climbing = false;
         StopCombo = true;
+        
 
         // Đòn attack đang chờ trong queue sẽ kéo animator ra khỏi player_hit
         // ngay lập tức làm mất knockback — huỷ nó khi trúng đòn
@@ -1089,13 +1097,13 @@ public class PlayerController : MonoBehaviour
     private float lastInteractAt = -999f;
     private const float interactDebounce = 0.25f;
 
-    private void InteractWithNearest()
+    private void InteractWithNearest(bool prioritySaveZone = false)
     {
         if (Time.unscaledTime < lastInteractAt + interactDebounce)
             return;
         lastInteractAt = Time.unscaledTime;
 
-        IInteractable interactable = FindNearestInteractable();
+        IInteractable interactable = FindNearestInteractable(prioritySaveZone);
         if (interactable != null && interactable.CanInteract)
         {
             if (interactable.GetType() == IInteractable.Type.Item && IsDucking == false)
@@ -1253,7 +1261,7 @@ public class PlayerController : MonoBehaviour
         promptedDialog = nearestInspect;
     }
 
-    private IInteractable FindNearestInteractable()
+    private IInteractable FindNearestInteractable(bool prioritySaveZone = false)
     {
       
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayerMask);
@@ -1272,6 +1280,11 @@ public class PlayerController : MonoBehaviour
                 continue;
 
             float distance = Vector2.Distance(transform.position, col.transform.position);
+            if(interactable.GetType() == IInteractable.Type.Save && prioritySaveZone)
+            {
+                nearest = interactable;
+                break;
+            }
             if (distance < bestDistance)
             {
                 bestDistance = distance;
@@ -1281,6 +1294,7 @@ public class PlayerController : MonoBehaviour
 
         // DialogInteractable intentionally does not read E on its own. Include distance-based
         // NPCs in the same arbitration pass so one key press selects exactly one target.
+        /*
         DialogInteractable[] dialogs = Object.FindObjectsByType<DialogInteractable>(
             FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         foreach (DialogInteractable dialog in dialogs)
@@ -1293,6 +1307,7 @@ public class PlayerController : MonoBehaviour
                 nearest = dialog;
             }
         }
+        */
 
         return nearest;
     }
@@ -1324,6 +1339,7 @@ public class PlayerController : MonoBehaviour
 
             if (hit)
             {
+
                 transform.position = hit.point + Vector2.up * (col.bounds.extents.y * 5.0f);
                 oldTransformPosition = transform.position;
             }
@@ -1432,6 +1448,8 @@ public class PlayerController : MonoBehaviour
     {
         lockInput = false;
         saveLock = false;
+        IsMoving = false;
+        IsRunning = false;
         SaveZone completedSaveZone = activeSaveZone;
         activeSaveZone = null;
         completedSaveZone?.OnSavingAnimationExited(this);
@@ -1440,6 +1458,9 @@ public class PlayerController : MonoBehaviour
     public void AnimationEnableSave()
     {
         CanExitForcementState = true;
+        IsMoving = false;
+        IsRunning = false;
+
         Sfx.PlayAt(SfxId.WorldCheckpoint, transform.position);
         activeSaveZone?.ShowMenu(this);
     }
@@ -1572,6 +1593,8 @@ public class PlayerController : MonoBehaviour
 
     public void LockCutScene()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         CutSceneLock = true;
         IsRunning = false;
         lockInput = true;
@@ -1581,12 +1604,18 @@ public class PlayerController : MonoBehaviour
 
     public void ReleaseLockCutScene()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         CutSceneLock = false;
         lockInput = false;
+        IsMoving = false;
+        IsRunning = false;
     }
 
     public void LockDiaLog()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         IsMoving = false;
         IsRunning = false;
         DialogLock = true;
@@ -1599,8 +1628,42 @@ public class PlayerController : MonoBehaviour
 
     public void ReleaseLockDialog()
     {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
         DialogLock = false;
         lockInput = false;
+        IsMoving = false;
+        IsRunning = false;
+    }
+
+    public void OnDie()
+    {
+        Climbing = false;
+        rb.gravityScale = gravityScale;
+        IsMoving = false;
+        IsRunning = false;
+        SaveManager.Instance.Die(this);
+    }
+
+    public void ResetFromDeath()
+    {
+        Damageable damageable = GetComponent<Damageable>();
+        if (damageable != null)
+        {
+            int restored = Mathf.Max(0, damageable.MaxHealth - damageable.Health);
+            damageable.Health = damageable.MaxHealth;
+            if (restored > 0)
+                CharacterEvents.characterHealed?.Invoke(gameObject, restored);
+            damageable.IsAlive = true;
+        }
+        
+        if (stat != null)
+        {
+            //stat.Mana = stat.MaxMana;
+            
+        }
+
+        SetSafeGround(transform.position);
     }
 
     public bool isSkipDialog()
@@ -1630,9 +1693,39 @@ public class PlayerController : MonoBehaviour
 
     public void InteractWithNearestCheckPoint()
     {
-        Debug.Log("Called");
+        
         UpdateInteractPrompts();
-        InteractWithNearest();
+        InteractWithNearest(true);
+    }
+
+    // If bug
+    private bool SHold = false;
+    float STiming = 2.0f;
+
+    public void OnPlayDead(InputAction.CallbackContext context)
+    {
+
+        // Gurantee safe
+        if (saveLock) return;
+        if (CutSceneLock) return;
+       
+        if (context.started)
+        {
+            SHold = true;
+            STiming = 0.0f;
+        }
+
+        if (context.canceled)
+        {
+            SHold = false;
+            if(STiming > 3.0f)
+            {
+                damageable.Health -= damageable.Health;
+                damageable.IsAlive = false;
+            }
+        }
+
+        
     }
 
 }

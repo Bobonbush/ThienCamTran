@@ -8,7 +8,7 @@ public class CutSceneInfo : ScriptableObject
 {
 
     public bool HideUI = true;
-
+    public bool StillHideUI = false;
     [System.Serializable]
     public class CameraForceData
     {
@@ -94,5 +94,7 @@ public class CutSceneInfo : ScriptableObject
     public bool ComeBackCamera = true;
     public float timeCameraComeBack = 1.0f;
 
+
+    
 
 }

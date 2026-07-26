@@ -2474,11 +2474,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6683747395998582027, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
+      propertyPath: secretID
+      value: secret
+      objectReference: {fileID: 0}
     - target: {fileID: 6943487862228064776, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
       propertyPath: oneTimeTriggerSave
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7116487255667139698, guid: 887a5a513cd8b154eb70bfee6f6edfe4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -36581,7 +36586,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1835926826}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -36608,7 +36613,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 2.0985527, y: -0.1994029}
+  m_Offset: {x: 0.039518356, y: -0.19940293}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -36618,7 +36623,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 6.8216515, y: 2.3189485}
+  m_Size: {x: 5.8765182, y: 2.3189485}
   m_EdgeRadius: 0
 --- !u!1 &1942374897
 GameObject:

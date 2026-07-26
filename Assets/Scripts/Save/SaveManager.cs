@@ -24,7 +24,13 @@ public class SaveManager : MonoBehaviour
 
     private static SaveManager instance;
 
-    bool noEnemyReloadNeeded = false;
+    // For testing save game
+    
+    private int useSlot = 2;
+
+    private bool currentlyInGame = false;
+
+
 
     public static SaveManager Instance
     {
@@ -72,9 +78,25 @@ public class SaveManager : MonoBehaviour
         }
 
         instance = this;
+        
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+
+    private void Start()
+    {
+
+
+        if (currentlyInGame == false)
+        {
+            CutSceneManager.Instance.ForceHideGamePlay();
+            Load(useSlot);
+        }
+        
+        
+    }
+
 
     private void OnDestroy()
     {
@@ -95,6 +117,54 @@ public class SaveManager : MonoBehaviour
     }
 
     /// <summary>Đọc slot vào bộ nhớ (file chưa có -> save trống, game mới).</summary>
+    /// 
+    private void InitializeGame()
+    {
+        string currentScene = Data.currentScene;
+        PlayerController player = CutSceneManager.Instance.playerController;
+        if(currentScene == String.Empty || currentScene == "")
+        {
+            // New Game was created
+            StartCoroutine(SceneTransitionManager.Instance.TransitionToScene("Warning", Vector3.zero));
+        }else
+        {
+            StartCoroutine(LoadGame(player));
+        }
+
+        
+    }
+
+
+    private IEnumerator LoadGame(PlayerController player)
+    {
+        yield return SceneTransitionManager.Instance.Fade(1.0f);
+
+        
+        Data.temporary.deadEnemies.Clear();
+        Data.temporary.deathDrop = new DeathDropData();
+
+        CutSceneManager.Instance.ForceHideGamePlay(true);
+
+        player.LockCutScene();
+
+
+        yield return SceneTransitionManager.Instance.TransitionToScene(Data.currentScene, Data.checkpointPosition);
+
+        
+
+
+        player.ResetFromDeath();
+
+        yield return new WaitForSeconds(0.3f);
+        RestAtSaveZoneFunction?.Invoke();
+
+        player.ReleaseLockCutScene();
+        yield return new WaitForSeconds(0.2f);
+
+        yield return SceneTransitionManager.Instance.Fade(0.0f);
+    }
+
+
     public void Load(int slot)
     {
         CurrentSlot = slot;
@@ -114,8 +184,14 @@ public class SaveManager : MonoBehaviour
             }
         }
 
+        
         // Sau khi Load từ menu, lần vào scene đầu tiên sẽ khôi phục inventory + vị trí
         pendingContinueRestore = true;
+        if (currentlyInGame == false)
+        {
+            InitializeGame();
+        }
+        currentlyInGame = true;
     }
 
     public void DeleteSave(int slot)
@@ -163,6 +239,9 @@ public class SaveManager : MonoBehaviour
         StartCoroutine(PerformRest(saveZoneId, player));
     }
 
+
+    
+
     private IEnumerator PerformRest(string saveZoneId, PlayerController player)
     {
         yield return SceneTransitionManager.Instance.Fade(1.0f);
@@ -175,7 +254,7 @@ public class SaveManager : MonoBehaviour
 
         player.LockCutScene();
 
-        noEnemyReloadNeeded = true;
+
         yield return SceneTransitionManager.Instance.ReloadScene();
 
         yield return new WaitForSeconds(0.2f);
@@ -189,6 +268,50 @@ public class SaveManager : MonoBehaviour
 
         yield return SceneTransitionManager.Instance.Fade(0.0f);
     }
+
+    public void Die(PlayerController player)
+    {
+        StartCoroutine(PerformDie(player));
+
+    }
+
+
+    private IEnumerator PerformDie(PlayerController player)
+    {
+        yield return SceneTransitionManager.Instance.Fade(1.0f);
+
+        Data.temporary.deadEnemies.Clear();
+        Data.temporary.deathDrop = new DeathDropData();
+
+        player.LockCutScene();
+
+        if (Data.world.isSteelMode == false)
+        {
+
+            yield return SceneTransitionManager.Instance.TransitionToScene(Data.currentScene, Data.checkpointPosition);
+
+
+            player.ResetFromDeath();
+
+            yield return new WaitForSeconds(0.3f);
+            RestAtSaveZoneFunction?.Invoke();
+
+            player.ReleaseLockCutScene();
+            yield return new WaitForSeconds(0.2f);
+        }else
+        {
+            SceneTransitionManager.Instance.TransitionToScene("hard", "", Vector3.zero);
+        }
+
+
+
+
+
+         yield return SceneTransitionManager.Instance.Fade(0.0f);
+
+        
+    }
+
 
     private void StoreCheckpointPosition(Vector3 position)
     {
@@ -210,6 +333,9 @@ public class SaveManager : MonoBehaviour
 
     public bool IsObjectBroken(string id) { return Contains(Data.world.brokenObjects, id); }
     public void MarkObjectBroken(string id) { AddUnique(Data.world.brokenObjects, id); }
+
+    public bool IsItemObtained(string id) { return Contains(Data.world.gotLored, id); }
+    public void MarkItemObtained(string id) { AddUnique(Data.world.gotLored, id); }
 
     public bool IsPuzzleSolved(string id) { return Contains(Data.world.solvedPuzzles, id); }
     public void MarkPuzzleSolved(string id) { AddUnique(Data.world.solvedPuzzles, id); }
@@ -286,7 +412,7 @@ public class SaveManager : MonoBehaviour
         {
             if (stack == null || stack.amount <= 0)
                 continue;
-            Data.player.inventory.Add(new SavedItemStack { itemName = stack.itemName, amount = stack.amount });
+            Data.player.inventory.Add(new SavedItemStack { itemName = stack.itemName, amount = stack.amount, isEquipped = stack.isEquipped });
         }
     }
 
@@ -300,12 +426,18 @@ public class SaveManager : MonoBehaviour
         {
             inventory.items.Add(new Inventory.ItemStack
             {
-                itemPrefab = null,   // AddItem gộp stack theo itemName nên prefab null vẫn cộng dồn đúng
+                itemPrefab = InventoryDatabase.Instance.GetItemByName(saved.itemName).itemPrefab,
                 itemName = saved.itemName,
                 amount = saved.amount,
+                Data = InventoryDatabase.Instance.GetItemDataByName(saved.itemName),
+                isEquipped = saved.isEquipped,
             });
         }
+
+        inventory.RestoreEquippedBuffs();
+        
     }
+
 
     // ==================== khôi phục khi vào scene ====================
 
@@ -315,7 +447,6 @@ public class SaveManager : MonoBehaviour
         AttachEnemyPersistence(scene);
         
         
-        noEnemyReloadNeeded = false;
 
         if (!pendingContinueRestore)
             return;

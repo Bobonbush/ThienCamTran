@@ -321,6 +321,11 @@ public class EnemyMove : MonoBehaviour
         waitforNextFlip = 0.0f;
     }
 
+    public void Flip()
+    {
+        flipState = StartCoroutine(FlipDirection());
+    }
+
     public void OnCliffDetected()
     {
         if (touchingDirections.IsGrounded)

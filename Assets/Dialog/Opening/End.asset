@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d0b0481880beb49bd60646c38a5d1b, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: Assembly-CSharp::DialogNode
+  speakerName: "K\u1EBFt"
+  text: "Thi\xEAn C\u1EA3m h\xF9ng v\u0129 \u1EDF ngay ph\xEDa tr\u01B0\u1EDBc\nV\u1EBB
+    oai phong x\u01B0a nay v\u1EABn c\xF2n nguy\xEAn\nC\xE2u chuy\u1EC7n h\u1EB3n
+    s\u1EBD c\xF2n \u0111\u01B0\u1EE3c vi\u1EBFt ti\u1EBFp\nV\u1EC1 nh\u1EEFng k\u1EBB
+    v\xF4 danh tr\u1EDF th\xE0nh anh h\xF9ng."
+  choices: []

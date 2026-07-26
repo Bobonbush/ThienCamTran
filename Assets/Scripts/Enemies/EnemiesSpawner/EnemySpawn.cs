@@ -108,6 +108,21 @@ public class EnemySpawn : MonoBehaviour
     }
 
 
+    public void ActiveAllTrap()
+    {
+        for (int cnt = 0; cnt < trapList.Count; cnt++)
+        {
+            for (int i = 0; i < trapList[cnt].trapInfos.Count; i++)
+            {
+                TrapInfo info = trapList[cnt].trapInfos[i];
+                info.traps.ActivateTrap();
+                
+            }
+        }
+        ActivateTrap(false);
+    }
+
+
     public void Spawn()
     {
 
@@ -139,8 +154,17 @@ public class EnemySpawn : MonoBehaviour
         {
             EnemiesInfo info = enemyList[round].enemies[i];
             Transform actualTransform = info.spawnPrefab.transform;
-            actualTransform.position += info.spawnOffset;
-            currentEnemies.Add(Instantiate(info.enemiesPrefab, actualTransform));
+            GameObject enemy = Instantiate(
+                 info.enemiesPrefab,
+                 actualTransform.position + info.spawnOffset,
+                 Quaternion.identity // or spawn.rotation if you want it too
+             );
+
+            if (actualTransform.lossyScale.x < 0.0f)
+            {
+                enemy.GetComponent<EnemyMove>().Flip();
+            }
+            currentEnemies.Add(enemy);
             Sfx.PlayAt(SfxId.EnemySpawn, actualTransform.position);
         }
         spawning = null;

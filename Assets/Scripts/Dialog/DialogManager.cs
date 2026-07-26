@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 // Picks the display style for a conversation
 public enum DialogStyle { Box, Bubble }
 
@@ -26,6 +27,8 @@ public class DialogManager : MonoBehaviour
 
     [SerializeField] private PlayerController controller;
 
+    private bool JustStarted = false;
+
     private void Awake()
     {
         if(Instance == null)
@@ -40,15 +43,31 @@ public class DialogManager : MonoBehaviour
         if (bubbleView != null) bubbleView.Close();
     }
 
+    bool IsAnyGamepadButtonPressed()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad == null) return false;
 
+        // Loop through all controls on the gamepad (buttons, triggers, bumpers, stick presses)
+        foreach (var control in gamepad.allControls)
+        {
+            if (control is ButtonControl button && button.wasPressedThisFrame)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void Update()
     {
         if (active == null)
             return;
 
-        if(!controller.isSkipDialog())
+        
+        if( JustStarted || ! (Keyboard.current.anyKey.wasPressedThisFrame || (Gamepad.current != null && IsAnyGamepadButtonPressed())))
         {
+            JustStarted = false;
             return;
         }
 
@@ -88,6 +107,7 @@ public class DialogManager : MonoBehaviour
             Debug.LogError($"DialogManager: chưa gán {style} View trong Inspector!", this);
             return;
         }
+        JustStarted = true;
         if (style == DialogStyle.Bubble) active.SetTarget(target);
 
         active.Open();

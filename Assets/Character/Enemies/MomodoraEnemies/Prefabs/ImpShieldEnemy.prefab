@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8202875370090857487}
   - component: {fileID: 7578839816078801774}
   - component: {fileID: 1456704595473282387}
+  - component: {fileID: 6693178037698400219}
   m_Layer: 8
   m_Name: ImpShieldEnemy
   m_TagString: Untagged
@@ -418,6 +419,33 @@ MonoBehaviour:
   lockedMove: 1
   shouldMove: 1
   goingBack: 0
+--- !u!114 &6693178037698400219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6084762074902324087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3e0fb073901cc44a47c2bfd3ba3f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDrops
+  drops:
+  - itemPrefab: {fileID: 3393830918241770400, guid: 192914da74ce6ab4784463a2c1f5737d, type: 3}
+    count: 1
+    chance: 0.209
+  - itemPrefab: {fileID: 3393830918241770400, guid: 9c236929795def34ebe0e9e795ac8dc8, type: 3}
+    count: 2
+    chance: 0.325
+  - itemPrefab: {fileID: 3393830918241770400, guid: bb735a29e0fc7c6438593715dc6341a9, type: 3}
+    count: 1
+    chance: 0.075
+  dropPoint: {fileID: 0}
+  burstForce: 4
+  upwardForce: 3
+  spreadX: 0.6
+  spreadY: 0.3
 --- !u!1 &6092297787316113603
 GameObject:
   m_ObjectHideFlags: 0

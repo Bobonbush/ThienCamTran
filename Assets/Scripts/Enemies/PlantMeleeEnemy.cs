@@ -261,7 +261,7 @@ public class PlantMeleeEnemy : MonoBehaviour
             ? animationAttackHitbox.enabled
             : IsAttacking;
 
-        if (!(hyperArmorWhileAttacking && strikeActive))
+        if (!(hyperArmorWhileAttacking))
         {
             // Max thay vì cộng dồn: combo liên tiếp không chồng Y phóng quái lên trời
             rb.linearVelocity = new Vector2(

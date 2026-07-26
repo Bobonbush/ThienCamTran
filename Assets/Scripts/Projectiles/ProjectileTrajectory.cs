@@ -26,6 +26,8 @@ public class ProjectileTrajectory : MonoBehaviour
     bool hasLaunchVelocity = false;
     Vector2 launchVelocity;
 
+    public float maximumFallSpeed = 100000f; 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -54,6 +56,10 @@ public class ProjectileTrajectory : MonoBehaviour
     {
 
         if (rb.linearVelocityY == 0) return;
+        if(rb.linearVelocityY < -maximumFallSpeed)
+        {
+            rb.linearVelocityY = -maximumFallSpeed;
+        }
         // indicate the direction of the object toward the trajection
         float angle = offsetRotation + Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg;
         Vector3 currentRotation = transform.eulerAngles;

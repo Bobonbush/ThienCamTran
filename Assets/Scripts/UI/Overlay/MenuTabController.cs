@@ -147,11 +147,7 @@ namespace Game.UI
             if (ItemObtained.IsShowing && !IsOpen)
                 return;
 
-            bool inventoryPressed = InputBindingService.Instance != null
-                ? InputBindingService.Instance.WasPressedThisFrame(MenuBindingId.Inventory)
-                : keyboard.iKey.wasPressedThisFrame;
-
-            if (inventoryPressed)
+            if (InputManager.Instance.Controls.Player.Inventory.WasPressedThisFrame())
             {
                 if (IsOpen)
                     CloseOverlay();
@@ -164,36 +160,31 @@ namespace Game.UI
             if (!IsOpen || isTransitioning)
                 return;
 
-            if (keyboard.qKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.OnDeny.WasPressedThisFrame())
             {
                 CloseOverlay();
                 return;
             }
 
-            if (keyboard.leftBracketKey.wasPressedThisFrame ||
-                keyboard.pageUpKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.PreviousPage.WasPressedThisFrame())
             {
                 Step(-1);
             }
-            else if (keyboard.rightBracketKey.wasPressedThisFrame ||
-                     keyboard.pageDownKey.wasPressedThisFrame)
+            else if (InputManager.Instance.Controls.Player.NextPage.WasPressedThisFrame())
             {
                 Step(1);
             }
-            else if (keyboard.tabKey.wasPressedThisFrame)
-            {
-                Step(keyboard.shiftKey.isPressed ? -1 : 1);
-            }
+            
 
             Vector2 navigation = ReadNavigation(keyboard);
 
             if (navigation != Vector2.zero)
                 ActivePanel?.OnNavigate(navigation);
 
-            if (keyboard.eKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.Interact.WasPressedThisFrame())
                 ActivePanel?.OnSubmit();
 
-            if (keyboard.spaceKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.SlotSwap.WasPressedThisFrame())
                 ActivePanel?.OnAlternate();
 
             Mouse mouse = Mouse.current;
@@ -719,36 +710,22 @@ namespace Game.UI
             float x = 0f;
             float y = 0f;
 
-            InputBindingService bindingService = InputBindingService.Instance;
-            bool left = bindingService != null
-                ? bindingService.WasPressedThisFrame(MenuBindingId.Left)
-                : keyboard.leftArrowKey.wasPressedThisFrame || keyboard.aKey.wasPressedThisFrame;
-            bool right = bindingService != null
-                ? bindingService.WasPressedThisFrame(MenuBindingId.Right)
-                : keyboard.rightArrowKey.wasPressedThisFrame || keyboard.dKey.wasPressedThisFrame;
-            bool up = bindingService != null
-                ? bindingService.WasPressedThisFrame(MenuBindingId.Up)
-                : keyboard.upArrowKey.wasPressedThisFrame || keyboard.wKey.wasPressedThisFrame;
-            bool down = bindingService != null
-                ? bindingService.WasPressedThisFrame(MenuBindingId.Down)
-                : keyboard.downArrowKey.wasPressedThisFrame || keyboard.sKey.wasPressedThisFrame;
-
-            if (left)
+            if (InputManager.Instance.LeftPress)
             {
                 x -= 1f;
             }
 
-            if (right)
+            if (InputManager.Instance.RightPress)
             {
                 x += 1f;
             }
 
-            if (up)
+            if (InputManager.Instance.UpPress)
             {
                 y += 1f;
             }
 
-            if (down)
+            if (InputManager.Instance.DownPress)
             {
                 y -= 1f;
             }

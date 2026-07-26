@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 4295872247327780457}
   - component: {fileID: 9084292799619583209}
   - component: {fileID: 8822006569030131093}
+  - component: {fileID: 9097641908493943385}
   m_Layer: 8
   m_Name: CatPeasantEnemy
   m_TagString: Untagged
@@ -510,6 +511,27 @@ MonoBehaviour:
   maximumPitch: 1.04
   spatialBlend: 0
   distanceFalloff: 1
+--- !u!114 &9097641908493943385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632481799677671888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3e0fb073901cc44a47c2bfd3ba3f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDrops
+  drops:
+  - itemPrefab: {fileID: 3393830918241770400, guid: bb735a29e0fc7c6438593715dc6341a9, type: 3}
+    count: 1
+    chance: 0.1
+  dropPoint: {fileID: 0}
+  burstForce: 4
+  upwardForce: 3
+  spreadX: 0.6
+  spreadY: 0.3
 --- !u!1 &4671645230758836983
 GameObject:
   m_ObjectHideFlags: 0

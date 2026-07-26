@@ -93,11 +93,15 @@ public class BossEffect : MonoBehaviour
 
     public void EarthWakeOnDown()
     {
+        // Heavy slam when the boss body hits the arena floor
+        Sfx.PlayAt(SfxId.BossSlam, transform.position);
         EarthWake(0.3f);
     }
 
     public void EarthWakeOnJump()
     {
+        // Lighter thump for the push-off
+        Sfx.PlayAt(SfxId.BossSlam, transform.position, 0.6f);
         EarthWake(0.3f);
     }
 
@@ -106,5 +110,68 @@ public class BossEffect : MonoBehaviour
         worldPosition = transform.localPosition;
         boss.AnimationFlip();
         flip = true;
+    }
+
+    public void SpawnImpactAnimation()
+    {
+        boss.SpawnGroundImpact();
+    }
+
+    // Dash further to the right
+
+    public void GroundStabDash()
+    {
+        boss.GroundStabDash();
+    }
+
+    public void SpawnGroundImpactOnBoth()
+    {
+        boss.SpawnGroundImpactOnBoth();
+    }
+
+
+    public void GroundStabEnd()
+    {
+        boss.GroundStabEnd();
+    }
+
+    // Dash to surprise the player
+    public void StabDash()
+    {
+        boss.StabDash();
+    }
+
+    public void ReadyForStab()
+    {
+        boss.ReadyForStab();
+    }
+
+    public void ListenStabEnd()
+    {
+        boss.ListenStabEnd();
+    }
+
+
+
+    public void StabEnd()
+    {
+        boss.StabEnd();
+    }
+
+    public void DoneFalling()
+    {
+        boss.DoneFalling();
+    }
+
+    public void SpecialUpAbility()
+    {
+        boss.SpecialUpAbility();
+    }
+
+    
+
+    public void AnimationDeadBoss()
+    {
+        boss.AnimationDeadBoss();
     }
 }
