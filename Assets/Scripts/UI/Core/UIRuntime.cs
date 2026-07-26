@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,18 +25,32 @@ public static class UIRuntime
         return found != null ? found.GetComponent<T>() : null;
     }
 
-    public static void ConfigureCanvas(GameObject root)
+    public static void ConfigureCanvas(GameObject root, bool preserveAuthoredLayout = false)
     {
         CanvasScaler scaler = root.GetComponentInChildren<CanvasScaler>(true);
         if (scaler != null)
         {
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.screenMatchMode = preserveAuthoredLayout
+                ? CanvasScaler.ScreenMatchMode.Expand
+                : CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
         }
+
+        if (preserveAuthoredLayout)
+            ConfigureFixedAspectContent(root, new Vector2(1920f, 1080f));
+
         foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
         {
+            if (preserveAuthoredLayout)
+            {
+                // The fixed 16:9 content area keeps the authored text rectangles unchanged at
+                // every resolution, so font sizes should remain exactly as designed.
+                text.enableAutoSizing = false;
+                continue;
+            }
+
             // Text inside a ScrollRect must keep its authored point size so its preferred
             // height can exceed the viewport. Auto-sizing it here would shrink the lore
             // until it fits and leave the ScrollRect with nothing to scroll.
@@ -44,6 +59,46 @@ public static class UIRuntime
             text.fontSizeMin = Mathf.Max(8f, text.fontSize * 0.55f);
             text.fontSizeMax = Mathf.Max(text.fontSize, text.fontSizeMax);
         }
+    }
+
+    private static void ConfigureFixedAspectContent(GameObject root, Vector2 referenceResolution)
+    {
+        Canvas canvas = root.GetComponentInChildren<Canvas>(true);
+        RectTransform canvasRect = canvas != null ? canvas.transform as RectTransform : null;
+        if (canvasRect == null) return;
+
+        Transform existing = canvasRect.Find("FixedAspectContent");
+        RectTransform content;
+        if (existing != null)
+        {
+            content = existing as RectTransform;
+        }
+        else
+        {
+            List<Transform> authoredChildren = new List<Transform>();
+            foreach (Transform child in canvasRect)
+                authoredChildren.Add(child);
+
+            GameObject contentObject = new GameObject(
+                "FixedAspectContent",
+                typeof(RectTransform),
+                typeof(AspectRatioFitter));
+            content = contentObject.GetComponent<RectTransform>();
+            content.SetParent(canvasRect, false);
+
+            foreach (Transform child in authoredChildren)
+                child.SetParent(content, false);
+        }
+
+        content.anchorMin = Vector2.zero;
+        content.anchorMax = Vector2.one;
+        content.offsetMin = Vector2.zero;
+        content.offsetMax = Vector2.zero;
+        content.localScale = Vector3.one;
+
+        AspectRatioFitter fitter = content.GetComponent<AspectRatioFitter>();
+        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        fitter.aspectRatio = referenceResolution.x / referenceResolution.y;
     }
 
     public static void ConfigureTextScroll(ScrollRect scroll, TMP_Text text, float fontSize)

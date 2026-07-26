@@ -147,7 +147,11 @@ namespace Game.UI
             if (ItemObtained.IsShowing && !IsOpen)
                 return;
 
-            if (keyboard.iKey.wasPressedThisFrame)
+            bool inventoryPressed = InputBindingService.Instance != null
+                ? InputBindingService.Instance.WasPressedThisFrame(MenuBindingId.Inventory)
+                : keyboard.iKey.wasPressedThisFrame;
+
+            if (inventoryPressed)
             {
                 if (IsOpen)
                     CloseOverlay();
@@ -715,26 +719,36 @@ namespace Game.UI
             float x = 0f;
             float y = 0f;
 
-            if (keyboard.leftArrowKey.wasPressedThisFrame ||
-                keyboard.aKey.wasPressedThisFrame)
+            InputBindingService bindingService = InputBindingService.Instance;
+            bool left = bindingService != null
+                ? bindingService.WasPressedThisFrame(MenuBindingId.Left)
+                : keyboard.leftArrowKey.wasPressedThisFrame || keyboard.aKey.wasPressedThisFrame;
+            bool right = bindingService != null
+                ? bindingService.WasPressedThisFrame(MenuBindingId.Right)
+                : keyboard.rightArrowKey.wasPressedThisFrame || keyboard.dKey.wasPressedThisFrame;
+            bool up = bindingService != null
+                ? bindingService.WasPressedThisFrame(MenuBindingId.Up)
+                : keyboard.upArrowKey.wasPressedThisFrame || keyboard.wKey.wasPressedThisFrame;
+            bool down = bindingService != null
+                ? bindingService.WasPressedThisFrame(MenuBindingId.Down)
+                : keyboard.downArrowKey.wasPressedThisFrame || keyboard.sKey.wasPressedThisFrame;
+
+            if (left)
             {
                 x -= 1f;
             }
 
-            if (keyboard.rightArrowKey.wasPressedThisFrame ||
-                keyboard.dKey.wasPressedThisFrame)
+            if (right)
             {
                 x += 1f;
             }
 
-            if (keyboard.upArrowKey.wasPressedThisFrame ||
-                keyboard.wKey.wasPressedThisFrame)
+            if (up)
             {
                 y += 1f;
             }
 
-            if (keyboard.downArrowKey.wasPressedThisFrame ||
-                keyboard.sKey.wasPressedThisFrame)
+            if (down)
             {
                 y -= 1f;
             }
