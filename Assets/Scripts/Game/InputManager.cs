@@ -1,4 +1,3 @@
-using Game.UI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,13 +6,7 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
     public InputSystem_Actions Controls { get; private set; }
-    public InputActionAsset SubControls { get; private set; }
-
-    private InputAction moveAction;
-    private InputAction lookAction;
-    private InputActionMap playerMap;
-
-    private PlayerInput playerInput;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public Vector2 Move = Vector2.zero;
     public Vector2 Look  = Vector2.zero;
@@ -31,9 +24,7 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     GameObject playerObj;
     PlayerController player;
-
-
-
+    
 
     private void Awake()
     {
@@ -48,59 +39,23 @@ public class InputManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         player = playerObj.GetComponent<PlayerController>();
+        Controls = new InputSystem_Actions();
 
-        
-
-        if (playerInput == null)
-            playerInput = GetComponent<PlayerInput>();
-
-        
-
-    }
-
-    private void Start()
-    {
-        var service = InputBindingService.Instance;
-
-        if (service == null)
-        {
-            Debug.LogError("InputBindingService not found.");
-            return;
-        }
-
-        Initialize(playerInput.actions);
-    }
-
-    public void Initialize(InputActionAsset actions)
-    {
-        SubControls = actions;
-
-        playerMap = SubControls.FindActionMap("Player");
-
-        moveAction = playerMap.FindAction("Move");
-        lookAction = playerMap.FindAction("Look");
-
-        moveAction.started += OnMove;
-        moveAction.performed += OnMove;
-        moveAction.canceled += OnMove;
-
-        lookAction.started += OnLook;
-        lookAction.performed += OnLook;
-        lookAction.canceled += OnLook;
-
-        //Debug.Log(playerInput.actions);
-        Debug.Log(InputBindingService.Instance.actions);
-        Debug.Log(playerInput.actions == InputBindingService.Instance.actions);
+        OnEnable();
     }
 
 
     private void OnEnable()
     {
-        if (Controls == null)
-            return;
+        Controls.Enable();
 
+        Controls.Player.Move.started += OnMove;
+        Controls.Player.Move.performed += OnMove;
+        Controls.Player.Move.canceled += OnMove;
 
-        playerMap.Enable();
+        Controls.Player.Look.performed += OnLook;
+        Controls.Player.Look.canceled += OnLook;
+        Controls.Player.Look.started += OnLook;
 
 
 
@@ -109,7 +64,15 @@ public class InputManager : MonoBehaviour
 
     private void OnDisable()
     {
-        playerMap.Disable();
+        Controls.Player.Move.started -= OnMove;
+        Controls.Player.Move.performed -= OnMove;
+        Controls.Player.Move.canceled -= OnMove;
+
+        Controls.Player.Look.performed -= OnLook;
+        Controls.Player.Look.canceled -= OnLook;
+        Controls.Player.Look.started -= OnLook;
+
+        Controls.Disable();
     }
 
 
@@ -230,5 +193,23 @@ public class InputManager : MonoBehaviour
 
 
 
-    
+    public void EnablePlayer()
+    {
+        Controls.Player.Enable();
+    }
+
+    public void DisablePlayer()
+    {
+        Controls.Player.Disable();
+    }
+
+    public void EnableUI()
+    {
+        Controls.UI.Enable();
+    }
+
+    public void DisableUI()
+    {
+        Controls.UI.Disable();
+    }
 }
