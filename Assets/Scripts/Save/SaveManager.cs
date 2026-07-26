@@ -73,7 +73,6 @@ public class SaveManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Debug.Log("BUSSSSGGGGGGGGGG");
             Destroy(gameObject);
             return;
         }
@@ -88,11 +87,13 @@ public class SaveManager : MonoBehaviour
     private void Start()
     {
 
-        Debug.Log("CutScene Call for what");
-        CutSceneManager.Instance.ForceHideGamePlay();
-        
 
-        Load(useSlot);
+        if (currentlyInGame == false)
+        {
+            CutSceneManager.Instance.ForceHideGamePlay();
+            Load(useSlot);
+        }
+        
         
     }
 
@@ -166,7 +167,6 @@ public class SaveManager : MonoBehaviour
 
     public void Load(int slot)
     {
-        if (currentlyInGame) return;
         CurrentSlot = slot;
         Data = new GameSaveData();
 
@@ -184,10 +184,14 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        currentlyInGame = true;
+        
         // Sau khi Load từ menu, lần vào scene đầu tiên sẽ khôi phục inventory + vị trí
         pendingContinueRestore = true;
-        InitializeGame();
+        if (currentlyInGame == false)
+        {
+            InitializeGame();
+        }
+        currentlyInGame = true;
     }
 
     public void DeleteSave(int slot)

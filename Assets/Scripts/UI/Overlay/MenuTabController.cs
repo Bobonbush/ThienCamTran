@@ -147,7 +147,7 @@ namespace Game.UI
             if (ItemObtained.IsShowing && !IsOpen)
                 return;
 
-            if (keyboard.iKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.Inventory.WasPressedThisFrame())
             {
                 if (IsOpen)
                     CloseOverlay();
@@ -160,36 +160,31 @@ namespace Game.UI
             if (!IsOpen || isTransitioning)
                 return;
 
-            if (keyboard.qKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.OnDeny.WasPressedThisFrame())
             {
                 CloseOverlay();
                 return;
             }
 
-            if (keyboard.leftBracketKey.wasPressedThisFrame ||
-                keyboard.pageUpKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.PreviousPage.WasPressedThisFrame())
             {
                 Step(-1);
             }
-            else if (keyboard.rightBracketKey.wasPressedThisFrame ||
-                     keyboard.pageDownKey.wasPressedThisFrame)
+            else if (InputManager.Instance.Controls.Player.NextPage.WasPressedThisFrame())
             {
                 Step(1);
             }
-            else if (keyboard.tabKey.wasPressedThisFrame)
-            {
-                Step(keyboard.shiftKey.isPressed ? -1 : 1);
-            }
+            
 
             Vector2 navigation = ReadNavigation(keyboard);
 
             if (navigation != Vector2.zero)
                 ActivePanel?.OnNavigate(navigation);
 
-            if (keyboard.eKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.Interact.WasPressedThisFrame())
                 ActivePanel?.OnSubmit();
 
-            if (keyboard.spaceKey.wasPressedThisFrame)
+            if (InputManager.Instance.Controls.Player.SlotSwap.WasPressedThisFrame())
                 ActivePanel?.OnAlternate();
 
             Mouse mouse = Mouse.current;
@@ -715,26 +710,22 @@ namespace Game.UI
             float x = 0f;
             float y = 0f;
 
-            if (keyboard.leftArrowKey.wasPressedThisFrame ||
-                keyboard.aKey.wasPressedThisFrame)
+            if (InputManager.Instance.LeftPress)
             {
                 x -= 1f;
             }
 
-            if (keyboard.rightArrowKey.wasPressedThisFrame ||
-                keyboard.dKey.wasPressedThisFrame)
+            if (InputManager.Instance.RightPress)
             {
                 x += 1f;
             }
 
-            if (keyboard.upArrowKey.wasPressedThisFrame ||
-                keyboard.wKey.wasPressedThisFrame)
+            if (InputManager.Instance.UpPress)
             {
                 y += 1f;
             }
 
-            if (keyboard.downArrowKey.wasPressedThisFrame ||
-                keyboard.sKey.wasPressedThisFrame)
+            if (InputManager.Instance.DownPress)
             {
                 y -= 1f;
             }

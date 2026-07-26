@@ -3934,7 +3934,7 @@ MonoBehaviour:
   moveDuration: 0.5
   moveDistance: 4.7
   resetDelay: 3
-  ActivateOnStart: 1
+  ActivateOnStart: 0
   ActiveAndDeActive: 0
   DestroyOnActivate: 0
   reset: 0

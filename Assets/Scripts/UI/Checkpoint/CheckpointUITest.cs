@@ -12,18 +12,18 @@ public class CheckpointUITest : MonoBehaviour
             return;
 
         // Pretend the player is standing on the left side.
-        if (keyboard.leftBracketKey.wasPressedThisFrame)
+        if (InputManager.Instance.PreviousPress)
         {
             checkpointUI.Open(playerIsOnLeftSide: true);
         }
 
         // Pretend the player is standing on the right side.
-        if (keyboard.rightBracketKey.wasPressedThisFrame)
+        if (InputManager.Instance.NextPress)
         {
             checkpointUI.Open(playerIsOnLeftSide: false);
         }
 
-        if (keyboard.backslashKey.wasPressedThisFrame)
+        if (InputManager.Instance.Controls.Player.DiscardForceStatement.WasPressedThisFrame())
         {
             checkpointUI.Close();
         }

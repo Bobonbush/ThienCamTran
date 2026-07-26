@@ -620,7 +620,7 @@ public class PlayerController : MonoBehaviour
             moveInput.x = 0.0f;
         }
 
-        if(Mathf.Abs(moveInput.y) < 1.6)
+        if(Mathf.Abs(moveInput.y) < 0.6)
         {
             moveInput.y = 0.0f;
         }

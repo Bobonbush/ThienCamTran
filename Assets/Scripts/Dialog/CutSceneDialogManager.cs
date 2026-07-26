@@ -60,7 +60,7 @@ public class CutSceneDialogManager : MonoBehaviour
         if (active == null)
             return;
 
-        if (JustStarted || !(Keyboard.current.anyKey.wasPressedThisFrame || (Gamepad.current == null && IsAnyGamepadButtonPressed())))
+        if (JustStarted || !(Keyboard.current.anyKey.wasPressedThisFrame || (Gamepad.current != null && IsAnyGamepadButtonPressed())))
         {
             JustStarted = false;
             return;

@@ -80,18 +80,18 @@ public class CheckpointWorldUI : MonoBehaviour
         if (keyboard == null)
             return;
 
-        if (keyboard.upArrowKey.wasPressedThisFrame || keyboard.wKey.wasPressedThisFrame)
+        if (InputManager.Instance.UpPress)
             Select(Mathf.Max(0, selectedIndex - 1));
-        else if (keyboard.downArrowKey.wasPressedThisFrame || keyboard.sKey.wasPressedThisFrame)
+        else if (InputManager.Instance.DownPress)
             Select(Mathf.Min(buttons.Length - 1, selectedIndex + 1));
 
-        if (keyboard.qKey.wasPressedThisFrame || keyboard.escapeKey.wasPressedThisFrame)
+        if (InputManager.Instance.Controls.Player.DiscardForceStatement.WasPressedThisFrame() || InputManager.Instance.CancelPress)
         {
             OnCancelPressed();
             return;
         }
 
-        if (keyboard.eKey.wasPressedThisFrame)
+        if (InputManager.Instance.Controls.Player.Interact.WasPressedThisFrame())
             buttons[selectedIndex]?.onClick.Invoke();
     }
 

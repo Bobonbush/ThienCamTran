@@ -65,7 +65,7 @@ public class DialogManager : MonoBehaviour
             return;
 
         
-        if( JustStarted || ! (Keyboard.current.anyKey.wasPressedThisFrame || (Gamepad.current == null && IsAnyGamepadButtonPressed())))
+        if( JustStarted || ! (Keyboard.current.anyKey.wasPressedThisFrame || (Gamepad.current != null && IsAnyGamepadButtonPressed())))
         {
             JustStarted = false;
             return;
