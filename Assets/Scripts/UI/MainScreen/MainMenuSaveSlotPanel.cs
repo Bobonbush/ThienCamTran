@@ -128,24 +128,39 @@ namespace Game.UI
 
             if (slots[index].filled)
             {
-                PopulateFilledDetail(slots[index]);
+                PopulateFilledDetail(index);
                 ShowDetails(filledDetail);
             }
             else
             {
                 selectedIcon = 0;
+                // Cả hai trang detail đều để sẵn tiêu đề "BẢN LƯU X" — thay X bằng số slot.
+                SetText(newDetail, "Title", $"BẢN LƯU {SlotNumber(index)}");
                 SelectMode(UIRuntime.Find(newDetail?.transform, ClassicMode), ClassicMode);
                 RefreshIconSelection();
                 ShowDetails(newDetail);
             }
         }
 
-        private void PopulateFilledDetail(SlotPreview data)
+        /// <summary>
+        /// Mỗi ô Game_Mode/Game_Time/Game_Point trong scene là MỘT dòng (size 40, auto-size tắt)
+        /// và ba ô xếp sát nhau trong Detail_Box, nên nhồi chuỗi hai dòng vào là dòng thứ hai
+        /// tràn xuống đè lên ô kế dưới. Giữ đúng một dòng: nhãn tiếng Việt như scene + giá trị.
+        /// </summary>
+        private void PopulateFilledDetail(int index)
         {
-            SetText(filledDetail, "Game_Mode", $"GAME MODE\n{data.mode.ToUpperInvariant()}");
-            SetText(filledDetail, "Game_Time", $"TIME SPENT\n{data.time}");
-            SetText(filledDetail, "Game_Point", $"POINT\n{data.points:N0}");
+            SlotPreview data = slots[index];
+            SetText(filledDetail, "Title", $"BẢN LƯU {SlotNumber(index)}");
+            SetText(filledDetail, "Game_Mode", $"Độ khó: {ModeDisplayName(data.mode)}");
+            SetText(filledDetail, "Game_Time", $"Thời gian: {data.time}");
+            SetText(filledDetail, "Game_Point", $"Điểm: {data.points:N0}");
             SetDetailIcon(filledDetail, GetIcon(data.iconIndex));
+        }
+
+        /// <summary>Tên hiển thị của mode — lấy đúng chữ trên hai nút trong Save_Slot_New.</summary>
+        private static string ModeDisplayName(string mode)
+        {
+            return mode == SteelMode ? "STEEL SOUL" : "CLASSIC";
         }
 
         private void ClearSelectedSlot()
@@ -279,9 +294,10 @@ namespace Game.UI
                 if (row == null) continue;
                 TMP_Text label = UIRuntime.Find<TMP_Text>(row, "Slot_Name");
                 if (label != null)
+                    // Slot_Name cũng là một dòng (size 36) như scene tự viết "BẢN LƯU n".
                     label.text = slots[i].filled
-                        ? $"SAVE SLOT {i + 1}  •  {slots[i].mode.ToUpperInvariant()}"
-                        : $"SAVE SLOT {i + 1}  •  NEW GAME";
+                        ? $"BẢN LƯU {SlotNumber(i)} • {ModeDisplayName(slots[i].mode)}"
+                        : $"BẢN LƯU {SlotNumber(i)} • TRỐNG";
                 UIRuntime.SetSlotIcon(UIRuntime.Find(row, "Icon_Slot"),
                     slots[i].filled ? GetIcon(slots[i].iconIndex) : null);
             }
