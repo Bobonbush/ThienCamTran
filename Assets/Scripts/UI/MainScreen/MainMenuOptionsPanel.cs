@@ -27,7 +27,7 @@ namespace Game.UI
         private static IReadOnlyList<InputBindingService.BindingDefinition> Rows =>
             InputBindingService.Definitions;
 
-        private MainMenuController owner;
+        private IOptionsHost owner;
         private SettingsService settings;
         private InputBindingService bindings;
         private GameObject videoDetail;
@@ -51,7 +51,9 @@ namespace Game.UI
         private int listeningIndex = -1;
         private bool controlsDirty;
 
-        public void Initialize(MainMenuController menu)
+        /// <summary>Host supplies only assets, so both the main menu and the in-game book overlay
+        /// can drive the same authored "Option_Panel " prefab.</summary>
+        public void Initialize(IOptionsHost menu)
         {
             owner = menu;
             settings = SettingsService.EnsureExists(owner.AudioMixer);
@@ -67,8 +69,8 @@ namespace Game.UI
             BindCategory("Video", Category.Video);
             BindCategory("Audio", Category.Audio);
             BindCategory("Control", Category.Control);
-            owner.EnsureButton(UIRuntime.Find(transform, "Save_Button"), SaveCurrent, true);
-            owner.EnsureButton(UIRuntime.Find(transform, "Reset_Button"), ResetCurrent, true);
+            Bind(UIRuntime.Find(transform, "Save_Button"), SaveCurrent, true);
+            Bind(UIRuntime.Find(transform, "Reset_Button"), ResetCurrent, true);
 
             ConfigureVideo();
             ConfigureAudio();
@@ -106,7 +108,13 @@ namespace Game.UI
         private void BindCategory(string name, Category category)
         {
             Transform target = UIRuntime.Find(transform, name);
-            owner.EnsureButton(target, () => SelectCategory(category));
+            Bind(target, () => SelectCategory(category));
+        }
+
+        /// <summary>Button wiring using the host's artwork.</summary>
+        private Button Bind(Transform target, UnityEngine.Events.UnityAction action, bool forceSelectedVisual = false)
+        {
+            return UIRuntime.EnsureButton(target, action, owner.SelectedButtonSprite, forceSelectedVisual);
         }
 
         private void SelectCategory(Category category)
@@ -221,14 +229,21 @@ namespace Game.UI
                 Transform keyBox = UIRuntime.Find(row, "Button_Box");
                 keyboardLabels.Add(UIRuntime.FirstText(keyBox, "Control_Button"));
                 int captured = i;
-                owner.EnsureButton(keyBox, () => BeginKeyCapture(captured, BindingDevice.Keyboard));
+                Bind(keyBox, () => BeginKeyCapture(captured, BindingDevice.Keyboard));
 
                 gamepadLabels.Add(BuildGamepadCell(keyBox, definition, captured));
 
                 // Set the row label last: the two key cells reserve their space via the label's right
                 // margin, so it has to be measured after the cells are positioned.
                 TMP_Text actionLabel = row.GetComponent<TMP_Text>();
-                if (actionLabel != null) actionLabel.text = definition.displayName;
+                if (actionLabel != null)
+                {
+                    actionLabel.text = definition.displayName;
+                    // A long name like "Inventory" otherwise wraps onto a second line and collides
+                    // with the row below. Keep the authored size as the ceiling and shrink to fit.
+                    UIRuntime.ConfigureSingleLineListText(actionLabel, Mathf.Max(actionLabel.fontSize, 12f));
+                    actionLabel.alignment = TextAlignmentOptions.MidlineLeft;
+                }
             }
 
             Destroy(prototype);
@@ -278,7 +293,7 @@ namespace Game.UI
                 return padLabel;
             }
 
-            owner.EnsureButton(padRect, () => BeginKeyCapture(index, BindingDevice.Gamepad));
+            Bind(padRect, () => BeginKeyCapture(index, BindingDevice.Gamepad));
             return padLabel;
         }
 

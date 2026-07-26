@@ -25,6 +25,50 @@ public static class UIRuntime
         return found != null ? found.GetComponent<T>() : null;
     }
 
+    /// <summary>
+    /// Makes sure an authored object behaves as a button and runs the given action.
+    /// Lives here rather than on MainMenuController so the in-game overlay can build the same
+    /// authored panels without a menu-scene component (see IOptionsHost).
+    /// </summary>
+    public static Button EnsureButton(
+        Transform target,
+        UnityEngine.Events.UnityAction action,
+        Sprite selectedSprite,
+        bool forceSelectedVisual = false)
+    {
+        if (target == null) return null;
+        Button button = target.GetComponent<Button>();
+        if (button == null) button = target.gameObject.AddComponent<Button>();
+        if (button.targetGraphic == null) button.targetGraphic = target.GetComponent<Graphic>();
+        button.transition = Selectable.Transition.None;
+        button.onClick.RemoveAllListeners();
+        if (action != null) button.onClick.AddListener(action);
+        ConfigureButtonVisual(button, selectedSprite, forceSelectedVisual);
+        return button;
+    }
+
+    /// <summary>Attaches the hover/selected sprite swap to a button that uses the menu artwork.</summary>
+    public static Game.UI.MenuButtonVisual ConfigureButtonVisual(
+        Button button,
+        Sprite selectedSprite,
+        bool force = false)
+    {
+        if (button == null || selectedSprite == null) return null;
+        Image image = button.targetGraphic as Image;
+        if (image == null) image = button.GetComponent<Image>();
+        if (image == null || image.sprite == null) return null;
+
+        bool usesButtonArtwork =
+            image.sprite.name.IndexOf("Unselected", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            image.sprite.name.IndexOf("Button_Medium", StringComparison.OrdinalIgnoreCase) >= 0;
+        if (!force && !usesButtonArtwork) return null;
+
+        Game.UI.MenuButtonVisual visual = button.GetComponent<Game.UI.MenuButtonVisual>();
+        if (visual == null) visual = button.gameObject.AddComponent<Game.UI.MenuButtonVisual>();
+        visual.Configure(image, image.sprite, selectedSprite);
+        return visual;
+    }
+
     public static void ConfigureCanvas(GameObject root, bool preserveAuthoredLayout = false)
     {
         CanvasScaler scaler = root.GetComponentInChildren<CanvasScaler>(true);

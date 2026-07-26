@@ -1795,7 +1795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4444444444444444444444444444444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DatabasePanel
-  tabLabel: Database
 --- !u!1 &1624348418208057549
 GameObject:
   m_ObjectHideFlags: 0
@@ -3893,7 +3892,7 @@ MonoBehaviour:
   - {fileID: 6164763270986218071}
   - {fileID: 2251453574599389032}
   - {fileID: 3278579187308847104}
-  - {fileID: 5110961280806266765}
+  - {fileID: 8947761591857616266}
   tabButtons:
   - {fileID: 1614289792623416145}
   - {fileID: 8053688031763091409}
@@ -10357,7 +10356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3333333333333333333333333333333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusPanel
-  tabLabel: Status
 --- !u!1 &7518611701831665654
 GameObject:
   m_ObjectHideFlags: 0
@@ -13243,7 +13241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8628529817853514928}
   - component: {fileID: 8046595730980234513}
-  - component: {fileID: 5110961280806266765}
+  - component: {fileID: 8947761591857616266}
   m_Layer: 5
   m_Name: SettingPanel
   m_TagString: Untagged
@@ -13278,7 +13276,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9064244005952417827}
   m_CullTransparentMesh: 1
---- !u!114 &5110961280806266765
+--- !u!114 &8947761591857616266
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13287,10 +13285,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 9064244005952417827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb1c9486c3dd284dba700f2453cf9e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 49e44085ffc89bf42b4b7ec6fc7bc077, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.UI.EmptyPanel
-  tabLabel: Database
+  m_EditorClassIdentifier: Assembly-CSharp::Game.UI.SettingsMenuPanel
+  optionPanelPrefab: {fileID: 5175338120726731263, guid: 1ed725fce8fffeb43b8607df85c47d0a, type: 3}
+  selectedButtonSprite: {fileID: -2448561726959846810, guid: 4373dd2f1fd9bed4a98e2d151bf3cabd, type: 3}
+  videoLabelSprite: {fileID: 2305670829786488779, guid: f9c1e7c058cd662498a1c2328e735d46, type: 3}
+  audioLabelSprite: {fileID: 6919455922133185910, guid: 8a6e980d3ab8907409b280d19ae5d2a4, type: 3}
+  controlLabelSprite: {fileID: 1062212523522765158, guid: 11ca0ce8e59238240aa082c521f7dbfb, type: 3}
+  audioMixer: {fileID: 24100000, guid: 7b73d08ed7ac6ff4fbba271b8449f6f7, type: 2}
+  inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  exitButtonLabel: "THO\xC1T V\u1EC0 MENU"
+  exitConfirmMessage: "Tho\xE1t v\u1EC1 menu ch\xEDnh?\nTi\u1EBFn tr\xECnh t\u1EEB
+    l\u1EA7n c\u1EA7u nguy\u1EC7n cu\u1ED1i s\u1EBD m\u1EA5t."
+  exitConfirmYes: "C\xD3"
+  exitConfirmNo: "KH\xD4NG"
 --- !u!1 &9071464379220327703
 GameObject:
   m_ObjectHideFlags: 0

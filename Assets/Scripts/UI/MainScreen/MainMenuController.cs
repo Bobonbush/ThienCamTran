@@ -11,7 +11,7 @@ namespace Game.UI
     /// Owns the authored MainMenuNew hierarchy. Save-slot and option changes intentionally remain
     /// UI-local; the events at the bottom are the future hand-off points for game services.
     /// </summary>
-    public sealed class MainMenuController : MonoBehaviour
+    public sealed class MainMenuController : MonoBehaviour, IOptionsHost
     {
         [Serializable] public sealed class PlayRequestedEvent : UnityEvent<int, string, int> { }
 
@@ -80,15 +80,7 @@ namespace Game.UI
 
         public Button EnsureButton(Transform target, UnityAction action, bool forceSelectedVisual = false)
         {
-            if (target == null) return null;
-            Button button = target.GetComponent<Button>();
-            if (button == null) button = target.gameObject.AddComponent<Button>();
-            if (button.targetGraphic == null) button.targetGraphic = target.GetComponent<Graphic>();
-            button.transition = Selectable.Transition.None;
-            button.onClick.RemoveAllListeners();
-            if (action != null) button.onClick.AddListener(action);
-            ConfigureButtonVisual(button, forceSelectedVisual);
-            return button;
+            return UIRuntime.EnsureButton(target, action, selectedButtonSprite, forceSelectedVisual);
         }
 
         public void NotifyPlayRequested(int slotIndex, string mode, int iconIndex)
@@ -164,20 +156,7 @@ namespace Game.UI
 
         public MenuButtonVisual ConfigureButtonVisual(Button button, bool force = false)
         {
-            if (button == null || selectedButtonSprite == null) return null;
-            Image image = button.targetGraphic as Image;
-            if (image == null) image = button.GetComponent<Image>();
-            if (image == null || image.sprite == null) return null;
-
-            bool usesButtonArtwork =
-                image.sprite.name.IndexOf("Unselected", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                image.sprite.name.IndexOf("Button_Medium", StringComparison.OrdinalIgnoreCase) >= 0;
-            if (!force && !usesButtonArtwork) return null;
-
-            MenuButtonVisual visual = button.GetComponent<MenuButtonVisual>();
-            if (visual == null) visual = button.gameObject.AddComponent<MenuButtonVisual>();
-            visual.Configure(image, image.sprite, selectedButtonSprite);
-            return visual;
+            return UIRuntime.ConfigureButtonVisual(button, selectedButtonSprite, force);
         }
 
         private static void SetActive(GameObject target, bool active)
