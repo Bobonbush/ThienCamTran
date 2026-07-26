@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace Game.UI
 {
@@ -16,8 +15,6 @@ namespace Game.UI
         [Tooltip("Container holding the Continue/Options/Quit buttons. Hidden while Options is open " +
                  "so the two menus don't overlap (same idea as the main menu hiding its title).")]
         [SerializeField] private GameObject menuButtons;
-        [Tooltip("Name of the main-menu scene to return to on 'Quit to Menu'.")]
-        [SerializeField] private string mainMenuScene = "MainMenu";
 
         public bool IsPaused { get; private set; }
 
@@ -86,7 +83,9 @@ namespace Game.UI
             Sfx.Play(SfxId.UiConfirm);
             Time.timeScale = 1f;
             IsPaused = false;
-            SceneManager.LoadScene(mainMenuScene);
+            // Qua SaveManager để currentlyInGame được reset — LoadScene thẳng sẽ khiến
+            // lần chọn slot sau đọc được file nhưng không bao giờ chuyển scene.
+            SaveManager.Instance.ReturnToMenu();
         }
     }
 }

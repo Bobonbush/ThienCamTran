@@ -93,7 +93,7 @@ namespace Game.UI
 
         public void NotifyPlayRequested(int slotIndex, string mode, int iconIndex)
         {
-            Debug.Log($"[MainMenu] Play requested: slot {slotIndex + 1}, mode {mode}, icon {iconIndex}. Backend hand-off is intentionally not connected.");
+            Debug.Log($"[MainMenu] Play requested: slot {slotIndex + 1}, mode {mode}, icon {iconIndex}.");
             playRequested.Invoke(slotIndex, mode, iconIndex);
         }
 

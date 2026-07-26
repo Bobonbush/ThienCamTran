@@ -19,6 +19,7 @@ MonoBehaviour:
   showTime: 2
   fadingTime: 2
   newScene: 0
+  returnToMainMenu: 1
   SceneID: MainMenuNew
   SpawnID: 
   SpawnOffset: {x: 4, y: 0, z: 0}

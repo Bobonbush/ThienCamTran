@@ -22,13 +22,29 @@ public class SaveManager : MonoBehaviour
 {
     private const string SaveFolder = "Saves";
 
+    /// <summary>Scene trung gian giữ các manager thường trú (SceneTransitionManager,
+    /// CutSceneManager, InputManager...). Main menu luôn đi qua đây trước khi vào game.</summary>
+    public const string BootScene = "StartGame";
+
+    /// <summary>Scene main menu — nơi quay về khi kết thúc một lượt chơi.</summary>
+    public const string MainMenuScene = "MainMenuNew";
+
+    /// <summary>Số slot main menu hiển thị (Slot_1..Slot_4).</summary>
+    public const int SlotCount = 4;
+
     private static SaveManager instance;
 
     // For testing save game
-    
+
     private int useSlot = 2;
 
     private bool currentlyInGame = false;
+
+    // Ý định chọn từ main menu, tiêu thụ khi BootScene load xong
+    private int pendingSlot = -1;
+    private bool pendingNewGame;
+    private bool pendingSteelMode;
+    private int pendingIcon;
 
 
 
@@ -86,15 +102,23 @@ public class SaveManager : MonoBehaviour
 
     private void Start()
     {
-
-
-        if (currentlyInGame == false)
+#if UNITY_EDITOR
+        // Tiện test: bấm Play thẳng từ một scene gameplay thì tự vào useSlot.
+        // Menu và BootScene phải bỏ qua — CutSceneManager không tồn tại ở menu,
+        // và BootScene chỉ được vào qua StartGameFromMenu/StartNewGameFromMenu.
+        string activeScene = SceneManager.GetActiveScene().name;
+        if (currentlyInGame == false && activeScene != MainMenuScene && activeScene != BootScene)
         {
             CutSceneManager.Instance.ForceHideGamePlay();
             Load(useSlot);
         }
-        
-        
+#endif
+    }
+
+    private void Update()
+    {
+        if (currentlyInGame)
+            Data.player.playTime += Time.deltaTime;
     }
 
 
@@ -150,8 +174,13 @@ public class SaveManager : MonoBehaviour
 
         yield return SceneTransitionManager.Instance.TransitionToScene(Data.currentScene, Data.checkpointPosition);
 
-        
-
+        player = ReacquirePlayer();
+        if (player == null)
+        {
+            Debug.LogError("SaveManager: không tìm thấy Player sau khi load scene " + Data.currentScene);
+            yield return SceneTransitionManager.Instance.Fade(0.0f);
+            yield break;
+        }
 
         player.ResetFromDeath();
 
@@ -164,8 +193,29 @@ public class SaveManager : MonoBehaviour
         yield return SceneTransitionManager.Instance.Fade(0.0f);
     }
 
+    /// <summary>Player cũ bị huỷ cùng scene cũ mỗi lần LoadSceneAsync, nên sau khi đổi
+    /// scene phải lấy lại bản mới. SceneTransitionManager đã rebind sẵn ở sceneLoaded.</summary>
+    private static PlayerController ReacquirePlayer()
+    {
+        SceneTransitionManager transitions = SceneTransitionManager.Instance;
+        return transitions != null ? transitions.CurrentPlayer : null;
+    }
+
 
     public void Load(int slot)
+    {
+        LoadIntoMemory(slot);
+
+        if (currentlyInGame == false)
+        {
+            InitializeGame();
+        }
+        currentlyInGame = true;
+    }
+
+    /// <summary>Chỉ đọc file vào bộ nhớ, KHÔNG khởi động game. Tách ra để khi tạo
+    /// game mới còn kịp ghi mode/icon vào Data trước khi InitializeGame chạy.</summary>
+    private void LoadIntoMemory(int slot)
     {
         CurrentSlot = slot;
         Data = new GameSaveData();
@@ -184,13 +234,98 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        
         // Sau khi Load từ menu, lần vào scene đầu tiên sẽ khôi phục inventory + vị trí
         pendingContinueRestore = true;
-        if (currentlyInGame == false)
+    }
+
+    /// <summary>Đọc thử một slot mà KHÔNG đụng vào CurrentSlot/Data — main menu
+    /// dùng để vẽ 4 dòng slot.</summary>
+    public bool TryPeekSlot(int slot, out GameSaveData data)
+    {
+        data = null;
+        if (!HasSave(slot))
+            return false;
+
+        try
         {
-            InitializeGame();
+            data = JsonUtility.FromJson<GameSaveData>(File.ReadAllText(SlotPath(slot)));
         }
+        catch (System.Exception e)
+        {
+            Debug.LogError("SaveManager: file save slot " + slot + " hỏng. " + e.Message);
+            data = null;
+        }
+
+        return data != null;
+    }
+
+    // ==================== vào / ra game từ main menu ====================
+
+    /// <summary>Main menu: chơi tiếp một slot đã có.</summary>
+    public void StartGameFromMenu(int slot)
+    {
+        pendingSlot = slot;
+        pendingNewGame = false;
+        SceneManager.LoadScene(BootScene);
+    }
+
+    /// <summary>Main menu: tạo game mới ở slot này (xoá file cũ nếu có).</summary>
+    public void StartNewGameFromMenu(int slot, bool steelMode, int iconIndex)
+    {
+        pendingSlot = slot;
+        pendingNewGame = true;
+        pendingSteelMode = steelMode;
+        pendingIcon = iconIndex;
+        SceneManager.LoadScene(BootScene);
+    }
+
+    /// <summary>Kết thúc một lượt chơi và quay về main menu. Phải đi qua đây thay vì
+    /// LoadScene thẳng, nếu không currentlyInGame kẹt ở true và lần chọn slot sau sẽ
+    /// đọc file nhưng không bao giờ chuyển scene.</summary>
+    public void ReturnToMenu()
+    {
+        currentlyInGame = false;
+        pendingSlot = -1;
+        pendingContinueRestore = false;
+        Data = new GameSaveData();
+
+        // Các manager gameplay là DontDestroyOnLoad và giữ tham chiếu tới Player của
+        // lượt chơi vừa rồi; SceneTransitionManager còn treo cả PersistentGameUI (HUD)
+        // làm con. Không huỷ thì HUD đè lên menu và lượt chơi sau dùng lại tham chiếu chết.
+        // StartGame sẽ dựng lại tất cả khi vào game lần nữa.
+        SceneTransitionManager.TeardownForMenu();
+        CutSceneManager.TeardownForMenu();
+        InputManager.TeardownForMenu();
+
+        SceneManager.LoadScene(MainMenuScene);
+    }
+
+    /// <summary>Thực thi lựa chọn từ main menu, chạy khi BootScene đã load xong
+    /// (lúc này CutSceneManager / SceneTransitionManager mới tồn tại).</summary>
+    private void ConsumePendingMenuChoice()
+    {
+        int slot = pendingSlot;
+        pendingSlot = -1;
+
+        CutSceneManager.Instance.ForceHideGamePlay();
+
+        if (pendingNewGame)
+            DeleteSave(slot);
+
+        LoadIntoMemory(slot);
+
+        if (pendingNewGame)
+        {
+            Data.world.isSteelMode = pendingSteelMode;
+            Data.player.iconIndex = pendingIcon;
+            Data.player.playTime = 0f;
+
+            // Ghi ngay: bình thường chỉ checkpoint mới ghi file, không ghi ở đây thì
+            // slot vừa tạo sẽ đọc lại thành trống/Classic nếu người chơi thoát sớm.
+            WriteToDisk();
+        }
+
+        InitializeGame();
         currentlyInGame = true;
     }
 
@@ -258,10 +393,19 @@ public class SaveManager : MonoBehaviour
         yield return SceneTransitionManager.Instance.ReloadScene();
 
         yield return new WaitForSeconds(0.2f);
-       
+
+        // ReloadScene đã huỷ Player cũ — dùng lại tham chiếu cũ là MissingReferenceException.
+        player = ReacquirePlayer();
+        if (player == null)
+        {
+            Debug.LogError("SaveManager: không tìm thấy Player sau khi reload scene lúc nghỉ.");
+            yield return SceneTransitionManager.Instance.Fade(0.0f);
+            yield break;
+        }
+
         RestAtSaveZoneFunction?.Invoke();
 
-        
+
         player.ReleaseLockCutScene();
 
         yield return new WaitForSeconds(0.2f);
@@ -290,6 +434,13 @@ public class SaveManager : MonoBehaviour
 
             yield return SceneTransitionManager.Instance.TransitionToScene(Data.currentScene, Data.checkpointPosition);
 
+            player = ReacquirePlayer();
+            if (player == null)
+            {
+                Debug.LogError("SaveManager: không tìm thấy Player sau khi hồi sinh ở " + Data.currentScene);
+                yield return SceneTransitionManager.Instance.Fade(0.0f);
+                yield break;
+            }
 
             player.ResetFromDeath();
 
@@ -300,7 +451,10 @@ public class SaveManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }else
         {
-            SceneTransitionManager.Instance.TransitionToScene("hard", "", Vector3.zero);
+            // Steel mode: chỉ có một mạng. Xoá file NGAY tại đây chứ không đợi hết
+            // cutscene, để thoát game giữa chừng cũng không cứu được lượt chơi.
+            DeleteSave(CurrentSlot);
+            yield return SceneTransitionManager.Instance.TransitionToScene("hard", Vector3.zero);
         }
 
 
@@ -443,10 +597,17 @@ public class SaveManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
+        // Bàn giao từ main menu: SaveManager là DontDestroyOnLoad nên Start() chỉ
+        // chạy đúng một lần, không dùng làm chỗ móc được.
+        if (scene.name == BootScene && pendingSlot >= 0)
+        {
+            ConsumePendingMenuChoice();
+            return;
+        }
+
         AttachEnemyPersistence(scene);
-        
-        
+
+
 
         if (!pendingContinueRestore)
             return;

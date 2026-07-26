@@ -30,6 +30,12 @@ public class PlayerData
     public List<string> equipmentIDs = new List<string>();
     public List<SavedItemStack> inventory = new List<SavedItemStack>();
     public int score;
+
+    /// <summary>Tổng thời gian chơi (giây), cộng dồn khi đang trong game.</summary>
+    public float playTime;
+
+    /// <summary>Icon chọn ở main menu: 0 = Default_Icon, 1..11 = Icon_1..Icon_11.</summary>
+    public int iconIndex;
 }
 
 [Serializable]

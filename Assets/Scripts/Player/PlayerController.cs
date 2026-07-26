@@ -313,14 +313,42 @@ public class PlayerController : MonoBehaviour
         playerEffect = GetComponent<PlayerEffect>();
     }
 
+    // Publisher đã đăng ký ở Start, giữ lại để OnDestroy gỡ đúng instance đó.
+    private SceneTransitionManager subscribedSceneManager;
+    private SaveManager subscribedSaveManager;
+
     private void Start()
     {
-       
+
         SceneTransitionManager sceneManager = SceneTransitionManager.Instance;
         sceneManager.OnSavingLock += LockInput;
 
         SaveManager saveManager = SaveManager.Instance;
         saveManager.RestAtSaveZoneFunction += InteractWithNearestCheckPoint;
+
+        // Giữ lại đúng hai publisher đã đăng ký để OnDestroy gỡ được (xem OnDestroy).
+        subscribedSceneManager = sceneManager;
+        subscribedSaveManager = saveManager;
+    }
+
+    /// <summary>
+    /// Hai manager trên là DontDestroyOnLoad còn Player thì chết theo scene, nên không gỡ
+    /// ở đây là mỗi lần load scene lại bỏ thêm một handler chết vào delegate. Lần nghỉ ở
+    /// Save Zone kế tiếp, RestAtSaveZoneFunction?.Invoke() sẽ gọi trúng handler chết ->
+    /// MissingReferenceException -> văng luôn coroutine PerformRest nên màn hình kẹt đen.
+    /// </summary>
+    private void OnDestroy()
+    {
+        // Dùng field đã cache, KHÔNG gọi lại SaveManager.Instance: property đó chạy
+        // EnsureExists() nên sẽ hồi sinh manager vừa bị huỷ ngay giữa lúc teardown.
+        if (subscribedSceneManager != null)
+            subscribedSceneManager.OnSavingLock -= LockInput;
+
+        if (subscribedSaveManager != null)
+            subscribedSaveManager.RestAtSaveZoneFunction -= InteractWithNearestCheckPoint;
+
+        subscribedSceneManager = null;
+        subscribedSaveManager = null;
     }
 
     private void Update()

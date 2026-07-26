@@ -77,6 +77,12 @@ public class CutSceneInfo : ScriptableObject
     
     public bool newScene = false;
 
+    /// <summary>Kết thúc cutscene thì kết thúc luôn lượt chơi và quay về main menu
+    /// (dùng cho scene "hard" khi chết Steel mode và scene "End" khi phá đảo).
+    /// Không dùng chung đường với newScene vì ForceTransitionToScene chạy logic
+    /// spawn point / SetRoom vốn vô nghĩa ở menu.</summary>
+    public bool returnToMainMenu = false;
+
     public string SceneID = "";
 
     public string SpawnID = "";

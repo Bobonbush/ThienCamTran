@@ -5,24 +5,25 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    /// <summary>Frontend-only four-slot selector used by MainMenuNew.</summary>
+    /// <summary>Four-slot selector used by MainMenuNew, backed by the real save files.
+    /// Rows are 0-based here; SaveManager slots are 1-based (see <see cref="SlotNumber"/>).</summary>
     public sealed class MainMenuSaveSlotPanel : MonoBehaviour
     {
-        [Serializable]
+        private const string ClassicMode = "Classic";
+        private const string SteelMode = "Steel";
+
+        /// <summary>View-model for one row, filled from the slot's save file.</summary>
         private sealed class SlotPreview
         {
             public bool filled;
             public int iconIndex;
-            public string mode = "Classic";
+            public string mode = ClassicMode;
             public string time = "00:00:00";
             public int points;
         }
 
-        private readonly SlotPreview[] slots =
-        {
-            new SlotPreview { filled = true, iconIndex = 0, mode = "Classic", time = "01:32:45", points = 1200 },
-            new SlotPreview(), new SlotPreview(), new SlotPreview()
-        };
+        // Elements are filled by RefreshSlots, which Initialize runs before anything reads them.
+        private readonly SlotPreview[] slots = new SlotPreview[SaveManager.SlotCount];
 
         private MainMenuController owner;
         private Sprite defaultIcon;
@@ -32,7 +33,7 @@ namespace Game.UI
         private GameObject newDetail;
         private int selectedSlot = -1;
         private int selectedIcon;
-        private string selectedMode = "Classic";
+        private string selectedMode = ClassicMode;
         private readonly System.Collections.Generic.List<MenuButtonVisual> modeVisuals =
             new System.Collections.Generic.List<MenuButtonVisual>();
 
@@ -40,7 +41,7 @@ namespace Game.UI
         {
             owner = menu;
             icons = selectableIcons ?? Array.Empty<Sprite>();
-            slotRows = new Transform[4];
+            slotRows = new Transform[SaveManager.SlotCount];
             for (int i = 0; i < slotRows.Length; i++)
             {
                 int captured = i;
@@ -58,6 +59,7 @@ namespace Game.UI
 
             BindIconChoices();
             BindModes();
+            RefreshSlots();
             RenderRows();
         }
 
@@ -65,7 +67,48 @@ namespace Game.UI
         {
             selectedSlot = -1;
             ShowDetails(null);
+            // Re-read from disk: coming back from a run the score/time changed, and a
+            // Steel death may have wiped the slot entirely.
+            RefreshSlots();
             RenderRows();
+        }
+
+        /// <summary>UI row index (0-based) -> SaveManager slot number (1-based).</summary>
+        private static int SlotNumber(int rowIndex)
+        {
+            return rowIndex + 1;
+        }
+
+        /// <summary>Rebuild every row's view-model from the save files on disk.</summary>
+        private void RefreshSlots()
+        {
+            SaveManager saves = SaveManager.Instance;
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (saves.TryPeekSlot(SlotNumber(i), out GameSaveData data))
+                {
+                    slots[i] = new SlotPreview
+                    {
+                        filled = true,
+                        iconIndex = data.player.iconIndex,
+                        mode = data.world.isSteelMode ? SteelMode : ClassicMode,
+                        time = FormatPlayTime(data.player.playTime),
+                        points = data.player.score
+                    };
+                }
+                else
+                {
+                    slots[i] = new SlotPreview();
+                }
+            }
+        }
+
+        private static string FormatPlayTime(float seconds)
+        {
+            if (seconds < 0f) seconds = 0f;
+            TimeSpan span = TimeSpan.FromSeconds(seconds);
+            // Hours must keep counting past 24 — TimeSpan's "hh" would roll over into days.
+            return $"{(int)span.TotalHours:00}:{span.Minutes:00}:{span.Seconds:00}";
         }
 
         /// <returns>True when Back was consumed by a detail page.</returns>
@@ -91,9 +134,8 @@ namespace Game.UI
             else
             {
                 selectedIcon = 0;
-                selectedMode = "Classic";
+                SelectMode(UIRuntime.Find(newDetail?.transform, ClassicMode), ClassicMode);
                 RefreshIconSelection();
-                RefreshModeSelection();
                 ShowDetails(newDetail);
             }
         }
@@ -109,7 +151,8 @@ namespace Game.UI
         private void ClearSelectedSlot()
         {
             if (selectedSlot < 0) return;
-            slots[selectedSlot] = new SlotPreview();
+            SaveManager.Instance.DeleteSave(SlotNumber(selectedSlot));
+            RefreshSlots();
             RenderRows();
             selectedSlot = -1;
             ShowDetails(null);
@@ -120,26 +163,22 @@ namespace Game.UI
         {
             if (selectedSlot < 0 || !slots[selectedSlot].filled) return;
             SlotPreview data = slots[selectedSlot];
-            owner.NotifyPlayRequested(selectedSlot, data.mode, data.iconIndex);
             Sfx.Play(SfxId.UiConfirm);
+            owner.NotifyPlayRequested(selectedSlot, data.mode, data.iconIndex);
+            // Hands off to StartGame, which then continues into the saved scene.
+            SaveManager.Instance.StartGameFromMenu(SlotNumber(selectedSlot));
         }
 
         private void CreateAndPlaySlot()
         {
             if (selectedSlot < 0) return;
-            slots[selectedSlot] = new SlotPreview
-            {
-                filled = true,
-                iconIndex = selectedIcon,
-                mode = selectedMode,
-                time = "00:00:00",
-                points = 0
-            };
-            RenderRows();
-            owner.NotifyPlayRequested(selectedSlot, selectedMode, selectedIcon);
-            PopulateFilledDetail(slots[selectedSlot]);
-            ShowDetails(filledDetail);
             Sfx.Play(SfxId.UiConfirm);
+            owner.NotifyPlayRequested(selectedSlot, selectedMode, selectedIcon);
+            // The scene is about to change, so there is no point re-rendering the detail page.
+            SaveManager.Instance.StartNewGameFromMenu(
+                SlotNumber(selectedSlot),
+                selectedMode == SteelMode,
+                selectedIcon);
         }
 
         private void BindIconChoices()
@@ -159,16 +198,23 @@ namespace Game.UI
             }
         }
 
+        /// <summary>Mode is chosen at slot creation only — Save_Slot_Detail shows an
+        /// existing save's mode read-only, so both buttons live under Save_Slot_New.</summary>
         private void BindModes()
         {
-            Transform classic = UIRuntime.Find(newDetail?.transform, "Classic");
-            Button classicButton = owner.EnsureButton(
-                classic,
-                () => SelectMode(classic, "Classic"),
-                true);
-            MenuButtonVisual visual = owner.ConfigureButtonVisual(classicButton, true);
+            Transform classic = BindMode(ClassicMode);
+            BindMode(SteelMode);
+            // Default only after both are registered, so RefreshModeSelection can un-latch Steel.
+            SelectMode(classic, ClassicMode);
+        }
+
+        private Transform BindMode(string modeName)
+        {
+            Transform mode = UIRuntime.Find(newDetail?.transform, modeName);
+            Button button = owner.EnsureButton(mode, () => SelectMode(mode, modeName), true);
+            MenuButtonVisual visual = owner.ConfigureButtonVisual(button, true);
             if (visual != null) modeVisuals.Add(visual);
-            SelectMode(classic, "Classic");
+            return mode;
         }
 
         private void SelectIcon(int iconIndex)

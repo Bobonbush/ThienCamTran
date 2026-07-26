@@ -26,6 +26,17 @@ public class InputManager : MonoBehaviour
     PlayerController player;
     
 
+    /// <summary>Về main menu: huỷ manager này (nó giữ tham chiếu tới Player của lượt
+    /// chơi cũ) để lượt sau dựng lại sạch từ StartGame.</summary>
+    public static void TeardownForMenu()
+    {
+        if (Instance == null)
+            return;
+
+        Destroy(Instance.gameObject);
+        Instance = null;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

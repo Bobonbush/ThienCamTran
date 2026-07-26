@@ -46,6 +46,18 @@ public class CutSceneManager : MonoBehaviour
     }
 
     
+    /// <summary>Về main menu: huỷ manager này để lượt chơi sau dựng lại sạch từ StartGame.
+    /// Phải gán Instance = null ngay thay vì đợi Destroy, nếu không Awake của bản mới
+    /// có thể thấy bản cũ chưa huỷ xong và tự destroy chính nó.</summary>
+    public static void TeardownForMenu()
+    {
+        if (Instance == null)
+            return;
+
+        Destroy(Instance.gameObject);
+        Instance = null;
+    }
+
     public void ForceHideGamePlay(bool settings = false)
     {
         if (gameplayObject == null)
@@ -101,6 +113,16 @@ public class CutSceneManager : MonoBehaviour
 
     public void OnCutSceneEnd(CutSceneInfo info)
     {
+
+        if (info.returnToMainMenu)
+        {
+            // Hết lượt chơi (chết Steel mode hoặc phá đảo) — về menu qua SaveManager
+            // để currentlyInGame được reset, nếu không lần chọn slot sau sẽ không vào được game.
+            // Bật lại Hub ở đây là vô nghĩa vì đang rời khỏi game, nên return sớm.
+            inCutScene = false;
+            SaveManager.Instance.ReturnToMenu();
+            return;
+        }
 
         // Turn on Hub Again
         if (info.useBigDialog && info.StillHideUI == false)

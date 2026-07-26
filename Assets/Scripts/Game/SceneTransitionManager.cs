@@ -41,6 +41,8 @@ public class SceneTransitionManager : MonoBehaviour
 
     private string targetSpawnPointId;
 
+    private bool sceneHooksRegistered;
+
     float coolDownTransition = -1.0f;
 
     float maxcoolDownTransition = 2.0f;
@@ -55,6 +57,7 @@ public class SceneTransitionManager : MonoBehaviour
 
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
+            sceneHooksRegistered = true;
             RemoveSceneUiDuplicates();
             CreatePersistentUi();
         }
@@ -68,6 +71,17 @@ public class SceneTransitionManager : MonoBehaviour
     {
         RemoveSceneUiDuplicates();
         RebindPlayer();
+    }
+
+    /// <summary>Về main menu: huỷ manager này. PersistentGameUI là con của transform
+    /// nên bị huỷ theo, không còn HUD gameplay đè lên menu. Lượt chơi sau dựng lại từ StartGame.</summary>
+    public static void TeardownForMenu()
+    {
+        if (Instance == null)
+            return;
+
+        Destroy(Instance.gameObject);
+        Instance = null;
     }
 
     private void CreatePersistentUi()
@@ -229,6 +243,14 @@ public class SceneTransitionManager : MonoBehaviour
         }
     }
 
+    /// <summary>PlayerController của scene hiện tại. RebindPlayer cập nhật lại sau mỗi
+    /// lần sceneLoaded, nên đây là tham chiếu duy nhất còn sống sau khi đổi scene —
+    /// tham chiếu lấy trước khi load đã bị huỷ cùng scene cũ.</summary>
+    public PlayerController CurrentPlayer
+    {
+        get { return playerController; }
+    }
+
     private void RebindPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -246,11 +268,19 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        // Điều kiện là cờ chứ không phải "Instance == this": TeardownForMenu gán
+        // Instance = null TRƯỚC khi OnDestroy chạy, nên so sánh với Instance sẽ không
+        // bao giờ gỡ được handler. Bản duplicate tự huỷ trong Awake chưa từng đăng ký
+        // nên cờ vẫn false ở đó và nó không gỡ nhầm handler của bản thật.
+        if (!sceneHooksRegistered)
+            return;
+
+        sceneHooksRegistered = false;
+        SceneManager.sceneLoaded -= SetRoom;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
         if (Instance == this)
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
             Instance = null;
-        }
     }
 
     // This is the global function any door in the game can call
