@@ -24,8 +24,8 @@ namespace Game.UI
             public override string ToString() => $"{width} x {height}";
         }
 
-        private static readonly string[] ActionNames =
-            { "Up", "Down", "Left", "Right", "Jump", "Dash", "Attack", "Cast", "Heal", "Inventory" };
+        private static IReadOnlyList<InputBindingService.BindingDefinition> Rows =>
+            InputBindingService.Definitions;
 
         private MainMenuController owner;
         private SettingsService settings;
@@ -46,7 +46,8 @@ namespace Game.UI
         private Slider music;
         private Slider sound;
         private readonly List<ResolutionChoice> resolutions = new List<ResolutionChoice>();
-        private readonly List<TMP_Text> keyLabels = new List<TMP_Text>();
+        private readonly List<TMP_Text> keyboardLabels = new List<TMP_Text>();
+        private readonly List<TMP_Text> gamepadLabels = new List<TMP_Text>();
         private int listeningIndex = -1;
         private bool controlsDirty;
 
@@ -202,32 +203,137 @@ namespace Game.UI
             Transform template = UIRuntime.Find(content, "Control_Item");
             if (content == null || template == null) return;
 
-            keyLabels.Clear();
-            for (int i = 0; i < ActionNames.Length; i++)
+            // Snapshot the authored row BEFORE anything is configured. Row 0 reuses the template in
+            // place, so cloning the template afterwards would copy an already-built gamepad column
+            // into every subsequent row.
+            GameObject prototype = Instantiate(template.gameObject, content);
+            prototype.SetActive(false);
+
+            keyboardLabels.Clear();
+            gamepadLabels.Clear();
+            for (int i = 0; i < Rows.Count; i++)
             {
-                Transform row = i == 0 ? template : Instantiate(template.gameObject, content).transform;
-                row.name = $"Control_Item_{ActionNames[i]}";
-                TMP_Text actionLabel = row.GetComponent<TMP_Text>();
-                if (actionLabel != null) actionLabel.text = ActionNames[i];
+                InputBindingService.BindingDefinition definition = Rows[i];
+                Transform row = i == 0 ? template : Instantiate(prototype, content).transform;
+                row.gameObject.SetActive(true);
+                row.name = $"Control_Item_{definition.displayName}";
 
                 Transform keyBox = UIRuntime.Find(row, "Button_Box");
-                TMP_Text keyLabel = UIRuntime.FirstText(keyBox, "Control_Button");
-                keyLabels.Add(keyLabel);
+                keyboardLabels.Add(UIRuntime.FirstText(keyBox, "Control_Button"));
                 int captured = i;
-                owner.EnsureButton(keyBox, () => BeginKeyCapture(captured));
+                owner.EnsureButton(keyBox, () => BeginKeyCapture(captured, BindingDevice.Keyboard));
+
+                gamepadLabels.Add(BuildGamepadCell(keyBox, definition, captured));
+
+                // Set the row label last: the two key cells reserve their space via the label's right
+                // margin, so it has to be measured after the cells are positioned.
+                TMP_Text actionLabel = row.GetComponent<TMP_Text>();
+                if (actionLabel != null) actionLabel.text = definition.displayName;
             }
+
+            Destroy(prototype);
             LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)content);
         }
 
-        private void BeginKeyCapture(int index)
+        /// <summary>
+        /// Clones the authored keyboard cell to make a gamepad column, so the second column matches
+        /// the art without the prefab needing a second Button_Box. The pair keeps the authored cell's
+        /// right edge and grows leftward into the label's space, so the row width is unchanged.
+        /// </summary>
+        private TMP_Text BuildGamepadCell(
+            Transform keyBox,
+            InputBindingService.BindingDefinition definition,
+            int index)
         {
-            if (bindings == null || index < 0 || index >= ActionNames.Length) return;
-            listeningIndex = index;
-            if (index < keyLabels.Count && keyLabels[index] != null)
-                keyLabels[index].text = "PRESS KEY...";
+            RectTransform keyRect = keyBox as RectTransform;
+            if (keyRect == null || keyRect.parent == null) return null;
 
-            MenuBindingId bindingId = (MenuBindingId)index;
-            bindings.StartInteractiveRebind(bindingId, (success, message) =>
+            RectTransform padRect = Instantiate(keyBox.gameObject, keyBox.parent).transform as RectTransform;
+            if (padRect == null) return null;
+            padRect.name = "Button_Box_Gamepad";
+            padRect.SetSiblingIndex(keyRect.GetSiblingIndex() + 1);
+            LayOutKeyCells(keyRect, padRect);
+
+            TMP_Text padLabel = UIRuntime.FirstText(padRect, "Control_Button");
+            UIRuntime.ConfigureSingleLineListText(padLabel);
+            UIRuntime.ConfigureSingleLineListText(UIRuntime.FirstText(keyRect, "Control_Button"));
+
+            if (!definition.gamepadRebindable)
+            {
+                // Move/Purify are whole-stick bindings on a gamepad - nothing per-direction to rebind.
+                // The clone inherited the keyboard cell's click handler; drop it before the deferred
+                // Destroy so the dead cell cannot start a rebind in the meantime.
+                Button existing = padRect.GetComponent<Button>();
+                if (existing != null)
+                {
+                    existing.onClick.RemoveAllListeners();
+                    existing.interactable = false;
+                    Destroy(existing);
+                }
+                if (padLabel != null)
+                {
+                    padLabel.text = InputBindingService.StickBindingLabel;
+                    padLabel.color = new Color(padLabel.color.r, padLabel.color.g, padLabel.color.b, 0.45f);
+                }
+                return padLabel;
+            }
+
+            owner.EnsureButton(padRect, () => BeginKeyCapture(index, BindingDevice.Gamepad));
+            return padLabel;
+        }
+
+        /// <summary>
+        /// Splits the authored single-cell slot into two side-by-side cells. Both keep the authored
+        /// anchoring and height; only x and width change, so the row rect and the vertical rhythm of
+        /// the list are untouched.
+        /// </summary>
+        private void LayOutKeyCells(RectTransform keyCell, RectTransform padCell)
+        {
+            const float gap = 8f;
+            const float widenFactor = 1.62f;
+
+            Vector2 authoredPosition = keyCell.anchoredPosition;
+            Vector2 authoredSize = keyCell.sizeDelta;
+
+            float rightEdge = authoredPosition.x + authoredSize.x * 0.5f;
+            float pairWidth = authoredSize.x * widenFactor;
+            float cellWidth = (pairWidth - gap) * 0.5f;
+            float leftEdge = rightEdge - pairWidth;
+
+            keyCell.sizeDelta = new Vector2(cellWidth, authoredSize.y);
+            keyCell.anchoredPosition = new Vector2(leftEdge + cellWidth * 0.5f, authoredPosition.y);
+
+            padCell.anchorMin = keyCell.anchorMin;
+            padCell.anchorMax = keyCell.anchorMax;
+            padCell.pivot = keyCell.pivot;
+            padCell.sizeDelta = new Vector2(cellWidth, authoredSize.y);
+            padCell.anchoredPosition = new Vector2(rightEdge - cellWidth * 0.5f, authoredPosition.y);
+
+            // Keep the row label clear of both cells.
+            TMP_Text rowLabel = keyCell.parent != null ? keyCell.parent.GetComponent<TMP_Text>() : null;
+            RectTransform rowRect = keyCell.parent as RectTransform;
+            if (rowLabel != null && rowRect != null)
+            {
+                Vector4 margin = rowLabel.margin;
+                rowLabel.margin = new Vector4(
+                    margin.x,
+                    margin.y,
+                    rowRect.rect.width * 0.5f - leftEdge + gap,
+                    margin.w);
+                rowLabel.alignment = TextAlignmentOptions.MidlineLeft;
+            }
+        }
+
+        private void BeginKeyCapture(int index, BindingDevice device)
+        {
+            if (bindings == null || index < 0 || index >= Rows.Count) return;
+            listeningIndex = index;
+
+            List<TMP_Text> column = device == BindingDevice.Gamepad ? gamepadLabels : keyboardLabels;
+            if (index < column.Count && column[index] != null)
+                column[index].text = device == BindingDevice.Gamepad ? "PRESS BUTTON..." : "PRESS KEY...";
+
+            bindings.StartInteractiveRebind(Rows[index].id, device, (success, message) =>
             {
                 listeningIndex = -1;
                 RefreshAllKeyLabels();
@@ -346,9 +452,14 @@ namespace Game.UI
         private void RefreshAllKeyLabels()
         {
             if (bindings == null) return;
-            for (int i = 0; i < keyLabels.Count; i++)
-                if (keyLabels[i] != null)
-                    keyLabels[i].text = bindings.GetDisplayString((MenuBindingId)i);
+            for (int i = 0; i < Rows.Count; i++)
+            {
+                MenuBindingId id = Rows[i].id;
+                if (i < keyboardLabels.Count && keyboardLabels[i] != null)
+                    keyboardLabels[i].text = bindings.GetDisplayString(id, BindingDevice.Keyboard);
+                if (i < gamepadLabels.Count && gamepadLabels[i] != null)
+                    gamepadLabels[i].text = bindings.GetDisplayString(id, BindingDevice.Gamepad);
+            }
         }
 
         private void PositionCategoryHighlighter(Transform category)

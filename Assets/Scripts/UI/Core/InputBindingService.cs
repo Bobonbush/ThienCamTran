@@ -12,48 +12,73 @@ namespace Game.UI
         Up, Down, Left, Right, Jump, Dash, Attack, Cast, Heal, Inventory
     }
 
+    /// <summary>Which physical device family a rebindable slot targets.</summary>
+    public enum BindingDevice
+    {
+        Keyboard, Gamepad
+    }
+
     /// <summary>
-    /// Persists keyboard binding overrides on the same InputActionAsset used by PlayerInput.
-    /// Overrides are copied to live PlayerInput clones so changes also work from an in-game menu.
+    /// Persists binding overrides on the InputActionAsset used by PlayerInput, and mirrors them onto
+    /// every other copy of that asset in play - live PlayerInput clones and any asset registered via
+    /// <see cref="RegisterMirror"/> (notably the one InputManager builds from the generated wrapper).
     /// </summary>
     [DefaultExecutionOrder(-95)]
     public sealed class InputBindingService : MonoBehaviour
     {
-        private sealed class BindingTarget
+        /// <summary>One rebindable row: which asset action and composite part it maps to.</summary>
+        public sealed class BindingDefinition
         {
-            public string action;
-            public string part;
-            public BindingTarget(string actionName, string compositePart = null)
+            public readonly MenuBindingId id;
+            public readonly string displayName;
+            public readonly string action;
+            public readonly string part;
+            public readonly bool gamepadRebindable;
+
+            public BindingDefinition(
+                MenuBindingId id,
+                string displayName,
+                string action,
+                string part,
+                bool gamepadRebindable)
             {
-                action = actionName;
-                part = compositePart;
+                this.id = id;
+                this.displayName = displayName;
+                this.action = action;
+                this.part = part;
+                this.gamepadRebindable = gamepadRebindable;
             }
         }
 
-        private static readonly Dictionary<MenuBindingId, BindingTarget> Targets =
-            new Dictionary<MenuBindingId, BindingTarget>
-            {
-                { MenuBindingId.Up, new BindingTarget("Purify", "Up") },
-                { MenuBindingId.Down, new BindingTarget("Purify", "Down") },
-                { MenuBindingId.Left, new BindingTarget("Move", "left") },
-                { MenuBindingId.Right, new BindingTarget("Move", "right") },
-                { MenuBindingId.Jump, new BindingTarget("Jump") },
-                { MenuBindingId.Dash, new BindingTarget("Dash") },
-                { MenuBindingId.Attack, new BindingTarget("Attack") },
-                { MenuBindingId.Cast, new BindingTarget("Skill 1") },
-                { MenuBindingId.Heal, new BindingTarget("Heal") }
-            };
+        // Order is index-aligned with the control rows built by MainMenuOptionsPanel.
+        // Move/Purify only expose per-direction bindings on the keyboard; on a gamepad they are whole
+        // stick/dpad bindings, so the four directional rows have nothing to rebind there.
+        private static readonly BindingDefinition[] definitions =
+        {
+            new BindingDefinition(MenuBindingId.Up, "Up", "Purify", "Up", false),
+            new BindingDefinition(MenuBindingId.Down, "Down", "Purify", "Down", false),
+            new BindingDefinition(MenuBindingId.Left, "Left", "Move", "left", false),
+            new BindingDefinition(MenuBindingId.Right, "Right", "Move", "right", false),
+            new BindingDefinition(MenuBindingId.Jump, "Jump", "Jump", null, true),
+            new BindingDefinition(MenuBindingId.Dash, "Dash", "Dash", null, true),
+            new BindingDefinition(MenuBindingId.Attack, "Attack", "Attack", null, true),
+            new BindingDefinition(MenuBindingId.Cast, "Cast", "Skill 1", null, true),
+            new BindingDefinition(MenuBindingId.Heal, "Heal", "Heal", null, true),
+            new BindingDefinition(MenuBindingId.Inventory, "Inventory", "Inventory", null, true)
+        };
+
+        public static IReadOnlyList<BindingDefinition> Definitions => definitions;
+
+        public const string StickBindingLabel = "L-Stick / D-Pad";
 
         private const string OverridesKey = "set_key_overrides";
-        private const string InventoryKey = "set_key_inventory";
-        private const string DefaultInventoryPath = "<Keyboard>/i";
+        private const string LegacyInventoryKey = "set_key_inventory";
 
         public static InputBindingService Instance { get; private set; }
 
         public InputActionAsset actions;
-        private InputAction inventoryAction;
+        private readonly List<InputActionAsset> mirrors = new List<InputActionAsset>();
         private InputActionRebindingExtensions.RebindingOperation operation;
-        private string savedInventoryPath = DefaultInventoryPath;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Bootstrap()
@@ -73,6 +98,14 @@ namespace Game.UI
             return Instance;
         }
 
+        public static BindingDefinition GetDefinition(MenuBindingId id)
+        {
+            foreach (BindingDefinition definition in definitions)
+                if (definition.id == id)
+                    return definition;
+            return null;
+        }
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -84,17 +117,20 @@ namespace Game.UI
             Instance = this;
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
-            CreateInventoryAction();
 
-            Debug.Log($"Has Key: {PlayerPrefs.HasKey(OverridesKey)}");
-            Debug.Log($"Key Name: {OverridesKey}");
-            Debug.Log($"Value: '{PlayerPrefs.GetString(OverridesKey)}'");
+            // Inventory used to be rebound on a throwaway action that never reached gameplay; the
+            // key it saved to was never in effect, so drop it rather than migrating it.
+            if (PlayerPrefs.HasKey(LegacyInventoryKey))
+            {
+                PlayerPrefs.DeleteKey(LegacyInventoryKey);
+                PlayerPrefs.Save();
+            }
         }
 
         private void OnDestroy()
         {
             operation?.Dispose();
-            inventoryAction?.Dispose();
+            operation = null;
             if (Instance != this) return;
             SceneManager.sceneLoaded -= OnSceneLoaded;
             Instance = null;
@@ -107,37 +143,153 @@ namespace Game.UI
             LoadSavedOverrides();
         }
 
-        public string GetDisplayString(MenuBindingId id)
+        /// <summary>
+        /// Registers another copy of the action asset that should receive the same overrides.
+        /// Used by InputManager, whose generated wrapper builds its own asset from baked-in defaults.
+        /// </summary>
+        public void RegisterMirror(InputActionAsset mirror)
         {
+            if (mirror == null || mirror == actions) return;
+            if (!mirrors.Contains(mirror)) mirrors.Add(mirror);
+            ApplyOverridesToMirrors();
+        }
+
+        public void UnregisterMirror(InputActionAsset mirror)
+        {
+            if (mirror == null) return;
+            mirrors.Remove(mirror);
+        }
+
+        public string GetDisplayString(MenuBindingId id, BindingDevice device)
+        {
+            if (device == BindingDevice.Gamepad)
+            {
+                BindingDefinition definition = GetDefinition(id);
+                if (definition != null && !definition.gamepadRebindable) return StickBindingLabel;
+            }
+
             InputAction action;
             int index;
-            if (!TryResolve(id, out action, out index)) return "UNBOUND";
+            if (!TryResolve(id, device, out action, out index)) return "UNBOUND";
             return action.GetBindingDisplayString(
                 index,
                 InputBinding.DisplayStringOptions.DontIncludeInteractions);
         }
 
-        public void StartInteractiveRebind(MenuBindingId id, Action<bool, string> completed)
+        public void StartInteractiveRebind(MenuBindingId id, BindingDevice device, Action<bool, string> completed)
         {
             CancelRebind();
 
+            BindingDefinition definition = GetDefinition(id);
+            if (device == BindingDevice.Gamepad && (definition == null || !definition.gamepadRebindable))
+            {
+                completed?.Invoke(false, "NOT REBINDABLE");
+                return;
+            }
+
             InputAction action;
             int bindingIndex;
-            if (!TryResolve(id, out action, out bindingIndex))
+            if (!TryResolve(id, device, out action, out bindingIndex))
             {
                 completed?.Invoke(false, "BINDING NOT FOUND");
                 return;
             }
 
+            Rebind(action, bindingIndex, device, id, completed);
+        }
+
+        /// <summary>
+        /// Rebinds an arbitrary action/binding pair. Used by rows that address a binding directly by
+        /// <see cref="InputActionReference"/> rather than through the <see cref="MenuBindingId"/> table,
+        /// so both paths share one rebind implementation, one conflict rule and one save location.
+        /// </summary>
+        public void StartInteractiveRebind(
+            InputAction action,
+            int bindingIndex,
+            BindingDevice device,
+            Action<bool, string> completed)
+        {
+            CancelRebind();
+
+            if (action == null || bindingIndex < 0 || bindingIndex >= action.bindings.Count)
+            {
+                completed?.Invoke(false, "BINDING NOT FOUND");
+                return;
+            }
+
+            // The caller may hold a different instance of the same asset. Rebind our own instance
+            // instead, otherwise the override would land on an object SaveOverrides never reads.
+            InputActionAsset sourceAsset = action.actionMap != null ? action.actionMap.asset : null;
+            if (actions != null && sourceAsset != null && sourceAsset != actions)
+            {
+                InputAction owned = actions.FindAction(action.id);
+                if (owned == null || bindingIndex >= owned.bindings.Count)
+                {
+                    completed?.Invoke(false, "BINDING NOT FOUND");
+                    return;
+                }
+                action = owned;
+            }
+
+            MenuBindingId? conflictScope = null;
+            MenuBindingId matched;
+            if (TryGetBindingId(action, bindingIndex, device, out matched)) conflictScope = matched;
+
+            Rebind(action, bindingIndex, device, conflictScope, completed);
+        }
+
+        /// <summary>Maps a raw action/binding pair back to its table row, if it has one.</summary>
+        public bool TryGetBindingId(InputAction action, int bindingIndex, BindingDevice device, out MenuBindingId id)
+        {
+            id = default;
+            if (action == null) return false;
+
+            foreach (BindingDefinition definition in definitions)
+            {
+                InputAction candidate;
+                int candidateIndex;
+                if (!TryResolve(definition.id, device, out candidate, out candidateIndex)) continue;
+                if (candidate.id == action.id && candidateIndex == bindingIndex)
+                {
+                    id = definition.id;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void Rebind(
+            InputAction action,
+            int bindingIndex,
+            BindingDevice device,
+            MenuBindingId? conflictScope,
+            Action<bool, string> completed)
+        {
             string previousOverride = action.bindings[bindingIndex].overridePath;
             bool wasEnabled = action.enabled;
             action.Disable();
 
-            operation = action.PerformInteractiveRebinding(bindingIndex)
-                .WithControlsExcluding("<Mouse>/position")
-                .WithControlsExcluding("<Mouse>/delta")
-                .WithControlsExcluding("<Mouse>/scroll")
-                .WithControlsHavingToMatchPath("<Keyboard>")
+            InputActionRebindingExtensions.RebindingOperation pending =
+                action.PerformInteractiveRebinding(bindingIndex);
+
+            if (device == BindingDevice.Gamepad)
+            {
+                pending = pending
+                    .WithControlsHavingToMatchPath("<Gamepad>")
+                    .WithExpectedControlType("Button");
+            }
+            else
+            {
+                pending = pending
+                    .WithControlsExcluding("<Mouse>/position")
+                    .WithControlsExcluding("<Mouse>/delta")
+                    .WithControlsExcluding("<Mouse>/scroll")
+                    .WithControlsHavingToMatchPath("<Keyboard>");
+            }
+
+            // Always cancel through the keyboard so a dead or unplugged controller cannot trap the
+            // player in a capture prompt.
+            operation = pending
                 .WithCancelingThrough("<Keyboard>/escape")
                 .OnCancel(op =>
                 {
@@ -147,7 +299,7 @@ namespace Game.UI
                 .OnComplete(op =>
                 {
                     string newPath = action.bindings[bindingIndex].effectivePath;
-                    if (HasConflict(id, newPath))
+                    if (conflictScope.HasValue && HasConflict(conflictScope.Value, device, newPath))
                     {
                         if (string.IsNullOrEmpty(previousOverride))
                             action.RemoveBindingOverride(bindingIndex);
@@ -159,8 +311,10 @@ namespace Game.UI
                     }
 
                     FinishOperation(op, action, wasEnabled);
-                    ApplyOverridesToLivePlayers();
-                    completed?.Invoke(true, GetDisplayString(id));
+                    ApplyOverridesToMirrors();
+                    completed?.Invoke(true, action.GetBindingDisplayString(
+                        bindingIndex,
+                        InputBinding.DisplayStringOptions.DontIncludeInteractions));
                 })
                 .Start();
         }
@@ -175,12 +329,8 @@ namespace Game.UI
         {
             if (actions != null)
                 PlayerPrefs.SetString(OverridesKey, actions.SaveBindingOverridesAsJson());
-            savedInventoryPath = inventoryAction != null
-                ? inventoryAction.bindings[0].effectivePath
-                : DefaultInventoryPath;
-            PlayerPrefs.SetString(InventoryKey, savedInventoryPath);
             PlayerPrefs.Save();
-            ApplyOverridesToLivePlayers();
+            ApplyOverridesToMirrors();
         }
 
         public void RevertUnsaved()
@@ -195,20 +345,16 @@ namespace Game.UI
                 foreach (InputActionMap map in actions.actionMaps)
                     map.RemoveAllBindingOverrides();
 
-            if (inventoryAction != null)
-                inventoryAction.RemoveAllBindingOverrides();
-            savedInventoryPath = DefaultInventoryPath;
             PlayerPrefs.DeleteKey(OverridesKey);
-            PlayerPrefs.DeleteKey(InventoryKey);
             PlayerPrefs.Save();
-            ApplyOverridesToLivePlayers();
+            ApplyOverridesToMirrors();
         }
 
-        public bool WasPressedThisFrame(MenuBindingId id)
+        public bool WasPressedThisFrame(MenuBindingId id, BindingDevice device)
         {
             InputAction action;
             int bindingIndex;
-            if (!TryResolve(id, out action, out bindingIndex)) return false;
+            if (!TryResolve(id, device, out action, out bindingIndex)) return false;
             string path = action.bindings[bindingIndex].effectivePath;
             ButtonControl control = InputSystem.FindControl(path) as ButtonControl;
             return control != null && control.wasPressedThisFrame;
@@ -233,64 +379,58 @@ namespace Game.UI
                 }
             }
 
-            CreateInventoryAction();
-            savedInventoryPath = PlayerPrefs.GetString(InventoryKey, DefaultInventoryPath);
-            inventoryAction.RemoveAllBindingOverrides();
-            if (!string.Equals(savedInventoryPath, DefaultInventoryPath, StringComparison.OrdinalIgnoreCase))
-                inventoryAction.ApplyBindingOverride(0, savedInventoryPath);
-            ApplyOverridesToLivePlayers();
+            ApplyOverridesToMirrors();
         }
 
-        private void CreateInventoryAction()
+        private bool TryResolve(MenuBindingId id, BindingDevice device, out InputAction action, out int bindingIndex)
         {
-            if (inventoryAction != null) return;
-            inventoryAction = new InputAction("Inventory", InputActionType.Button, DefaultInventoryPath);
-            inventoryAction.Enable();
-        }
-
-        private bool TryResolve(MenuBindingId id, out InputAction action, out int bindingIndex)
-        {
-            if (id == MenuBindingId.Inventory)
-            {
-                CreateInventoryAction();
-                action = inventoryAction;
-                bindingIndex = 0;
-                return true;
-            }
-
             action = null;
             bindingIndex = -1;
-            if (actions == null || !Targets.TryGetValue(id, out BindingTarget target)) return false;
 
-            action = actions.FindAction(target.action, false);
+            BindingDefinition definition = GetDefinition(id);
+            if (actions == null || definition == null) return false;
+
+            action = actions.FindAction(definition.action, false);
             if (action == null) return false;
+
+            string devicePrefix = device == BindingDevice.Gamepad ? "<Gamepad>" : "<Keyboard>";
+            bool wantsPart = definition.part != null;
 
             for (int i = 0; i < action.bindings.Count; i++)
             {
                 InputBinding binding = action.bindings[i];
-                bool keyboard = binding.path != null &&
-                    binding.path.IndexOf("<Keyboard>", StringComparison.OrdinalIgnoreCase) >= 0;
-                if (!keyboard) continue;
-                if (target.part == null ||
-                    string.Equals(binding.name, target.part, StringComparison.OrdinalIgnoreCase))
-                {
-                    bindingIndex = i;
-                    return true;
-                }
+
+                // Composite headers ("Dpad") carry no path of their own.
+                if (binding.isComposite) continue;
+                if (binding.isPartOfComposite != wantsPart) continue;
+                if (wantsPart &&
+                    !string.Equals(binding.name, definition.part, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                // effectivePath, not path: an already-overridden binding must still resolve to its
+                // own row rather than falling through to a later binding on the same action.
+                string path = binding.effectivePath;
+                if (path == null ||
+                    !path.StartsWith(devicePrefix, StringComparison.OrdinalIgnoreCase)) continue;
+
+                bindingIndex = i;
+                return true;
             }
 
+            action = null;
             return false;
         }
 
-        private bool HasConflict(MenuBindingId changedId, string path)
+        private bool HasConflict(MenuBindingId changedId, BindingDevice device, string path)
         {
             if (string.IsNullOrEmpty(path)) return false;
-            foreach (MenuBindingId id in Enum.GetValues(typeof(MenuBindingId)))
+            foreach (BindingDefinition definition in definitions)
             {
-                if (id == changedId) continue;
+                if (definition.id == changedId) continue;
+                // A keyboard key never conflicts with a gamepad button.
                 InputAction otherAction;
                 int otherIndex;
-                if (!TryResolve(id, out otherAction, out otherIndex)) continue;
+                if (!TryResolve(definition.id, device, out otherAction, out otherIndex)) continue;
                 if (string.Equals(
                     otherAction.bindings[otherIndex].effectivePath,
                     path,
@@ -308,23 +448,42 @@ namespace Game.UI
             completedOperation.Dispose();
             operation = null;
             if (reEnable) action.Enable();
-            if (action == inventoryAction && !action.enabled) action.Enable();
         }
 
-        private void ApplyOverridesToLivePlayers()
+        private void ApplyOverridesToMirrors()
         {
             if (actions == null) return;
             string json = actions.SaveBindingOverridesAsJson();
+
+            for (int i = mirrors.Count - 1; i >= 0; i--)
+            {
+                InputActionAsset mirror = mirrors[i];
+                if (mirror == null)
+                {
+                    mirrors.RemoveAt(i);
+                    continue;
+                }
+                ApplyJson(mirror, json, mirror.name);
+            }
+
+            // PlayerInput clones the asset when more than one player exists, so live clones still
+            // need the sweep even though the registered mirrors cover InputManager.
             foreach (PlayerInput playerInput in FindObjectsByType<PlayerInput>(
                 FindObjectsInactive.Include,
                 FindObjectsSortMode.None))
             {
                 if (playerInput.actions == null || playerInput.actions == actions) continue;
-                try { playerInput.actions.LoadBindingOverridesFromJson(json); }
-                catch (Exception exception)
-                {
-                    Debug.LogWarning($"InputBindingService: could not update '{playerInput.name}'. {exception.Message}");
-                }
+                if (mirrors.Contains(playerInput.actions)) continue;
+                ApplyJson(playerInput.actions, json, playerInput.name);
+            }
+        }
+
+        private static void ApplyJson(InputActionAsset target, string json, string label)
+        {
+            try { target.LoadBindingOverridesFromJson(json); }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"InputBindingService: could not update '{label}'. {exception.Message}");
             }
         }
 
@@ -340,7 +499,7 @@ namespace Game.UI
                     return;
                 }
             }
-            ApplyOverridesToLivePlayers();
+            ApplyOverridesToMirrors();
         }
     }
 }

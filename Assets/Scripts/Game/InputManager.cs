@@ -41,12 +41,18 @@ public class InputManager : MonoBehaviour
         player = playerObj.GetComponent<PlayerController>();
         Controls = new InputSystem_Actions();
 
-        OnEnable();
+        // The generated wrapper builds its own asset from baked-in defaults, so it never sees the
+        // rebinds applied to the PlayerInput asset unless it is registered as a mirror.
+        Game.UI.InputBindingService.EnsureExists(null)?.RegisterMirror(Controls.asset);
+
+        // Unity calls OnEnable itself right after Awake - calling it here too would double-subscribe.
     }
 
 
     private void OnEnable()
     {
+        if (Controls == null) return;
+
         Controls.Enable();
 
         Controls.Player.Move.started += OnMove;
@@ -64,6 +70,8 @@ public class InputManager : MonoBehaviour
 
     private void OnDisable()
     {
+        if (Controls == null) return;
+
         Controls.Player.Move.started -= OnMove;
         Controls.Player.Move.performed -= OnMove;
         Controls.Player.Move.canceled -= OnMove;
@@ -73,6 +81,13 @@ public class InputManager : MonoBehaviour
         Controls.Player.Look.started -= OnLook;
 
         Controls.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance != this || Controls == null) return;
+        Game.UI.InputBindingService.Instance?.UnregisterMirror(Controls.asset);
+        Instance = null;
     }
 
 
