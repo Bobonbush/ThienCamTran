@@ -50,7 +50,7 @@ namespace Game.UI
 
         public static InputBindingService Instance { get; private set; }
 
-        private InputActionAsset actions;
+        public InputActionAsset actions;
         private InputAction inventoryAction;
         private InputActionRebindingExtensions.RebindingOperation operation;
         private string savedInventoryPath = DefaultInventoryPath;
@@ -85,6 +85,10 @@ namespace Game.UI
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
             CreateInventoryAction();
+
+            Debug.Log($"Has Key: {PlayerPrefs.HasKey(OverridesKey)}");
+            Debug.Log($"Key Name: {OverridesKey}");
+            Debug.Log($"Value: '{PlayerPrefs.GetString(OverridesKey)}'");
         }
 
         private void OnDestroy()

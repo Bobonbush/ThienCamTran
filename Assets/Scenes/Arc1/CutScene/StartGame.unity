@@ -356,7 +356,6 @@ Transform:
   - {fileID: 342807716}
   - {fileID: 1296079695}
   - {fileID: 117510859}
-  - {fileID: 1048972178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &117510858
@@ -2300,12 +2299,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048972177}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.4, y: -26.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 18846740}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1048972179
 MonoBehaviour:
@@ -2412,14 +2411,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2776c80d-3c14-4091-8c56-d04ced07a2b0
-    m_ActionName: 'Player/Previous[/Keyboard/1]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba
-    m_ActionName: 'Player/Next[/Keyboard/2]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1280010018}
@@ -2604,6 +2595,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 729977bb-40c5-4e8e-8c2a-f11139d498e4
     m_ActionName: 'Player/NextPage[/Keyboard/rightBracket]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 819fca82-1c60-4b30-bd8d-521f7e40eed7
+    m_ActionName: 'Player/Inventory[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -5211,3 +5206,4 @@ SceneRoots:
   - {fileID: 776765584}
   - {fileID: 1726778654}
   - {fileID: 18846740}
+  - {fileID: 1048972178}
